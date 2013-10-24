@@ -1,4 +1,4 @@
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 1
 
 
    1              		.code	16
@@ -58,7 +58,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
   21:testI2C.c     ****  * Description:
   22:testI2C.c     ****  *    Test EEPROM
   23:testI2C.c     ****  *
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 2
 
 
   24:testI2C.c     ****  ****************************************************************************/
@@ -118,7 +118,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
   59 0030 FFF7FEFF 		bl	eepromPoll
   60 0034 0006     		lsl	r0, r0, #24
   61 0036 0016     		asr	r0, r0, #24
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 3
 
 
   62 0038 0128     		cmp	r0, #1
@@ -178,7 +178,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
   98 0072 00D0     		beq	.L8
   99 0074 0024     		mov	r4, #0
  100              	.L8:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 4
 
 
   64:testI2C.c     **** ;//    printf("\n        - program cycle completed");
@@ -238,7 +238,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  125 009e 291C     		mov	r1, r5
  126 00a0 0E22     		mov	r2, #14
  127 00a2 FFF7FEFF 		bl	eepromPageRead
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 5
 
 
   94:testI2C.c     ****   if (errorCode == I2C_CODE_OK)
@@ -298,7 +298,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  123:testI2C.c     ****   if (eepromPoll() == I2C_CODE_OK)
  153              		.loc 1 123 0
  154 00ce FFF7FEFF 		bl	eepromPoll
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 6
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 6
 
 
  155 00d2 0006     		lsl	r0, r0, #24
@@ -358,7 +358,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  182 00fe 201C     		mov	r0, r4
  183 0100 09B0     		add	sp, sp, #36
  184              		@ sp needed for prologue
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 7
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 7
 
 
  185              	.LVL4:
@@ -418,7 +418,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  215      65616C2D 
  215      54696D65 
  215      20436C6F 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 8
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 8
 
 
  216 0125 000000   		.align	2
@@ -478,7 +478,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  242              		.text
  243              		.align	2
  244              		.global	testI2C
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 9
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 9
 
 
  245              		.code 16
@@ -538,7 +538,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  200:testI2C.c     ****  *
  201:testI2C.c     ****  ****************************************************************************/
  202:testI2C.c     **** void
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 10
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 10
 
 
  203:testI2C.c     **** testI2C(void)
@@ -598,7 +598,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  292              		.loc 1 164 0
  293 014a 0C33     		add	r3, r3, #12
  294 014c 1C60     		str	r4, [r3]
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 11
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 11
 
 
  295              		.loc 1 165 0
@@ -658,7 +658,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  349 01a6 201C     		mov	r0, r4
  350 01a8 FFF7FEFF 		bl	simplePrintf
  351              		.loc 1 185 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 12
 
 
  352 01ac 3220     		mov	r0, #50
@@ -718,7 +718,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  400              	.L32:
  221:testI2C.c     ****   else
  222:testI2C.c     ****     printf("\n\nSummary of EEPROM tests: Failed at least one test!");
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 13
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 13
 
 
  401              		.loc 1 222 0
@@ -778,7 +778,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  442 0248 0904     		lsl	r1, r1, #16
  443 024a 0B0C     		lsr	r3, r1, #16
  444              	.LVL5:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 14
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 14
 
 
  236:testI2C.c     ****     printf("\rLM75 temp = %d.%d", temp / 2, (temp&1) * 5);
@@ -838,7 +838,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  494 0008 01       		.byte	0x1
  495 0009 00       		.ascii	"\000"
  496 000a 01       		.uleb128 0x1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 15
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 15
 
 
  497 000b 7C       		.sleb128 -4
@@ -898,7 +898,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  551 004f 18       		.uleb128 0x18
  552              		.align	2
  553              	.LEFDE2:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 16
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 16
 
 
  554              		.file 2 "../pre_emptive_os/api/../api/general.h"
@@ -958,7 +958,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  608 007e 14010000 		.4byte	.LCFI3-.Ltext0
  609 0082 B4020000 		.4byte	.LFE4-.Ltext0
  610 0086 0200     		.2byte	0x2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 17
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 17
 
 
  611 0088 7D       		.byte	0x7d
@@ -981,30 +981,30 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  628 000c 00000000 		.4byte	.Ldebug_line0
  629 0010 B4020000 		.4byte	.Letext0
  630 0014 00000000 		.4byte	.Ltext0
- 631 0018 02010000 		.4byte	.LASF20
+ 631 0018 06010000 		.4byte	.LASF20
  632 001c 01       		.byte	0x1
- 633 001d 18010000 		.4byte	.LASF21
- 634 0021 16000000 		.4byte	.LASF22
+ 633 001d 1C010000 		.4byte	.LASF21
+ 634 0021 4E000000 		.4byte	.LASF22
  635 0025 02       		.uleb128 0x2
  636 0026 74553800 		.ascii	"tU8\000"
  637 002a 02       		.byte	0x2
  638 002b 47       		.byte	0x47
  639 002c 30000000 		.4byte	0x30
  640 0030 03       		.uleb128 0x3
- 641 0031 EC000000 		.4byte	.LASF1
+ 641 0031 F0000000 		.4byte	.LASF1
  642 0035 01       		.byte	0x1
  643 0036 08       		.byte	0x8
  644 0037 04       		.uleb128 0x4
- 645 0038 77000000 		.4byte	.LASF0
+ 645 0038 3B000000 		.4byte	.LASF0
  646 003c 02       		.byte	0x2
  647 003d 48       		.byte	0x48
  648 003e 42000000 		.4byte	0x42
  649 0042 03       		.uleb128 0x3
- 650 0043 B6000000 		.4byte	.LASF2
+ 650 0043 BA000000 		.4byte	.LASF2
  651 0047 02       		.byte	0x2
  652 0048 07       		.byte	0x7
  653 0049 03       		.uleb128 0x3
- 654 004a 8A000000 		.4byte	.LASF3
+ 654 004a 8E000000 		.4byte	.LASF3
  655 004e 04       		.byte	0x4
  656 004f 07       		.byte	0x7
  657 0050 02       		.uleb128 0x2
@@ -1017,8 +1017,8 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  664 0060 01       		.byte	0x1
  665 0061 06       		.byte	0x6
  666 0062 03       		.uleb128 0x3
- 667 0063 0E010000 		.4byte	.LASF5
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 18
+ 667 0063 12010000 		.4byte	.LASF5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 18
 
 
  668 0067 02       		.byte	0x2
@@ -1028,33 +1028,33 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  672 006e 04       		.byte	0x4
  673 006f 05       		.byte	0x5
  674 0070 03       		.uleb128 0x3
- 675 0071 9F000000 		.4byte	.LASF6
+ 675 0071 A3000000 		.4byte	.LASF6
  676 0075 04       		.byte	0x4
  677 0076 07       		.byte	0x7
  678 0077 03       		.uleb128 0x3
- 679 0078 81000000 		.4byte	.LASF7
+ 679 0078 45000000 		.4byte	.LASF7
  680 007c 04       		.byte	0x4
  681 007d 05       		.byte	0x5
  682 007e 03       		.uleb128 0x3
- 683 007f 69000000 		.4byte	.LASF8
+ 683 007f 2D000000 		.4byte	.LASF8
  684 0083 08       		.byte	0x8
  685 0084 05       		.byte	0x5
  686 0085 03       		.uleb128 0x3
- 687 0086 9F000000 		.4byte	.LASF6
+ 687 0086 A3000000 		.4byte	.LASF6
  688 008a 04       		.byte	0x4
  689 008b 07       		.byte	0x7
  690 008c 03       		.uleb128 0x3
- 691 008d 22010000 		.4byte	.LASF9
+ 691 008d 26010000 		.4byte	.LASF9
  692 0091 01       		.byte	0x1
  693 0092 08       		.byte	0x8
  694 0093 03       		.uleb128 0x3
- 695 0094 52000000 		.4byte	.LASF10
+ 695 0094 16000000 		.4byte	.LASF10
  696 0098 08       		.byte	0x8
  697 0099 07       		.byte	0x7
  698 009a 06       		.uleb128 0x6
  699 009b 00010000 		.4byte	0x100
  700 009f 01       		.byte	0x1
- 701 00a0 E1000000 		.4byte	.LASF16
+ 701 00a0 E5000000 		.4byte	.LASF16
  702 00a4 01       		.byte	0x1
  703 00a5 1B       		.byte	0x1b
  704 00a6 01       		.byte	0x1
@@ -1063,13 +1063,13 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  707 00af 10010000 		.4byte	.LFE2
  708 00b3 00000000 		.4byte	.LLST0
  709 00b7 07       		.uleb128 0x7
- 710 00b8 2F010000 		.4byte	.LASF11
+ 710 00b8 33010000 		.4byte	.LASF11
  711 00bc 01       		.byte	0x1
  712 00bd 1C       		.byte	0x1c
  713 00be 25000000 		.4byte	0x25
  714 00c2 2B000000 		.4byte	.LLST1
  715 00c6 08       		.uleb128 0x8
- 716 00c7 C9000000 		.4byte	.LASF12
+ 716 00c7 CD000000 		.4byte	.LASF12
  717 00cb 01       		.byte	0x1
  718 00cc 1D       		.byte	0x1d
  719 00cd 00010000 		.4byte	0x100
@@ -1077,8 +1077,8 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  721 00d2 91       		.byte	0x91
  722 00d3 66       		.sleb128 -26
  723 00d4 08       		.uleb128 0x8
- 724 00d5 D5000000 		.4byte	.LASF13
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 19
+ 724 00d5 D9000000 		.4byte	.LASF13
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 19
 
 
  725 00d9 01       		.byte	0x1
@@ -1088,7 +1088,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  729 00e0 91       		.byte	0x91
  730 00e1 5C       		.sleb128 -36
  731 00e2 08       		.uleb128 0x8
- 732 00e3 97000000 		.4byte	.LASF14
+ 732 00e3 9B000000 		.4byte	.LASF14
  733 00e7 01       		.byte	0x1
  734 00e8 1F       		.byte	0x1f
  735 00e9 20010000 		.4byte	0x120
@@ -1124,7 +1124,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  765 012e 0D       		.byte	0xd
  766 012f 00       		.byte	0x0
  767 0130 0B       		.uleb128 0xb
- 768 0131 27010000 		.4byte	.LASF23
+ 768 0131 2B010000 		.4byte	.LASF23
  769 0135 01       		.byte	0x1
  770 0136 A0       		.byte	0xa0
  771 0137 01       		.byte	0x1
@@ -1132,18 +1132,18 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  773 0139 0C       		.uleb128 0xc
  774 013a 85010000 		.4byte	0x185
  775 013e 01       		.byte	0x1
- 776 013f FA000000 		.4byte	.LASF17
+ 776 013f FE000000 		.4byte	.LASF17
  777 0143 01       		.byte	0x1
  778 0144 CC       		.byte	0xcc
  779 0145 01       		.byte	0x1
  780 0146 10010000 		.4byte	.LFB4
  781 014a B4020000 		.4byte	.LFE4
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 20
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 20
 
 
  782 014e 67000000 		.4byte	.LLST3
  783 0152 08       		.uleb128 0x8
- 784 0153 B1000000 		.4byte	.LASF18
+ 784 0153 B5000000 		.4byte	.LASF18
  785 0157 01       		.byte	0x1
  786 0158 CD       		.byte	0xcd
  787 0159 85010000 		.4byte	0x185
@@ -1159,7 +1159,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  797 016c 3E020000 		.4byte	.LBB9
  798 0170 5C020000 		.4byte	.LBE9
  799 0174 07       		.uleb128 0x7
- 800 0175 7C000000 		.4byte	.LASF19
+ 800 0175 40000000 		.4byte	.LASF19
  801 0179 01       		.byte	0x1
  802 017a EA       		.byte	0xea
  803 017b 37000000 		.4byte	0x37
@@ -1198,7 +1198,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  836 0015 00       		.byte	0x0
  837 0016 03       		.uleb128 0x3
  838 0017 08       		.uleb128 0x8
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 21
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 21
 
 
  839 0018 3A       		.uleb128 0x3a
@@ -1258,7 +1258,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  893 004e 3B       		.uleb128 0x3b
  894 004f 0B       		.uleb128 0xb
  895 0050 27       		.uleb128 0x27
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 22
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 22
 
 
  896 0051 0C       		.uleb128 0xc
@@ -1318,7 +1318,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  950 0087 13       		.uleb128 0x13
  951 0088 2F       		.uleb128 0x2f
  952 0089 0B       		.uleb128 0xb
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 23
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 23
 
 
  953 008a 00       		.byte	0x0
@@ -1378,7 +1378,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  1007 00c0 0B       		.uleb128 0xb
  1008 00c1 01       		.byte	0x1
  1009 00c2 11       		.uleb128 0x11
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 24
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 24
 
 
  1010 00c3 01       		.uleb128 0x1
@@ -1436,121 +1436,122 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 1
  1057 000a 7369676E 		.ascii	"signed char\000"
  1057      65642063 
  1057      68617200 
- 1058              	.LASF22:
- 1059 0016 2F637967 		.ascii	"/cygdrive/c/Embedded/workspace/2148/testProgram_lpc"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 25
+ 1058              	.LASF10:
+ 1059 0016 6C6F6E67 		.ascii	"long long unsigned int\000"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 25
 
 
- 1059      64726976 
- 1059      652F632F 
- 1059      456D6265 
- 1059      64646564 
- 1060 0049 32313438 		.ascii	"2148_edu\000"
- 1060      5F656475 
- 1060      00
- 1061              	.LASF10:
- 1062 0052 6C6F6E67 		.ascii	"long long unsigned int\000"
- 1062      206C6F6E 
- 1062      6720756E 
- 1062      7369676E 
- 1062      65642069 
- 1063              	.LASF8:
- 1064 0069 6C6F6E67 		.ascii	"long long int\000"
- 1064      206C6F6E 
- 1064      6720696E 
- 1064      7400
- 1065              	.LASF0:
- 1066 0077 74553136 		.ascii	"tU16\000"
- 1066      00
- 1067              	.LASF19:
- 1068 007c 74656D70 		.ascii	"temp\000"
- 1068      00
- 1069              	.LASF7:
- 1070 0081 6C6F6E67 		.ascii	"long int\000"
- 1070      20696E74 
+ 1059      206C6F6E 
+ 1059      6720756E 
+ 1059      7369676E 
+ 1059      65642069 
+ 1060              	.LASF8:
+ 1061 002d 6C6F6E67 		.ascii	"long long int\000"
+ 1061      206C6F6E 
+ 1061      6720696E 
+ 1061      7400
+ 1062              	.LASF0:
+ 1063 003b 74553136 		.ascii	"tU16\000"
+ 1063      00
+ 1064              	.LASF19:
+ 1065 0040 74656D70 		.ascii	"temp\000"
+ 1065      00
+ 1066              	.LASF7:
+ 1067 0045 6C6F6E67 		.ascii	"long int\000"
+ 1067      20696E74 
+ 1067      00
+ 1068              	.LASF22:
+ 1069 004e 2F637967 		.ascii	"/cygdrive/g/servers/github/SysWbud/2148/testProgram"
+ 1069      64726976 
+ 1069      652F672F 
+ 1069      73657276 
+ 1069      6572732F 
+ 1070 0081 5F6C7063 		.ascii	"_lpc2148_edu\000"
+ 1070      32313438 
+ 1070      5F656475 
  1070      00
  1071              	.LASF3:
- 1072 008a 756E7369 		.ascii	"unsigned int\000"
+ 1072 008e 756E7369 		.ascii	"unsigned int\000"
  1072      676E6564 
  1072      20696E74 
  1072      00
  1073              	.LASF14:
- 1074 0097 74657374 		.ascii	"testBuf\000"
+ 1074 009b 74657374 		.ascii	"testBuf\000"
  1074      42756600 
  1075              	.LASF6:
- 1076 009f 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1076 00a3 6C6F6E67 		.ascii	"long unsigned int\000"
  1076      20756E73 
  1076      69676E65 
  1076      6420696E 
  1076      7400
  1077              	.LASF18:
- 1078 00b1 64617461 		.ascii	"data\000"
+ 1078 00b5 64617461 		.ascii	"data\000"
  1078      00
  1079              	.LASF2:
- 1080 00b6 73686F72 		.ascii	"short unsigned int\000"
+ 1080 00ba 73686F72 		.ascii	"short unsigned int\000"
  1080      7420756E 
  1080      7369676E 
  1080      65642069 
  1080      6E7400
  1081              	.LASF12:
- 1082 00c9 74657374 		.ascii	"testString1\000"
+ 1082 00cd 74657374 		.ascii	"testString1\000"
  1082      53747269 
  1082      6E673100 
  1083              	.LASF13:
- 1084 00d5 74657374 		.ascii	"testString2\000"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 26
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 26
 
 
+ 1084 00d9 74657374 		.ascii	"testString2\000"
  1084      53747269 
  1084      6E673200 
  1085              	.LASF16:
- 1086 00e1 74657374 		.ascii	"testEEPROM\000"
+ 1086 00e5 74657374 		.ascii	"testEEPROM\000"
  1086      45455052 
  1086      4F4D00
  1087              	.LASF1:
- 1088 00ec 756E7369 		.ascii	"unsigned char\000"
+ 1088 00f0 756E7369 		.ascii	"unsigned char\000"
  1088      676E6564 
  1088      20636861 
  1088      7200
  1089              	.LASF17:
- 1090 00fa 74657374 		.ascii	"testI2C\000"
+ 1090 00fe 74657374 		.ascii	"testI2C\000"
  1090      49324300 
  1091              	.LASF20:
- 1092 0102 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 1092 0106 474E5520 		.ascii	"GNU C 4.1.1\000"
  1092      4320342E 
  1092      312E3100 
  1093              	.LASF5:
- 1094 010e 73686F72 		.ascii	"short int\000"
+ 1094 0112 73686F72 		.ascii	"short int\000"
  1094      7420696E 
  1094      7400
  1095              	.LASF21:
- 1096 0118 74657374 		.ascii	"testI2C.c\000"
+ 1096 011c 74657374 		.ascii	"testI2C.c\000"
  1096      4932432E 
  1096      6300
  1097              	.LASF9:
- 1098 0122 63686172 		.ascii	"char\000"
+ 1098 0126 63686172 		.ascii	"char\000"
  1098      00
  1099              	.LASF23:
- 1100 0127 74657374 		.ascii	"testRtc\000"
+ 1100 012b 74657374 		.ascii	"testRtc\000"
  1100      52746300 
  1101              	.LASF11:
- 1102 012f 65657072 		.ascii	"eepromTestResultOK\000"
+ 1102 0133 65657072 		.ascii	"eepromTestResultOK\000"
  1102      6F6D5465 
  1102      73745265 
  1102      73756C74 
  1102      4F4B00
  1103              		.ident	"GCC: (GNU) 4.1.1"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s 			page 27
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s 			page 27
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 testI2C.c
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s:1      .text:00000000 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s:24     .text:00000000 testEEPROM
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s:192    .text:00000108 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s:248    .text:00000110 testI2C
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s:245    .text:00000110 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccVT4Wed.s:469    .text:0000026c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s:24     .text:00000000 testEEPROM
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s:192    .text:00000108 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s:248    .text:00000110 testI2C
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s:245    .text:00000110 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccgw8QT8.s:469    .text:0000026c $d
 
 UNDEFINED SYMBOLS
 memcpy

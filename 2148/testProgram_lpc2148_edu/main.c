@@ -19,9 +19,10 @@
 #include "usb/lpc_usb.h"
 #include "usb/lpc_hid.h"
 
+
+#include "lcd.h"
 #include "snake.h"
 #include "key.h"
-#include "lcd.h"
 
 #include "fire_0_100x40c.h"
 #include "fire_1_100x40c.h"
@@ -58,6 +59,8 @@ static void proc4(void* arg);
 static void proc5(void* arg);
 static void proc66(void* arg);
 static void initProc(void* arg);
+
+static void drawMenu(void);
 
 void testLedMatrix(void);
 void testLcd(void);
@@ -302,24 +305,6 @@ proc3(void* arg)
 	testLcd();
 }
 
-static void
-drawMenu(void)
-{
-  lcdColor(0,0);
-  lcdClrscr();
-
-  lcdRect(14, 0, 102, 128, 0x6d);
-  lcdRect(15, 17, 100, 110, 0);
-
-  lcdGotoxy(48,1);
-  lcdColor(0x6d,0);
-  lcdPuts("MENU");
-
-  lcdGotoxy(22,20+(14*1));
-  lcdColor(0x00,0xe0);
-//  lcdColor(0x00,0xfd);
-  lcdPuts("Play Snake");
-}
 
 static void
 proc66(void* arg)
@@ -439,6 +424,26 @@ initProc(void* arg)
   osStartProcess(pid1, &error);
 
   osDeleteProcess();
+}
+
+
+static void
+drawMenu(void)
+{
+  lcdColor(0,0);
+  lcdClrscr();
+
+  lcdRect(14, 0, 102, 128, 0x6d);
+  lcdRect(15, 17, 100, 110, 0);
+
+  lcdGotoxy(48,1);
+  lcdColor(0x6d,0);
+  lcdPuts("MENU");
+
+  lcdGotoxy(22,20+(14*1));
+  lcdColor(0x00,0xe0);
+//  lcdColor(0x00,0xfd);
+  lcdPuts("Play Snake");
 }
 
 /*****************************************************************************
