@@ -69,19 +69,22 @@ writeLCD(tU8 reg, tU8 data)
 	else
 	  IOSET1 = LCD_RS;
 	  
-  IOCLR0 = LCD_RW;
+	IOCLR0 = LCD_RW;
 	IOCLR1 = LCD_DATA;
 	IOSET1 = ((tU32)data << 16) & LCD_DATA;
 //printf("\nwrite: %x", data);
 	
 	IOSET1 = LCD_E;
 //	osSleep(1);
+	// NOP - No Operation
 	for(i=0; i<16; i++)
-    asm volatile (" nop"); //delay 15 ns x 16 = about 250 ns delay
+		asm volatile (" nop"); //delay 15 ns x 16 = about 250 ns delay
+
 	IOCLR1 = LCD_E;
 //	osSleep(1);
+
 	for(i=0; i<16; i++)
-    asm volatile (" nop"); //delay 15 ns x 16 = about 250 ns delay
+		asm volatile (" nop"); //delay 15 ns x 16 = about 250 ns delay
 }
 
 /*****************************************************************************

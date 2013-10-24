@@ -19,11 +19,22 @@
 #include "usb/lpc_usb.h"
 #include "usb/lpc_hid.h"
 
+#include "snake.h"
+#include "key.h"
+#include "lcd.h"
+
+#include "fire_0_100x40c.h"
+#include "fire_1_100x40c.h"
+#include "fire_2_100x40c.h"
+#include "fire_3_100x40c.h"
+#include "fire_4_100x40c.h"
+
 #define PROC1_STACK_SIZE 2048
 #define PROC2_STACK_SIZE 2048
 #define PROC3_STACK_SIZE 2048
 #define PROC4_STACK_SIZE 2048
 #define PROC5_STACK_SIZE 2048
+#define PROC66_STACK_SIZE 750
 #define INIT_STACK_SIZE  400
 
 static tU8 proc1Stack[PROC1_STACK_SIZE];
@@ -31,19 +42,21 @@ static tU8 proc2Stack[PROC2_STACK_SIZE];
 static tU8 proc3Stack[PROC3_STACK_SIZE];
 static tU8 proc4Stack[PROC4_STACK_SIZE];
 static tU8 proc5Stack[PROC5_STACK_SIZE];
+static tU8 proc66Stack[PROC66_STACK_SIZE];
 static tU8 initStack[INIT_STACK_SIZE];
 static tU8 pid1;
 static tU8 pid2;
 static tU8 pid3;
 static tU8 pid4;
 static tU8 pid5;
-
+static tU8 pid66;
 
 static void proc1(void* arg);
 static void proc2(void* arg);
 static void proc3(void* arg);
 static void proc4(void* arg);
 static void proc5(void* arg);
+static void proc66(void* arg);
 static void initProc(void* arg);
 
 void testLedMatrix(void);
@@ -58,6 +71,8 @@ tU8  testXBee(void);
 tU8 xbeePresent;
 volatile tU32 msClock = 0;
 extern char startupSound[];
+
+static tU8 contrast = 46;
 
 
 /*****************************************************************************
@@ -214,6 +229,8 @@ proc1(void* arg)
     //osStartProcess(pid2, &error);
     osCreateProcess(proc3, proc3Stack, PROC3_STACK_SIZE, &pid3, 3, NULL, &error);
     osStartProcess(pid3, &error);
+    osCreateProcess(proc66, proc66Stack, PROC66_STACK_SIZE, &pid66, 3, NULL, &error);
+    osStartProcess(pid66, &error);
     //osCreateProcess(proc4, proc4Stack, PROC4_STACK_SIZE, &pid4, 3, NULL, &error);
     //osStartProcess(pid4, &error);
     //osCreateProcess(proc5, proc5Stack, PROC5_STACK_SIZE, &pid5, 3, NULL, &error);
@@ -283,6 +300,90 @@ static void
 proc3(void* arg)
 {
 	testLcd();
+}
+
+static void
+drawMenu(void)
+{
+  lcdColor(0,0);
+  lcdClrscr();
+
+  lcdRect(14, 0, 102, 128, 0x6d);
+  lcdRect(15, 17, 100, 110, 0);
+
+  lcdGotoxy(48,1);
+  lcdColor(0x6d,0);
+  lcdPuts("MENU");
+
+  lcdGotoxy(22,20+(14*1));
+  lcdColor(0x00,0xe0);
+//  lcdColor(0x00,0xfd);
+  lcdPuts("Play Snake");
+}
+
+static void
+proc66(void* arg)
+{
+  static tU8 i = 0;
+
+  printf("\n\n\n\n\n*******************************************************\n");
+  printf("*                                                     *\n");
+  printf("* Demo program for 'Experiment Expansion Board'       *\n");
+  printf("* running on LPC2103 Education Board.                 *\n");
+  printf("* - Snake game                                        *\n");
+  printf("*                                                     *\n");
+  printf("* (C) Embedded Artists 2008                           *\n");
+  printf("*                                                     *\n");
+  printf("*******************************************************\n");
+
+  IODIR |= 0x00006000;  //P0.13/14
+  IOSET  = 0x00006000;
+
+  lcdInit();
+  initKeyProc();
+  drawMenu();
+  lcdContrast(contrast);
+  while(1)
+  {
+    tU8 anyKey;
+
+    anyKey = checkKey();
+    if (anyKey != KEY_NOTHING)
+    {
+      //select specific function
+      if (anyKey == KEY_CENTER)
+      {
+        playSnake();
+        drawMenu();
+      }
+
+      //adjust contrast
+      else if (anyKey == KEY_RIGHT)
+      {
+        contrast++;
+        if (contrast > 127)
+          contrast = 127;
+        lcdContrast(contrast);
+      }
+      else if (anyKey == KEY_LEFT)
+      {
+        if (contrast > 0)
+          contrast--;
+        lcdContrast(contrast);
+      }
+    }
+
+    switch(i)
+    {
+      case 0: lcdIcon(15, 88, 100, 40, _fire_0_100x40c[2], _fire_0_100x40c[3], &_fire_0_100x40c[4]); i++; break;
+      case 1: lcdIcon(15, 88, 100, 40, _fire_1_100x40c[2], _fire_1_100x40c[3], &_fire_1_100x40c[4]); i++; break;
+      case 2: lcdIcon(15, 88, 100, 40, _fire_2_100x40c[2], _fire_2_100x40c[3], &_fire_2_100x40c[4]); i++; break;
+      case 3: lcdIcon(15, 88, 100, 40, _fire_3_100x40c[2], _fire_3_100x40c[3], &_fire_3_100x40c[4]); i++; break;
+      case 4: lcdIcon(15, 88, 100, 40, _fire_4_100x40c[2], _fire_4_100x40c[3], &_fire_4_100x40c[4]); i=0; break;
+      default: i = 0; break;
+    }
+    osSleep(20);
+  }
 }
 
 /*****************************************************************************
