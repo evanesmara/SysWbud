@@ -19,6 +19,4 @@
 
 *.hex
 *.elf
-*/build_files/*.ld
-*/build_files/*.mk
 *.map
