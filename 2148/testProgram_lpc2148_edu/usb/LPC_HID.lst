@@ -1,0 +1,3335 @@
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 1
+
+
+   1              		.file	"LPC_HID.c"
+   2              		.section	.debug_abbrev,"",%progbits
+   3              	.Ldebug_abbrev0:
+   4              		.section	.debug_info,"",%progbits
+   5              	.Ldebug_info0:
+   6              		.section	.debug_line,"",%progbits
+   7              	.Ldebug_line0:
+   8 0000 21010000 		.text
+   8      02002000 
+   8      00000201 
+   8      FB0E0D00 
+   8      01010101 
+   9              	.Ltext0:
+  10              		.align	2
+  11              		.global	HID_GetConfiguration
+  12              		.type	HID_GetConfiguration, %function
+  13              	HID_GetConfiguration:
+  14              	.LFB3:
+  15              		.file 1 "LPC_HID.c"
+   1:LPC_HID.c     **** /*************************************************************************
+   2:LPC_HID.c     ****  *
+   3:LPC_HID.c     **** **************************************************************************/
+   4:LPC_HID.c     **** #include <lpc2xxx.h>
+   5:LPC_HID.c     **** #include <printf_P.h>
+   6:LPC_HID.c     **** #include "lpc_hid.h"
+   7:LPC_HID.c     **** 
+   8:LPC_HID.c     **** 
+   9:LPC_HID.c     **** typedef union
+  10:LPC_HID.c     **** {
+  11:LPC_HID.c     ****   unsigned int Data[2];
+  12:LPC_HID.c     ****   unsigned short SetupRecuest;
+  13:LPC_HID.c     ****   struct
+  14:LPC_HID.c     ****   {
+  15:LPC_HID.c     ****     unsigned char  RequestType;
+  16:LPC_HID.c     ****     unsigned char  Request;
+  17:LPC_HID.c     ****     unsigned short Value;
+  18:LPC_HID.c     ****     unsigned short Index;
+  19:LPC_HID.c     ****     unsigned short Length;
+  20:LPC_HID.c     ****   } __attribute__ ((packed)) DataFields;
+  21:LPC_HID.c     **** } __attribute__ ((packed)) USB_SETUP_PACKET_DEF;
+  22:LPC_HID.c     **** 
+  23:LPC_HID.c     **** #define MIN(a, b) (((a) < (b)) ? (a) : (b))
+  24:LPC_HID.c     **** 
+  25:LPC_HID.c     **** unsigned char  currentConfiguration __attribute__ ((aligned (8)));
+  26:LPC_HID.c     **** unsigned char  currentAddress __attribute__ ((aligned (8)));
+  27:LPC_HID.c     **** 
+  28:LPC_HID.c     **** short mouseDescriptor[] __attribute__ ((aligned (8))) =
+  29:LPC_HID.c     **** {
+  30:LPC_HID.c     ****   0x0105, // Usage Page (Generic Desktop)
+  31:LPC_HID.c     ****   0x0209, // Usage (Mouse)
+  32:LPC_HID.c     ****   0x01A1, // Collection (Application)
+  33:LPC_HID.c     ****   0x0109, //  Usage (Pointer)
+  34:LPC_HID.c     ****   0x00A1, //  Collection (Physical)
+  35:LPC_HID.c     ****   0x0905, //    Usage Page (Buttons)
+  36:LPC_HID.c     ****   0x0119, //    Usage Minimumù (01)
+  37:LPC_HID.c     ****   0x0329, //    Usage Maximum (03)
+  38:LPC_HID.c     ****   0x0015, //    Logical Minimum (0)
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 2
+
+
+  39:LPC_HID.c     ****   0x0125, //    Logical Maximum (1)
+  40:LPC_HID.c     ****   0x0395, //    Report Count (3)
+  41:LPC_HID.c     ****   0x0175, //    Report Size (1)
+  42:LPC_HID.c     ****   0x0281, //    3 Button bits
+  43:LPC_HID.c     ****   0x0195, //    Report Count (1)
+  44:LPC_HID.c     ****   0x0575, //    Report Size (6)
+  45:LPC_HID.c     ****   0x0181, //    6 bit padding
+  46:LPC_HID.c     ****   0x0105, //    Generic desktop
+  47:LPC_HID.c     ****   0x3009, //    Usage(X)
+  48:LPC_HID.c     ****   0x3109, //    Usage(Y)
+  49:LPC_HID.c     ****   0x8115, //    Logical Minimum (-127)
+  50:LPC_HID.c     ****   0x7F25, //    Logical Maximum (127)
+  51:LPC_HID.c     ****   0x0875, //    Report Size (8)
+  52:LPC_HID.c     ****   0x0295, //    Report Count (2)
+  53:LPC_HID.c     ****   0x0681, //    2 position bytes
+  54:LPC_HID.c     ****   0xC0C0  // End collection x2
+  55:LPC_HID.c     **** } ;
+  56:LPC_HID.c     **** 
+  57:LPC_HID.c     **** // Check http://www.usb.org/developers/hidpage/#Class_Definition
+  58:LPC_HID.c     **** char devDescriptor[] __attribute__ ((aligned (8))) =
+  59:LPC_HID.c     **** {
+  60:LPC_HID.c     ****   /* Device descriptor */
+  61:LPC_HID.c     ****   0x12,                 // bLength
+  62:LPC_HID.c     ****   0x01,                 // bDescriptorType
+  63:LPC_HID.c     ****   0x10,                 // bcdUSBL
+  64:LPC_HID.c     ****   0x01,                 //
+  65:LPC_HID.c     ****   0x00,                 // bDeviceClass:
+  66:LPC_HID.c     ****   0x00,                 // bDeviceSubclass:
+  67:LPC_HID.c     ****   0x00,                 // bDeviceProtocol:
+  68:LPC_HID.c     ****   MAX_CTRL_EP_PK_SIZE,  // bMaxPacketSize0
+  69:LPC_HID.c     ****   0xFF,                 // idVendorL
+  70:LPC_HID.c     ****   0xFF,                 //
+  71:LPC_HID.c     ****   0x01,                 // idProductL
+  72:LPC_HID.c     ****   0x00,                 //
+  73:LPC_HID.c     ****   0x00,                 // bcdDeviceL
+  74:LPC_HID.c     ****   0x00,                 //
+  75:LPC_HID.c     ****   0x01,                 // iManufacturer
+  76:LPC_HID.c     ****   0x02,                 // iProduct
+  77:LPC_HID.c     ****   0x00,                 // SerialNumber
+  78:LPC_HID.c     ****   0x01                  // bNumConfigs
+  79:LPC_HID.c     **** };
+  80:LPC_HID.c     **** 
+  81:LPC_HID.c     **** char cfgDescriptor[] __attribute__ ((aligned (8))) =
+  82:LPC_HID.c     **** {
+  83:LPC_HID.c     ****   /* ============== CONFIGURATION 1 =========== */
+  84:LPC_HID.c     ****   /* Configuration 1 descriptor */
+  85:LPC_HID.c     ****   0x09,   // CbLength
+  86:LPC_HID.c     ****   0x02,   // CbDescriptorType
+  87:LPC_HID.c     ****   0x22,   // CwTotalLength 2 EP + Control
+  88:LPC_HID.c     ****   0x00,
+  89:LPC_HID.c     ****   0x01,   // CbNumInterfaces
+  90:LPC_HID.c     ****   0x01,   // CbConfigurationValue
+  91:LPC_HID.c     ****   0x00,   // CiConfiguration
+  92:LPC_HID.c     ****   0xA0,   // CbmAttributes Bus powered + Remote Wakeup
+  93:LPC_HID.c     ****   0x32,   // CMaxPower: 100mA
+  94:LPC_HID.c     **** 
+  95:LPC_HID.c     ****   /* Mouse Interface Descriptor Requirement */
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 3
+
+
+  96:LPC_HID.c     ****   0x09,   // bLength
+  97:LPC_HID.c     ****   0x04,   // bDescriptorType
+  98:LPC_HID.c     ****   0x00,   // bInterfaceNumber
+  99:LPC_HID.c     ****   0x00,   // bAlternateSetting
+ 100:LPC_HID.c     ****   0x01,   // bNumEndpoints
+ 101:LPC_HID.c     ****   0x03,   // bInterfaceClass: HID code
+ 102:LPC_HID.c     ****   0x01,   // bInterfaceSubclass
+ 103:LPC_HID.c     ****   0x02,   // bInterfaceProtocol: Mouse
+ 104:LPC_HID.c     ****   0x00,   // iInterface
+ 105:LPC_HID.c     **** 
+ 106:LPC_HID.c     ****   /* HID Descriptor */
+ 107:LPC_HID.c     ****   0x09,   // bLength
+ 108:LPC_HID.c     ****   0x21,   // bDescriptor type: HID Descriptor Type
+ 109:LPC_HID.c     ****   0x00,   // bcdHID
+ 110:LPC_HID.c     ****   0x01,
+ 111:LPC_HID.c     ****   0x00,   // bCountry Code
+ 112:LPC_HID.c     ****   0x01,   // bNumDescriptors
+ 113:LPC_HID.c     ****   0x22,   // bDescriptorType
+ 114:LPC_HID.c     ****   sizeof(mouseDescriptor), // wItemLength
+ 115:LPC_HID.c     ****   0x00,
+ 116:LPC_HID.c     **** 
+ 117:LPC_HID.c     ****   /* Endpoint 1 descriptor */
+ 118:LPC_HID.c     ****   0x07,   // bLength
+ 119:LPC_HID.c     ****   0x05,   // bDescriptorType
+ 120:LPC_HID.c     ****   ((EP_REP&1)<<7) + (EP_REP>>1),// bEndpointAddress and direction, Endpoint Logic address!!
+ 121:LPC_HID.c     ****   0x03,   // bmAttributes      INT
+ 122:LPC_HID.c     ****   0x04,   // wMaxPacketSize: 3 bytes (button, x, y)
+ 123:LPC_HID.c     ****   0x00,
+ 124:LPC_HID.c     ****   0x0A    // bInterval
+ 125:LPC_HID.c     **** };
+ 126:LPC_HID.c     **** 
+ 127:LPC_HID.c     **** 
+ 128:LPC_HID.c     **** char LanguagesStr[] __attribute__ ((aligned (8))) =
+ 129:LPC_HID.c     **** {
+ 130:LPC_HID.c     ****   /* String descriptor 0*/
+ 131:LPC_HID.c     ****   0x04, // bLength
+ 132:LPC_HID.c     ****   0x03, // bDescriptorType
+ 133:LPC_HID.c     ****   0x09,0x04 // Language English
+ 134:LPC_HID.c     **** };
+ 135:LPC_HID.c     **** 
+ 136:LPC_HID.c     **** char ManufacturerStr[] __attribute__ ((aligned (8))) =
+ 137:LPC_HID.c     **** {
+ 138:LPC_HID.c     ****   /* String descriptor 1*/
+ 139:LPC_HID.c     ****   60,   // bLength
+ 140:LPC_HID.c     ****   0x03, // bDescriptorType
+ 141:LPC_HID.c     ****   'P',0,'h',0,'i',0,'l',0,'i',0,
+ 142:LPC_HID.c     ****   'p',0,' ',0,'S',0,'e',0,'m',0,
+ 143:LPC_HID.c     ****   'i',0,'c',0,'o',0,'n',0,'d',0,
+ 144:LPC_HID.c     ****   'u',0,'c',0,'t',0,'o',0,'r',0,
+ 145:LPC_HID.c     ****   's',0,' ',0,'L',0,'P',0,'C',0,
+ 146:LPC_HID.c     ****   '2',0,'1',0,'4',0,'8',0
+ 147:LPC_HID.c     **** };
+ 148:LPC_HID.c     **** 
+ 149:LPC_HID.c     **** char ProductStr[] __attribute__ ((aligned (8))) =
+ 150:LPC_HID.c     **** {
+ 151:LPC_HID.c     ****   /* String descriptor 2*/
+ 152:LPC_HID.c     ****   98,   // bLength
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 4
+
+
+ 153:LPC_HID.c     ****   0x03, // bDescriptorType
+ 154:LPC_HID.c     ****   'E',0,'m',0,'b',0,'e',0,'d',0,
+ 155:LPC_HID.c     ****   'd',0,'e',0,'d',0,' ',0,'A',0,
+ 156:LPC_HID.c     ****   'r',0,'t',0,'i',0,'s',0,'t',0,
+ 157:LPC_HID.c     ****   's',0,' ',0,'Q',0,'u',0,'i',0,
+ 158:LPC_HID.c     ****   'c',0,'k',0,'S',0,'t',0,'a',0,
+ 159:LPC_HID.c     ****   'r',0,'t',0,' ',0,'B',0,'o',0,
+ 160:LPC_HID.c     ****   'a',0,'r',0,'d',0,' ',0,'-',0,
+ 161:LPC_HID.c     ****   ' ',0,'t',0,'e',0,'s',0,'t',0,
+ 162:LPC_HID.c     ****   ' ',0,'p',0,'r',0,'o',0,'g',0,
+ 163:LPC_HID.c     ****   'r',0,'a',0,'m',0
+ 164:LPC_HID.c     **** };
+ 165:LPC_HID.c     **** 
+ 166:LPC_HID.c     **** const char * const StrPoin [] __attribute__ ((aligned (8))) =
+ 167:LPC_HID.c     **** {
+ 168:LPC_HID.c     ****   LanguagesStr,ManufacturerStr,ProductStr
+ 169:LPC_HID.c     **** };
+ 170:LPC_HID.c     **** 
+ 171:LPC_HID.c     **** /*************************************************************************
+ 172:LPC_HID.c     ****  * Function Name: HID_Intr
+ 173:LPC_HID.c     ****  * Parameters: none
+ 174:LPC_HID.c     ****  * Return: none
+ 175:LPC_HID.c     ****  * Description: HID Init
+ 176:LPC_HID.c     ****  *
+ 177:LPC_HID.c     ****  *************************************************************************/
+ 178:LPC_HID.c     **** void HID_Init (void)
+ 179:LPC_HID.c     **** {
+ 180:LPC_HID.c     ****   currentConfiguration = 0;
+ 181:LPC_HID.c     ****   currentAddress = 0;
+ 182:LPC_HID.c     ****   // Realize I/O Ctrl Endpoint
+ 183:LPC_HID.c     ****   USB_RealizeEndPoint(CTRL_ENP_OUT,MAX_CTRL_EP_PK_SIZE,USB_LowPrior,1);
+ 184:LPC_HID.c     ****   USB_RealizeEndPoint(CTRL_ENP_IN ,MAX_CTRL_EP_PK_SIZE,USB_LowPrior,0);
+ 185:LPC_HID.c     ****   // Set dafault Address
+ 186:LPC_HID.c     ****   USB_SetAdd(currentAddress);
+ 187:LPC_HID.c     ****   /* Set the device status, making the soft connect active */
+ 188:LPC_HID.c     ****   USB_Cmd(CMD_USB_SET_DEV_STAT,1);
+ 189:LPC_HID.c     **** }
+ 190:LPC_HID.c     **** 
+ 191:LPC_HID.c     **** /*************************************************************************
+ 192:LPC_HID.c     ****  * Function Name: HID_GetConfiguration
+ 193:LPC_HID.c     ****  * Parameters: none
+ 194:LPC_HID.c     ****  * Return: unsigned char
+ 195:LPC_HID.c     ****  * Description: Return current device configuration
+ 196:LPC_HID.c     ****  *
+ 197:LPC_HID.c     ****  *************************************************************************/
+ 198:LPC_HID.c     **** unsigned char HID_GetConfiguration (void)
+ 199:LPC_HID.c     **** {
+  16              		.loc 1 199 0
+  17              		@ Function supports interworking.
+  18              		@ args = 0, pretend = 0, frame = 0
+  19              		@ frame_needed = 0, uses_anonymous_args = 0
+  20              		@ link register save eliminated.
+ 200:LPC_HID.c     ****   return(currentConfiguration);
+ 201:LPC_HID.c     **** }
+  21              		.loc 1 201 0
+  22 0000 04309FE5 		ldr	r3, .L3
+  23 0004 0000D3E5 		ldrb	r0, [r3, #0]	@ zero_extendqisi2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 5
+
+
+  24              		.loc 1 199 0
+  25              		@ lr needed for prologue
+  26              		.loc 1 201 0
+  27 0008 1EFF2FE1 		bx	lr
+  28              	.L4:
+  29              		.align	2
+  30              	.L3:
+  31 000c 00000000 		.word	currentConfiguration
+  32              	.LFE3:
+  33              		.size	HID_GetConfiguration, .-HID_GetConfiguration
+  34              		.section	.rodata.str1.4,"aMS",%progbits,1
+  35              		.align	2
+  36              	.LC0:
+  37 0000 4572726F 		.ascii	"Error Send Data\000"
+  37      72205365 
+  37      6E642044 
+  37      61746100 
+  38              		.text
+  39              		.align	2
+  40              		.global	HID_SendReport
+  41              		.type	HID_SendReport, %function
+  42              	HID_SendReport:
+  43              	.LFB9:
+ 202:LPC_HID.c     **** 
+ 203:LPC_HID.c     **** /*************************************************************************
+ 204:LPC_HID.c     ****  * Function Name: HID_CallBack
+ 205:LPC_HID.c     ****  * Parameters: none
+ 206:LPC_HID.c     ****  * Return: none
+ 207:LPC_HID.c     ****  * Description: HID callback subroutine
+ 208:LPC_HID.c     ****  *
+ 209:LPC_HID.c     ****  *************************************************************************/
+ 210:LPC_HID.c     **** void HID_CallBack (void)
+ 211:LPC_HID.c     **** {
+ 212:LPC_HID.c     ****   if (DEV_INT_STAT & USB_ErrorInterrupt)
+ 213:LPC_HID.c     ****   {
+ 214:LPC_HID.c     ****     // Error interrupt
+ 215:LPC_HID.c     **** //printf("\nUSB error irq\n");
+ 216:LPC_HID.c     ****     USB_Cmd(CMD_USB_RD_ERROR_STAT,0);
+ 217:LPC_HID.c     ****     DEV_INT_CLR = USB_ErrorInterrupt;
+ 218:LPC_HID.c     ****   }
+ 219:LPC_HID.c     **** 
+ 220:LPC_HID.c     ****   if (DEV_INT_STAT & USB_DevStatusInterrupt)
+ 221:LPC_HID.c     ****   {
+ 222:LPC_HID.c     ****     // Device status interrupt
+ 223:LPC_HID.c     ****     int USB_DevIntrStaus = USB_Cmd(CMD_USB_GET_DEV_STAT,0);
+ 224:LPC_HID.c     ****     // Bus reset
+ 225:LPC_HID.c     ****     if (USB_DevIntrStaus & USB_BusReset)
+ 226:LPC_HID.c     ****     {
+ 227:LPC_HID.c     **** //printf("\nUSB bus reset\n");
+ 228:LPC_HID.c     ****       HID_Init();
+ 229:LPC_HID.c     ****     }
+ 230:LPC_HID.c     ****     DEV_INT_CLR = USB_DevStatusInterrupt;
+ 231:LPC_HID.c     ****   }
+ 232:LPC_HID.c     **** 
+ 233:LPC_HID.c     ****   if (DEV_INT_STAT & USB_FastInterrupt)
+ 234:LPC_HID.c     ****   {
+ 235:LPC_HID.c     ****     DEV_INT_CLR = USB_FastInterrupt;
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 6
+
+
+ 236:LPC_HID.c     ****   }
+ 237:LPC_HID.c     **** 
+ 238:LPC_HID.c     ****   if (DEV_INT_STAT & USB_SlowInterrupt)
+ 239:LPC_HID.c     ****   {
+ 240:LPC_HID.c     ****     // Slow interrupt
+ 241:LPC_HID.c     ****     if (EP_INT_STAT & (1<<CTRL_ENP_OUT))
+ 242:LPC_HID.c     ****     {
+ 243:LPC_HID.c     ****       // Select And Clear interrupt
+ 244:LPC_HID.c     ****       HID_ImplSetupPacket();
+ 245:LPC_HID.c     ****       EP_INT_CLR = 1<<CTRL_ENP_OUT;
+ 246:LPC_HID.c     ****     }
+ 247:LPC_HID.c     ****     DEV_INT_CLR = USB_SlowInterrupt;
+ 248:LPC_HID.c     ****   }
+ 249:LPC_HID.c     **** }
+ 250:LPC_HID.c     **** 
+ 251:LPC_HID.c     **** /*************************************************************************
+ 252:LPC_HID.c     ****  * Function Name: HID_CtrlStall
+ 253:LPC_HID.c     ****  * Parameters: none
+ 254:LPC_HID.c     ****  * Return: none
+ 255:LPC_HID.c     ****  * Description: Stalls Cotrol Endpoint
+ 256:LPC_HID.c     ****  *
+ 257:LPC_HID.c     ****  *************************************************************************/
+ 258:LPC_HID.c     **** void HID_CtrlStall (void)
+ 259:LPC_HID.c     **** {
+ 260:LPC_HID.c     ****   USB_Cmd(CMD_USB_SET_EP_STAT + CTRL_ENP_OUT,0x80);
+ 261:LPC_HID.c     **** }
+ 262:LPC_HID.c     **** 
+ 263:LPC_HID.c     **** /*************************************************************************
+ 264:LPC_HID.c     ****  * Function Name: HID_SendDataByCtrlEP
+ 265:LPC_HID.c     ****  * Parameters: none
+ 266:LPC_HID.c     ****  * Return: none
+ 267:LPC_HID.c     ****  * Description: Send zero length size packet
+ 268:LPC_HID.c     ****  *
+ 269:LPC_HID.c     ****  *************************************************************************/
+ 270:LPC_HID.c     **** void HID_SendZeroLengthByCtrlEP (void)
+ 271:LPC_HID.c     **** {
+ 272:LPC_HID.c     **** //EA  USBCTRL_bit.LOG_ENDPOINT = 0;
+ 273:LPC_HID.c     **** //EA  USBCTRL_bit.WR_EN = 1;
+ 274:LPC_HID.c     **** USB_CTRL = (USB_CTRL & 0x01) | 0x02;
+ 275:LPC_HID.c     ****   TX_PLENGTH = 0;
+ 276:LPC_HID.c     ****   do
+ 277:LPC_HID.c     ****   {
+ 278:LPC_HID.c     ****     TX_DATA = 0;
+ 279:LPC_HID.c     ****   }
+ 280:LPC_HID.c     **** //EA  while (USBCTRL_bit.WR_EN);
+ 281:LPC_HID.c     ****   while (USB_CTRL & 0x02);
+ 282:LPC_HID.c     **** 
+ 283:LPC_HID.c     ****   // Validate buffer
+ 284:LPC_HID.c     ****   USB_ValidateBuffer(CTRL_ENP_IN);
+ 285:LPC_HID.c     **** 
+ 286:LPC_HID.c     ****   // Wait for interrupt by EP0 IN
+ 287:LPC_HID.c     ****   while ((EP_INT_STAT & (1<<CTRL_ENP_IN)) == 0)
+ 288:LPC_HID.c     ****   {
+ 289:LPC_HID.c     ****     if ((USB_Cmd(CMD_USB_SET_EP_STAT + CTRL_ENP_IN,0) & 1) == 0)
+ 290:LPC_HID.c     ****     {
+ 291:LPC_HID.c     ****       if((EP_INT_STAT & (1<<CTRL_ENP_IN)) == 0)
+ 292:LPC_HID.c     ****       {
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 7
+
+
+ 293:LPC_HID.c     ****         break;
+ 294:LPC_HID.c     ****       }
+ 295:LPC_HID.c     ****     }
+ 296:LPC_HID.c     ****   }
+ 297:LPC_HID.c     ****   // Clear Endpoint inerrupt (in USB clock domain)
+ 298:LPC_HID.c     ****   USB_Cmd(CMD_USB_SEL_CLR_INT_EP + CTRL_ENP_IN,0);
+ 299:LPC_HID.c     ****   // Clear interrupt
+ 300:LPC_HID.c     ****   EP_INT_CLR = (1<<CTRL_ENP_IN);
+ 301:LPC_HID.c     **** }
+ 302:LPC_HID.c     **** 
+ 303:LPC_HID.c     **** /*************************************************************************
+ 304:LPC_HID.c     ****  * Function Name: HID_SendDataByCtrlEP
+ 305:LPC_HID.c     ****  * Parameters: none
+ 306:LPC_HID.c     ****  * Return: none
+ 307:LPC_HID.c     ****  * Description: Send data by Cotrol Endpoint
+ 308:LPC_HID.c     ****  *
+ 309:LPC_HID.c     ****  *************************************************************************/
+ 310:LPC_HID.c     **** void HID_SendDataByCtrlEP (unsigned char * Data, unsigned int DataSize)
+ 311:LPC_HID.c     **** {
+ 312:LPC_HID.c     **** unsigned int * pData = (unsigned int *)Data;
+ 313:LPC_HID.c     **** unsigned int i;
+ 314:LPC_HID.c     **** int ZerroLength = 0;
+ 315:LPC_HID.c     **** 
+ 316:LPC_HID.c     ****   do
+ 317:LPC_HID.c     ****   {
+ 318:LPC_HID.c     ****     if (DataSize == MAX_CTRL_EP_PK_SIZE)
+ 319:LPC_HID.c     ****     {
+ 320:LPC_HID.c     ****       ++ZerroLength;
+ 321:LPC_HID.c     ****     }
+ 322:LPC_HID.c     ****     i = MIN(DataSize,MAX_CTRL_EP_PK_SIZE);
+ 323:LPC_HID.c     ****     DataSize -= i;
+ 324:LPC_HID.c     ****     // Select Endpoint
+ 325:LPC_HID.c     **** //EA    USBCTRL_bit.LOG_ENDPOINT = 0;
+ 326:LPC_HID.c     **** //EA    USBCTRL_bit.WR_EN = 1;
+ 327:LPC_HID.c     **** USB_CTRL = (USB_CTRL & 0x01) | 0x02;
+ 328:LPC_HID.c     **** 
+ 329:LPC_HID.c     ****     TX_PLENGTH = i;
+ 330:LPC_HID.c     **** 
+ 331:LPC_HID.c     **** 	  do
+ 332:LPC_HID.c     ****     {
+ 333:LPC_HID.c     ****       TX_DATA = *pData++;
+ 334:LPC_HID.c     ****     }
+ 335:LPC_HID.c     ****     while (USB_CTRL & 0x02);
+ 336:LPC_HID.c     **** //EA    while (USBCTRL_bit.WR_EN);
+ 337:LPC_HID.c     **** 
+ 338:LPC_HID.c     ****     // Validate buffer
+ 339:LPC_HID.c     ****     USB_ValidateBuffer(CTRL_ENP_IN);
+ 340:LPC_HID.c     ****     // Wait until data is send or overwrite by setup packet
+ 341:LPC_HID.c     ****     while ((EP_INT_STAT & (1<<CTRL_ENP_IN)) == 0)
+ 342:LPC_HID.c     ****     {
+ 343:LPC_HID.c     ****       if ((USB_Cmd(CMD_USB_SET_EP_STAT + CTRL_ENP_IN,0) & 1) == 0)
+ 344:LPC_HID.c     ****       {
+ 345:LPC_HID.c     ****         if((EP_INT_STAT & (1<<CTRL_ENP_IN)) == 0)
+ 346:LPC_HID.c     ****         {
+ 347:LPC_HID.c     ****           USB_Cmd(CMD_USB_SEL_CLR_INT_EP + CTRL_ENP_IN,0);
+ 348:LPC_HID.c     ****           return;
+ 349:LPC_HID.c     ****         }
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 8
+
+
+ 350:LPC_HID.c     ****       }
+ 351:LPC_HID.c     ****     }
+ 352:LPC_HID.c     **** 
+ 353:LPC_HID.c     ****     USB_Cmd(CMD_USB_SEL_CLR_INT_EP + CTRL_ENP_IN,0);
+ 354:LPC_HID.c     ****     EP_INT_CLR = (1<<CTRL_ENP_IN);
+ 355:LPC_HID.c     ****   }
+ 356:LPC_HID.c     ****   while (DataSize);
+ 357:LPC_HID.c     ****   if (ZerroLength)
+ 358:LPC_HID.c     ****   {
+ 359:LPC_HID.c     ****     HID_SendZeroLengthByCtrlEP();
+ 360:LPC_HID.c     ****   }
+ 361:LPC_HID.c     **** }
+ 362:LPC_HID.c     **** 
+ 363:LPC_HID.c     **** /*************************************************************************
+ 364:LPC_HID.c     ****  * Function Name: HID_ImplSetupPacket
+ 365:LPC_HID.c     ****  * Parameters: none
+ 366:LPC_HID.c     ****  * Return: none
+ 367:LPC_HID.c     ****  * Description: Setup packet implementation
+ 368:LPC_HID.c     ****  *
+ 369:LPC_HID.c     ****  *************************************************************************/
+ 370:LPC_HID.c     **** void HID_ImplSetupPacket (void)
+ 371:LPC_HID.c     **** {
+ 372:LPC_HID.c     **** static USB_SETUP_PACKET_DEF Setup __attribute__ ((aligned (8)));
+ 373:LPC_HID.c     **** static unsigned short Status,Length __attribute__ ((aligned (8)));
+ 374:LPC_HID.c     **** int i = 0;
+ 375:LPC_HID.c     ****   do
+ 376:LPC_HID.c     ****   {
+ 377:LPC_HID.c     ****     // Read from CTRL Endpoint (0 - out)
+ 378:LPC_HID.c     **** //EA    USBCTRL_bit.LOG_ENDPOINT = 0;
+ 379:LPC_HID.c     **** //EA    USBCTRL_bit.RD_EN = 1;
+ 380:LPC_HID.c     **** USB_CTRL = (USB_CTRL & 0x02) | 0x01;
+ 381:LPC_HID.c     **** 
+ 382:LPC_HID.c     ****     // Wait Packet ready flag
+ 383:LPC_HID.c     **** //EA    while (RCVEPKTLEN_bit.PKT_RDY == 0);
+ 384:LPC_HID.c     ****     while ((RX_PLENGTH & 0x800) == 0);
+ 385:LPC_HID.c     ****     // Read data from USB FIFO
+ 386:LPC_HID.c     ****     // Get size of packet
+ 387:LPC_HID.c     **** //EA    Length = RCVEPKTLEN_bit.PKT_LNGTH;
+ 388:LPC_HID.c     ****     Length = RX_PLENGTH & 0x3ff;
+ 389:LPC_HID.c     **** //EA    while (RCVEPKTLEN_bit.DV)
+ 390:LPC_HID.c     ****     while (RX_PLENGTH & 0x400)
+ 391:LPC_HID.c     ****     {
+ 392:LPC_HID.c     **** //EA      Setup.Data[i++] = RCVEDATA;
+ 393:LPC_HID.c     ****       Setup.Data[i++] = RX_DATA;
+ 394:LPC_HID.c     ****     }
+ 395:LPC_HID.c     ****     // Clear Buffer Full flag
+ 396:LPC_HID.c     ****     i = USB_ClearBuffer(CTRL_ENP_OUT);
+ 397:LPC_HID.c     ****     USB_Cmd(CMD_USB_SEL_CLR_INT_EP+CTRL_ENP_OUT,0);
+ 398:LPC_HID.c     ****   }
+ 399:LPC_HID.c     ****   while(i);
+ 400:LPC_HID.c     **** 
+ 401:LPC_HID.c     ****   if (Length == 0) return;
+ 402:LPC_HID.c     **** 
+ 403:LPC_HID.c     ****   switch (Setup.SetupRecuest)
+ 404:LPC_HID.c     ****   {
+ 405:LPC_HID.c     ****   case USB_GET_DESCRIPTOR:
+ 406:LPC_HID.c     **** //printf("\nUSB get descriptor\n");
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 9
+
+
+ 407:LPC_HID.c     **** 
+ 408:LPC_HID.c     ****     if (Setup.DataFields.Value == 0x100)       // Return Device Descriptor
+ 409:LPC_HID.c     ****     {
+ 410:LPC_HID.c     ****       HID_SendDataByCtrlEP((unsigned char *)devDescriptor,MIN(sizeof(devDescriptor), Setup.DataFiel
+ 411:LPC_HID.c     ****     }
+ 412:LPC_HID.c     ****     else if (Setup.DataFields.Value == 0x200)  // Return Configuration Descriptor
+ 413:LPC_HID.c     ****     {
+ 414:LPC_HID.c     ****       HID_SendDataByCtrlEP((unsigned char *)cfgDescriptor,MIN(sizeof(cfgDescriptor), Setup.DataFiel
+ 415:LPC_HID.c     ****     }
+ 416:LPC_HID.c     ****     else if ((Setup.DataFields.Value & 0xFF00) == 0x300)  // Return String
+ 417:LPC_HID.c     ****     {
+ 418:LPC_HID.c     ****       if ((Setup.DataFields.Value & 0xF) < 3)
+ 419:LPC_HID.c     ****       {
+ 420:LPC_HID.c     ****         const char * Data = StrPoin[Setup.DataFields.Value & 0xF];
+ 421:LPC_HID.c     ****         HID_SendDataByCtrlEP((unsigned char *)Data,MIN(*Data, Setup.DataFields.Length));
+ 422:LPC_HID.c     ****       }
+ 423:LPC_HID.c     ****       else
+ 424:LPC_HID.c     ****       {
+ 425:LPC_HID.c     ****         HID_CtrlStall();
+ 426:LPC_HID.c     ****       }
+ 427:LPC_HID.c     ****     }
+ 428:LPC_HID.c     ****     else
+ 429:LPC_HID.c     ****     {
+ 430:LPC_HID.c     ****       HID_CtrlStall();
+ 431:LPC_HID.c     ****     }
+ 432:LPC_HID.c     ****     break;
+ 433:LPC_HID.c     ****   case USB_SET_ADD:
+ 434:LPC_HID.c     **** //printf("\nUSB set address\n");
+ 435:LPC_HID.c     ****     HID_SendZeroLengthByCtrlEP();
+ 436:LPC_HID.c     ****     currentAddress = Setup.DataFields.Value;
+ 437:LPC_HID.c     ****     USB_SetAdd(currentAddress);
+ 438:LPC_HID.c     ****     break;
+ 439:LPC_HID.c     ****   case USB_SET_CONFIGURATION:
+ 440:LPC_HID.c     **** //printf("\nUSB set configuration\n");
+ 441:LPC_HID.c     ****     if (Setup.DataFields.Value == 1)
+ 442:LPC_HID.c     ****     {
+ 443:LPC_HID.c     ****       currentConfiguration = Setup.DataFields.Value;
+ 444:LPC_HID.c     ****       USB_RealizeEndPoint(EP_REP,4,USB_LowPrior,0);
+ 445:LPC_HID.c     ****       USB_Cmd(CMD_USB_CFG_DEV,1);
+ 446:LPC_HID.c     ****       HID_SendZeroLengthByCtrlEP();
+ 447:LPC_HID.c     ****     }
+ 448:LPC_HID.c     ****     else
+ 449:LPC_HID.c     ****     {
+ 450:LPC_HID.c     ****       // Enable only Endpoint 0
+ 451:LPC_HID.c     ****       USB_Cmd(CMD_USB_CFG_DEV,0);
+ 452:LPC_HID.c     ****       HID_SendZeroLengthByCtrlEP();
+ 453:LPC_HID.c     ****     }
+ 454:LPC_HID.c     ****     break;
+ 455:LPC_HID.c     ****   case USB_GET_CONFIGURATION:
+ 456:LPC_HID.c     **** //printf("\nUSB get configuration\n");
+ 457:LPC_HID.c     ****     HID_SendDataByCtrlEP(&currentConfiguration,sizeof(currentConfiguration));
+ 458:LPC_HID.c     ****     break;
+ 459:LPC_HID.c     ****   case USB_GET_STATUS_DEV:
+ 460:LPC_HID.c     ****   case USB_GET_STATUS_INTERFACE:
+ 461:LPC_HID.c     **** //printf("\nUSB get status\n");
+ 462:LPC_HID.c     ****     Status = 0;
+ 463:LPC_HID.c     ****     HID_SendDataByCtrlEP((unsigned char *)&Status,sizeof(Status));
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 10
+
+
+ 464:LPC_HID.c     ****     break;
+ 465:LPC_HID.c     ****   case USB_GET_STATUS_ENDPOINT:
+ 466:LPC_HID.c     **** //printf("\nUSB get status endpoint\n");
+ 467:LPC_HID.c     ****     Status = 0;
+ 468:LPC_HID.c     ****     if (currentConfiguration && (Setup.DataFields.Index <= 1))
+ 469:LPC_HID.c     ****     {
+ 470:LPC_HID.c     ****       HID_SendDataByCtrlEP((unsigned char *)&Status,sizeof(Status));
+ 471:LPC_HID.c     ****     }
+ 472:LPC_HID.c     ****     else if (currentAddress && (Setup.DataFields.Index == 0))
+ 473:LPC_HID.c     ****     {
+ 474:LPC_HID.c     ****       HID_SendDataByCtrlEP((unsigned char *)&Status,sizeof(Status));
+ 475:LPC_HID.c     ****     }
+ 476:LPC_HID.c     ****     else
+ 477:LPC_HID.c     ****     {
+ 478:LPC_HID.c     ****       HID_CtrlStall();
+ 479:LPC_HID.c     ****     }
+ 480:LPC_HID.c     ****     break;
+ 481:LPC_HID.c     ****   case USB_SET_FEATURE_ENDPOINT:
+ 482:LPC_HID.c     **** //printf("\nUSB set feature endpoint\n");
+ 483:LPC_HID.c     ****     if (Setup.DataFields.Index <= 1)
+ 484:LPC_HID.c     ****     {
+ 485:LPC_HID.c     ****       HID_SendZeroLengthByCtrlEP();
+ 486:LPC_HID.c     ****     }
+ 487:LPC_HID.c     ****     else
+ 488:LPC_HID.c     ****     {
+ 489:LPC_HID.c     ****       HID_CtrlStall();
+ 490:LPC_HID.c     ****     }
+ 491:LPC_HID.c     ****     break;
+ 492:LPC_HID.c     ****   case USB_CLEAR_FEATURE_ENDPOINT:
+ 493:LPC_HID.c     **** //printf("\nUSB clear feature endpoint\n");
+ 494:LPC_HID.c     ****     if ((Setup.DataFields.Value == 0) && (Setup.DataFields.Index == 1))
+ 495:LPC_HID.c     ****     {
+ 496:LPC_HID.c     ****       HID_SendZeroLengthByCtrlEP();
+ 497:LPC_HID.c     ****     }
+ 498:LPC_HID.c     ****     else
+ 499:LPC_HID.c     ****     {
+ 500:LPC_HID.c     ****       HID_CtrlStall();
+ 501:LPC_HID.c     ****     }
+ 502:LPC_HID.c     ****     break;
+ 503:LPC_HID.c     ****   case USB_SET_FEATURE_INTERFACE:
+ 504:LPC_HID.c     ****   case USB_CLEAR_FEATURE_INTERFACE:
+ 505:LPC_HID.c     ****   case USB_HID_SET_IDLE:
+ 506:LPC_HID.c     **** //printf("\nUSB xxx\n");
+ 507:LPC_HID.c     ****     HID_SendZeroLengthByCtrlEP();
+ 508:LPC_HID.c     ****     break;
+ 509:LPC_HID.c     ****   case USB_GET_HID_DESCRIPTOR:
+ 510:LPC_HID.c     **** //printf("\nUSB get hid descriptor\n");
+ 511:LPC_HID.c     ****     HID_SendDataByCtrlEP((unsigned char*) mouseDescriptor,MIN(sizeof(mouseDescriptor), Setup.DataFi
+ 512:LPC_HID.c     ****     break;
+ 513:LPC_HID.c     ****   case USB_SET_FEATURE_DEV:
+ 514:LPC_HID.c     ****   case USB_CLEAR_FEATURE_DEV:
+ 515:LPC_HID.c     ****   case USB_SET_DESCRIPTOR:
+ 516:LPC_HID.c     ****   case USB_GET_INTERFACE:
+ 517:LPC_HID.c     ****   case USB_SET_INTERFACE:
+ 518:LPC_HID.c     ****   default:
+ 519:LPC_HID.c     **** //printf("\nUSB yyy\n");
+ 520:LPC_HID.c     ****     HID_CtrlStall();
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 11
+
+
+ 521:LPC_HID.c     ****     break;
+ 522:LPC_HID.c     ****   }
+ 523:LPC_HID.c     **** }
+ 524:LPC_HID.c     **** 
+ 525:LPC_HID.c     **** /*************************************************************************
+ 526:LPC_HID.c     ****  * Function Name: HID_SendReport
+ 527:LPC_HID.c     ****  * Parameters: char button, char x, char y
+ 528:LPC_HID.c     ****  * Return: none
+ 529:LPC_HID.c     ****  * Description: Send data by Cotrol Endpoint
+ 530:LPC_HID.c     ****  *
+ 531:LPC_HID.c     ****  *************************************************************************/
+ 532:LPC_HID.c     **** void HID_SendReport(char button, char x, char y)
+ 533:LPC_HID.c     **** {
+  44              		.loc 1 533 0
+  45              		@ Function supports interworking.
+  46              		@ args = 0, pretend = 0, frame = 0
+  47              		@ frame_needed = 0, uses_anonymous_args = 0
+  48              	.LVL0:
+ 534:LPC_HID.c     **** unsigned int Data = button + (x<<8) + (y<<16);
+ 535:LPC_HID.c     **** unsigned int failsafe;
+ 536:LPC_HID.c     **** 
+ 537:LPC_HID.c     **** //EA  USBCTRL_bit.LOG_ENDPOINT = EP_REP >> 1;
+ 538:LPC_HID.c     **** //EA  USBCTRL_bit.WR_EN = 1;
+ 539:LPC_HID.c     **** USB_CTRL = (USB_CTRL & 0x01) | 0x02 | (EP_REP << 1);
+  49              		.loc 1 539 0
+  50 0010 A8C09FE5 		ldr	ip, .L20
+  51              		.loc 1 533 0
+  52 0014 0114A0E1 		mov	r1, r1, asl #8
+  53              		.loc 1 539 0
+  54 0018 28309CE5 		ldr	r3, [ip, #40]
+  55              		.loc 1 533 0
+  56 001c FF0000E2 		and	r0, r0, #255
+  57 0020 0228A0E1 		mov	r2, r2, asl #16
+  58              		.loc 1 534 0
+  59 0024 FF1C01E2 		and	r1, r1, #65280
+  60              	.LVL1:
+  61 0028 FF2802E2 		and	r2, r2, #16711680
+  62              	.LVL2:
+  63 002c 010080E0 		add	r0, r0, r1
+  64              	.LVL3:
+  65              		.loc 1 539 0
+  66 0030 013003E2 		and	r3, r3, #1
+  67              		.loc 1 534 0
+  68 0034 020080E0 		add	r0, r0, r2
+  69              	.LVL4:
+  70              		.loc 1 539 0
+  71 0038 063083E3 		orr	r3, r3, #6
+ 540:LPC_HID.c     **** 
+ 541:LPC_HID.c     **** //EA  TPKTLEN = 3;
+ 542:LPC_HID.c     ****   TX_PLENGTH = 3;
+  72              		.loc 1 542 0
+  73 003c 0320A0E3 		mov	r2, #3
+  74              		.loc 1 539 0
+  75 0040 28308CE5 		str	r3, [ip, #40]
+  76              		.loc 1 542 0
+  77 0044 24208CE5 		str	r2, [ip, #36]
+ 543:LPC_HID.c     **** //EA  TDATA = Data;
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 12
+
+
+ 544:LPC_HID.c     ****   TX_DATA = Data;
+  78              		.loc 1 544 0
+  79 0048 1C008CE5 		str	r0, [ip, #28]
+ 545:LPC_HID.c     **** //EA  if (USBCTRL_bit.WR_EN)
+ 546:LPC_HID.c     ****   if (USB_CTRL & 0x02)
+  80              		.loc 1 546 0
+  81 004c 28309CE5 		ldr	r3, [ip, #40]
+  82 0050 020013E3 		tst	r3, #2
+  83              		.loc 1 533 0
+  84 0054 10402DE9 		stmfd	sp!, {r4, lr}
+  85              	.LCFI0:
+  86              		.loc 1 546 0
+  87 0058 0200000A 		beq	.L6
+ 547:LPC_HID.c     ****   {
+ 548:LPC_HID.c     **** #ifndef NDEBUG
+ 549:LPC_HID.c     ****     printf("Error Send Data");
+  88              		.loc 1 549 0
+  89 005c 60009FE5 		ldr	r0, .L20+4
+  90              	.LVL5:
+  91 0060 FEFFFFEB 		bl	simplePrintf
+  92 0064 130000EA 		b	.L13
+  93              	.LVL6:
+  94              	.L6:
+ 550:LPC_HID.c     **** #endif
+ 551:LPC_HID.c     ****     return;
+ 552:LPC_HID.c     ****   }
+ 553:LPC_HID.c     **** 
+ 554:LPC_HID.c     ****   // Validate buffer
+ 555:LPC_HID.c     ****   USB_ValidateBuffer(EP_REP);
+  95              		.loc 1 555 0
+  96 0068 0200A0E1 		mov	r0, r2
+  97              	.LVL7:
+  98 006c FEFFFFEB 		bl	USB_ValidateBuffer
+  99 0070 050000EA 		b	.L19
+ 100              	.L10:
+ 556:LPC_HID.c     **** 
+ 557:LPC_HID.c     ****   // Wait to complete of transmition
+ 558:LPC_HID.c     **** failsafe=0;
+ 559:LPC_HID.c     ****   while ((EP_INT_STAT & (1<<EP_REP)) == 0)
+ 560:LPC_HID.c     ****   {
+ 561:LPC_HID.c     ****     // Get enmdpoint status
+ 562:LPC_HID.c     ****     if ((USB_Cmd(CMD_USB_SET_EP_STAT + EP_REP,0) & 1) == 0)
+ 101              		.loc 1 562 0
+ 102 0074 FEFFFFEB 		bl	USB_Cmd
+ 103 0078 010010E3 		tst	r0, #1
+ 104 007c 0200001A 		bne	.L19
+ 563:LPC_HID.c     ****     {
+ 564:LPC_HID.c     ****       if((EP_INT_STAT & (1<<EP_REP)) == 0)
+ 105              		.loc 1 564 0
+ 106 0080 303094E5 		ldr	r3, [r4, #48]
+ 107 0084 080013E3 		tst	r3, #8
+ 108 0088 0400000A 		beq	.L12
+ 109              	.L19:
+ 110              		.loc 1 559 0
+ 111 008c 2C409FE5 		ldr	r4, .L20
+ 112 0090 301094E5 		ldr	r1, [r4, #48]
+ 113 0094 081011E2 		ands	r1, r1, #8
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 13
+
+
+ 114              		.loc 1 562 0
+ 115 0098 28009FE5 		ldr	r0, .L20+8
+ 116              		.loc 1 559 0
+ 117 009c F4FFFF0A 		beq	.L10
+ 118              	.L12:
+ 565:LPC_HID.c     ****       {
+ 566:LPC_HID.c     ****         break;
+ 567:LPC_HID.c     ****       }
+ 568:LPC_HID.c     ****     }
+ 569:LPC_HID.c     **** //failsafe++;
+ 570:LPC_HID.c     **** //if (failsafe > 10000)
+ 571:LPC_HID.c     **** //  break;
+ 572:LPC_HID.c     **** 
+ 573:LPC_HID.c     **** //printf("\r"); //effective!!!
+ 574:LPC_HID.c     **** 
+ 575:LPC_HID.c     ****   }
+ 576:LPC_HID.c     ****   USB_Cmd(CMD_USB_SEL_CLR_INT_EP + EP_REP,0);
+ 119              		.loc 1 576 0
+ 120 00a0 4300A0E3 		mov	r0, #67
+ 121 00a4 0010A0E3 		mov	r1, #0
+ 122 00a8 FEFFFFEB 		bl	USB_Cmd
+ 577:LPC_HID.c     ****   EP_INT_CLR = (1<<EP_REP);
+ 123              		.loc 1 577 0
+ 124 00ac 0C309FE5 		ldr	r3, .L20
+ 125 00b0 0820A0E3 		mov	r2, #8
+ 126 00b4 382083E5 		str	r2, [r3, #56]
+ 127              	.L13:
+ 578:LPC_HID.c     **** }
+ 128              		.loc 1 578 0
+ 129 00b8 1040BDE8 		ldmfd	sp!, {r4, lr}
+ 130 00bc 1EFF2FE1 		bx	lr
+ 131              	.L21:
+ 132              		.align	2
+ 133              	.L20:
+ 134 00c0 000009E0 		.word	-536281088
+ 135 00c4 00000000 		.word	.LC0
+ 136 00c8 43010000 		.word	323
+ 137              	.LFE9:
+ 138              		.size	HID_SendReport, .-HID_SendReport
+ 139              		.align	2
+ 140              		.global	HID_SendZeroLengthByCtrlEP
+ 141              		.type	HID_SendZeroLengthByCtrlEP, %function
+ 142              	HID_SendZeroLengthByCtrlEP:
+ 143              	.LFB6:
+ 144              		.loc 1 271 0
+ 145              		@ Function supports interworking.
+ 146              		@ args = 0, pretend = 0, frame = 0
+ 147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 148              		.loc 1 274 0
+ 149 00cc 88309FE5 		ldr	r3, .L38
+ 150 00d0 282093E5 		ldr	r2, [r3, #40]
+ 151              		.loc 1 271 0
+ 152 00d4 10402DE9 		stmfd	sp!, {r4, lr}
+ 153              	.LCFI1:
+ 154              		.loc 1 274 0
+ 155 00d8 012002E2 		and	r2, r2, #1
+ 156 00dc 022082E3 		orr	r2, r2, #2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 14
+
+
+ 157 00e0 282083E5 		str	r2, [r3, #40]
+ 158              		.loc 1 275 0
+ 159 00e4 0020A0E3 		mov	r2, #0
+ 160 00e8 242083E5 		str	r2, [r3, #36]
+ 161              	.L23:
+ 162              		.loc 1 278 0
+ 163 00ec 68309FE5 		ldr	r3, .L38
+ 164 00f0 0020A0E3 		mov	r2, #0
+ 165 00f4 1C2083E5 		str	r2, [r3, #28]
+ 166              		.loc 1 281 0
+ 167 00f8 283093E5 		ldr	r3, [r3, #40]
+ 168 00fc 020013E3 		tst	r3, #2
+ 169 0100 F9FFFF1A 		bne	.L23
+ 170              		.loc 1 284 0
+ 171 0104 0100A0E3 		mov	r0, #1
+ 172 0108 FEFFFFEB 		bl	USB_ValidateBuffer
+ 173 010c 050000EA 		b	.L37
+ 174              	.L26:
+ 175              		.loc 1 289 0
+ 176 0110 FEFFFFEB 		bl	USB_Cmd
+ 177 0114 010010E3 		tst	r0, #1
+ 178 0118 0200001A 		bne	.L37
+ 179              		.loc 1 291 0
+ 180 011c 303094E5 		ldr	r3, [r4, #48]
+ 181 0120 020013E3 		tst	r3, #2
+ 182 0124 0400000A 		beq	.L28
+ 183              	.L37:
+ 184              		.loc 1 287 0
+ 185 0128 2C409FE5 		ldr	r4, .L38
+ 186 012c 301094E5 		ldr	r1, [r4, #48]
+ 187 0130 021011E2 		ands	r1, r1, #2
+ 188              		.loc 1 289 0
+ 189 0134 24009FE5 		ldr	r0, .L38+4
+ 190              		.loc 1 287 0
+ 191 0138 F4FFFF0A 		beq	.L26
+ 192              	.L28:
+ 193              		.loc 1 298 0
+ 194 013c 4100A0E3 		mov	r0, #65
+ 195 0140 0010A0E3 		mov	r1, #0
+ 196 0144 FEFFFFEB 		bl	USB_Cmd
+ 197              		.loc 1 300 0
+ 198 0148 0C309FE5 		ldr	r3, .L38
+ 199 014c 0220A0E3 		mov	r2, #2
+ 200 0150 382083E5 		str	r2, [r3, #56]
+ 201              		.loc 1 301 0
+ 202 0154 1040BDE8 		ldmfd	sp!, {r4, lr}
+ 203 0158 1EFF2FE1 		bx	lr
+ 204              	.L39:
+ 205              		.align	2
+ 206              	.L38:
+ 207 015c 000009E0 		.word	-536281088
+ 208 0160 41010000 		.word	321
+ 209              	.LFE6:
+ 210              		.size	HID_SendZeroLengthByCtrlEP, .-HID_SendZeroLengthByCtrlEP
+ 211              		.align	2
+ 212              		.global	HID_SendDataByCtrlEP
+ 213              		.type	HID_SendDataByCtrlEP, %function
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 15
+
+
+ 214              	HID_SendDataByCtrlEP:
+ 215              	.LFB7:
+ 216              		.loc 1 311 0
+ 217              		@ Function supports interworking.
+ 218              		@ args = 0, pretend = 0, frame = 0
+ 219              		@ frame_needed = 0, uses_anonymous_args = 0
+ 220              	.LVL8:
+ 221 0164 F0412DE9 		stmfd	sp!, {r4, r5, r6, r7, r8, lr}
+ 222              	.LCFI2:
+ 223              		.loc 1 311 0
+ 224 0168 0140A0E1 		mov	r4, r1
+ 225              		.loc 1 312 0
+ 226 016c 0080A0E1 		mov	r8, r0
+ 227              	.LVL9:
+ 228 0170 0070A0E3 		mov	r7, #0
+ 229              	.LVL10:
+ 230              	.LVL11:
+ 231              	.L41:
+ 232              		.loc 1 327 0
+ 233 0174 B4209FE5 		ldr	r2, .L66
+ 234 0178 283092E5 		ldr	r3, [r2, #40]
+ 235              		.loc 1 318 0
+ 236 017c 080054E3 		cmp	r4, #8
+ 237              		.loc 1 327 0
+ 238 0180 013003E2 		and	r3, r3, #1
+ 239              		.loc 1 320 0
+ 240 0184 01708702 		addeq	r7, r7, #1
+ 241              		.loc 1 327 0
+ 242 0188 023083E3 		orr	r3, r3, #2
+ 243              		.loc 1 322 0
+ 244 018c 080054E3 		cmp	r4, #8
+ 245 0190 0460A031 		movcc	r6, r4
+ 246 0194 0860A023 		movcs	r6, #8
+ 247              		.loc 1 327 0
+ 248 0198 283082E5 		str	r3, [r2, #40]
+ 249              		.loc 1 329 0
+ 250 019c 246082E5 		str	r6, [r2, #36]
+ 251              	.L44:
+ 252              		.loc 1 333 0
+ 253 01a0 88309FE5 		ldr	r3, .L66
+ 254 01a4 042098E4 		ldr	r2, [r8], #4
+ 255 01a8 1C2083E5 		str	r2, [r3, #28]
+ 256              		.loc 1 335 0
+ 257 01ac 283093E5 		ldr	r3, [r3, #40]
+ 258 01b0 020013E3 		tst	r3, #2
+ 259 01b4 F9FFFF1A 		bne	.L44
+ 260              		.loc 1 339 0
+ 261 01b8 0100A0E3 		mov	r0, #1
+ 262              	.LVL12:
+ 263 01bc FEFFFFEB 		bl	USB_ValidateBuffer
+ 264 01c0 050000EA 		b	.L65
+ 265              	.L47:
+ 266              		.loc 1 343 0
+ 267 01c4 FEFFFFEB 		bl	USB_Cmd
+ 268 01c8 010010E3 		tst	r0, #1
+ 269 01cc 0200001A 		bne	.L65
+ 270              		.loc 1 345 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 16
+
+
+ 271 01d0 303095E5 		ldr	r3, [r5, #48]
+ 272 01d4 021013E2 		ands	r1, r3, #2
+ 273 01d8 1000000A 		beq	.L56
+ 274              	.L65:
+ 275              		.loc 1 341 0
+ 276 01dc 4C509FE5 		ldr	r5, .L66
+ 277 01e0 301095E5 		ldr	r1, [r5, #48]
+ 278 01e4 021011E2 		ands	r1, r1, #2
+ 279              		.loc 1 343 0
+ 280 01e8 44009FE5 		ldr	r0, .L66+4
+ 281              		.loc 1 341 0
+ 282 01ec F4FFFF0A 		beq	.L47
+ 283              		.loc 1 323 0
+ 284 01f0 044066E0 		rsb	r4, r6, r4
+ 285              		.loc 1 353 0
+ 286 01f4 4100A0E3 		mov	r0, #65
+ 287 01f8 0010A0E3 		mov	r1, #0
+ 288 01fc FEFFFFEB 		bl	USB_Cmd
+ 289              		.loc 1 354 0
+ 290 0200 0230A0E3 		mov	r3, #2
+ 291              		.loc 1 356 0
+ 292 0204 000054E3 		cmp	r4, #0
+ 293              		.loc 1 354 0
+ 294 0208 383085E5 		str	r3, [r5, #56]
+ 295              		.loc 1 356 0
+ 296 020c D8FFFF1A 		bne	.L41
+ 297              		.loc 1 357 0
+ 298 0210 000057E3 		cmp	r7, #0
+ 299 0214 0300000A 		beq	.L54
+ 300              		.loc 1 361 0
+ 301 0218 F041BDE8 		ldmfd	sp!, {r4, r5, r6, r7, r8, lr}
+ 302              		.loc 1 359 0
+ 303 021c FEFFFFEA 		b	HID_SendZeroLengthByCtrlEP
+ 304              	.L56:
+ 305              		.loc 1 347 0
+ 306 0220 4100A0E3 		mov	r0, #65
+ 307 0224 FEFFFFEB 		bl	USB_Cmd
+ 308              	.L54:
+ 309              		.loc 1 361 0
+ 310 0228 F041BDE8 		ldmfd	sp!, {r4, r5, r6, r7, r8, lr}
+ 311 022c 1EFF2FE1 		bx	lr
+ 312              	.L67:
+ 313              		.align	2
+ 314              	.L66:
+ 315 0230 000009E0 		.word	-536281088
+ 316 0234 41010000 		.word	321
+ 317              	.LFE7:
+ 318              		.size	HID_SendDataByCtrlEP, .-HID_SendDataByCtrlEP
+ 319              		.align	2
+ 320              		.global	HID_CtrlStall
+ 321              		.type	HID_CtrlStall, %function
+ 322              	HID_CtrlStall:
+ 323              	.LFB5:
+ 324              		.loc 1 259 0
+ 325              		@ Function supports interworking.
+ 326              		@ args = 0, pretend = 0, frame = 0
+ 327              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 17
+
+
+ 328 0238 04E02DE5 		str	lr, [sp, #-4]!
+ 329              	.LCFI3:
+ 330              		.loc 1 260 0
+ 331 023c 8010A0E3 		mov	r1, #128
+ 332 0240 050DA0E3 		mov	r0, #320
+ 333 0244 FEFFFFEB 		bl	USB_Cmd
+ 334              		.loc 1 261 0
+ 335 0248 04E09DE4 		ldr	lr, [sp], #4
+ 336 024c 1EFF2FE1 		bx	lr
+ 337              	.LFE5:
+ 338              		.size	HID_CtrlStall, .-HID_CtrlStall
+ 339              		.align	2
+ 340              		.global	HID_ImplSetupPacket
+ 341              		.type	HID_ImplSetupPacket, %function
+ 342              	HID_ImplSetupPacket:
+ 343              	.LFB8:
+ 344              		.loc 1 371 0
+ 345              		@ Function supports interworking.
+ 346              		@ args = 0, pretend = 0, frame = 0
+ 347              		@ frame_needed = 0, uses_anonymous_args = 0
+ 348 0250 30402DE9 		stmfd	sp!, {r4, r5, lr}
+ 349              	.LCFI4:
+ 350              		.loc 1 371 0
+ 351 0254 0000A0E3 		mov	r0, #0
+ 352              	.LVL13:
+ 353              	.L71:
+ 354              		.loc 1 380 0
+ 355 0258 B0229FE5 		ldr	r2, .L136
+ 356 025c 283092E5 		ldr	r3, [r2, #40]
+ 357 0260 023003E2 		and	r3, r3, #2
+ 358 0264 013083E3 		orr	r3, r3, #1
+ 359 0268 283082E5 		str	r3, [r2, #40]
+ 360              	.L72:
+ 361              		.loc 1 384 0
+ 362 026c 9C229FE5 		ldr	r2, .L136
+ 363 0270 203092E5 		ldr	r3, [r2, #32]
+ 364 0274 020B13E3 		tst	r3, #2048
+ 365 0278 FBFFFF0A 		beq	.L72
+ 366              		.loc 1 388 0
+ 367 027c 203092E5 		ldr	r3, [r2, #32]
+ 368 0280 8C229FE5 		ldr	r2, .L136+4
+ 369 0284 3F3BC3E3 		bic	r3, r3, #64512
+ 370 0288 B030C2E1 		strh	r3, [r2, #0]	@ movhi
+ 371 028c 030000EA 		b	.L74
+ 372              	.L75:
+ 373              		.loc 1 393 0
+ 374 0290 182092E5 		ldr	r2, [r2, #24]
+ 375 0294 7C329FE5 		ldr	r3, .L136+8
+ 376 0298 002183E7 		str	r2, [r3, r0, asl #2]
+ 377 029c 010080E2 		add	r0, r0, #1
+ 378              	.L74:
+ 379              		.loc 1 390 0
+ 380 02a0 68229FE5 		ldr	r2, .L136
+ 381 02a4 203092E5 		ldr	r3, [r2, #32]
+ 382 02a8 015B13E2 		ands	r5, r3, #1024
+ 383 02ac F7FFFF1A 		bne	.L75
+ 384              		.loc 1 396 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 18
+
+
+ 385 02b0 0500A0E1 		mov	r0, r5
+ 386              	.LVL14:
+ 387 02b4 FEFFFFEB 		bl	USB_ClearBuffer
+ 388              		.loc 1 397 0
+ 389 02b8 0510A0E1 		mov	r1, r5
+ 390              		.loc 1 396 0
+ 391 02bc 0040A0E1 		mov	r4, r0
+ 392              		.loc 1 397 0
+ 393 02c0 4000A0E3 		mov	r0, #64
+ 394 02c4 FEFFFFEB 		bl	USB_Cmd
+ 395              		.loc 1 399 0
+ 396 02c8 000054E3 		cmp	r4, #0
+ 397              		.loc 1 396 0
+ 398 02cc 0400A011 		movne	r0, r4
+ 399              	.LVL15:
+ 400 02d0 E0FFFF1A 		bne	.L71
+ 401              	.LVL16:
+ 402              	.L77:
+ 403              		.loc 1 401 0
+ 404 02d4 38329FE5 		ldr	r3, .L136+4
+ 405 02d8 B030D3E1 		ldrh	r3, [r3, #0]
+ 406 02dc 000053E3 		cmp	r3, #0
+ 407 02e0 8800000A 		beq	.L128
+ 408              		.loc 1 403 0
+ 409 02e4 2C429FE5 		ldr	r4, .L136+8
+ 410 02e8 2C329FE5 		ldr	r3, .L136+12
+ 411 02ec B020D4E1 		ldrh	r2, [r4, #0]
+ 412 02f0 030052E1 		cmp	r2, r3
+ 413 02f4 7000000A 		beq	.L86
+ 414 02f8 0E00008A 		bhi	.L92
+ 415 02fc 820052E3 		cmp	r2, #130
+ 416 0300 5900000A 		beq	.L83
+ 417 0304 0200008A 		bhi	.L93
+ 418 0308 800052E3 		cmp	r2, #128
+ 419 030c 7B00003A 		bcc	.L81
+ 420 0310 4F0000EA 		b	.L131
+ 421              	.L93:
+ 422 0314 04329FE5 		ldr	r3, .L136+16
+ 423 0318 030052E1 		cmp	r2, r3
+ 424 031c 6A00000A 		beq	.L85
+ 425 0320 FC319FE5 		ldr	r3, .L136+20
+ 426 0324 030052E1 		cmp	r2, r3
+ 427 0328 6D00000A 		beq	.L84
+ 428 032c 023C43E2 		sub	r3, r3, #512
+ 429 0330 030052E1 		cmp	r2, r3
+ 430 0334 690000EA 		b	.L134
+ 431              	.L92:
+ 432 0338 E8319FE5 		ldr	r3, .L136+24
+ 433 033c 030052E1 		cmp	r2, r3
+ 434 0340 6900000A 		beq	.L89
+ 435 0344 0400008A 		bhi	.L94
+ 436 0348 050C52E3 		cmp	r2, #1280
+ 437 034c 2700000A 		beq	.L87
+ 438 0350 1A0D52E3 		cmp	r2, #1664
+ 439 0354 6900001A 		bne	.L81
+ 440 0358 070000EA 		b	.L88
+ 441              	.L94:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 19
+
+
+ 442 035c 090C52E3 		cmp	r2, #2304
+ 443 0360 2900000A 		beq	.L91
+ 444 0364 C0319FE5 		ldr	r3, .L136+28
+ 445 0368 030052E1 		cmp	r2, r3
+ 446 036c 5C00000A 		beq	.L84
+ 447 0370 220D52E3 		cmp	r2, #2176
+ 448 0374 6100001A 		bne	.L81
+ 449 0378 320000EA 		b	.L90
+ 450              	.L88:
+ 451              		.loc 1 408 0
+ 452 037c B220D4E1 		ldrh	r2, [r4, #2]
+ 453 0380 010C52E3 		cmp	r2, #256
+ 454 0384 0400001A 		bne	.L95
+ 455              		.loc 1 410 0
+ 456 0388 B610D4E1 		ldrh	r1, [r4, #6]
+ 457 038c 9C019FE5 		ldr	r0, .L136+32
+ 458 0390 120051E3 		cmp	r1, #18
+ 459 0394 1210A023 		movcs	r1, #18
+ 460 0398 050000EA 		b	.L132
+ 461              	.L95:
+ 462              		.loc 1 412 0
+ 463 039c 020C52E3 		cmp	r2, #512
+ 464 03a0 0500001A 		bne	.L100
+ 465              		.loc 1 414 0
+ 466 03a4 B610D4E1 		ldrh	r1, [r4, #6]
+ 467 03a8 84019FE5 		ldr	r0, .L136+36
+ 468 03ac 220051E3 		cmp	r1, #34
+ 469 03b0 2210A023 		movcs	r1, #34
+ 470              	.LVL17:
+ 471              	.L132:
+ 472              		.loc 1 523 0
+ 473 03b4 3040BDE8 		ldmfd	sp!, {r4, r5, lr}
+ 474              		.loc 1 414 0
+ 475 03b8 FEFFFFEA 		b	HID_SendDataByCtrlEP
+ 476              	.LVL18:
+ 477              	.L100:
+ 478              		.loc 1 416 0
+ 479 03bc FF3C02E2 		and	r3, r2, #65280
+ 480 03c0 030C53E3 		cmp	r3, #768
+ 481 03c4 4D00001A 		bne	.L81
+ 482              		.loc 1 418 0
+ 483 03c8 0F2002E2 		and	r2, r2, #15
+ 484 03cc 020052E3 		cmp	r2, #2
+ 485 03d0 4A0000CA 		bgt	.L81
+ 486              	.LBB2:
+ 487              		.loc 1 420 0
+ 488 03d4 5C319FE5 		ldr	r3, .L136+40
+ 489 03d8 020193E7 		ldr	r0, [r3, r2, asl #2]
+ 490              	.LVL19:
+ 491              		.loc 1 421 0
+ 492 03dc B630D4E1 		ldrh	r3, [r4, #6]
+ 493 03e0 0010D0E5 		ldrb	r1, [r0, #0]	@ zero_extendqisi2
+ 494 03e4 030051E1 		cmp	r1, r3
+ 495 03e8 0310A021 		movcs	r1, r3
+ 496 03ec F0FFFFEA 		b	.L132
+ 497              	.LVL20:
+ 498              	.L87:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 20
+
+
+ 499              	.LBE2:
+ 500              		.loc 1 435 0
+ 501 03f0 FEFFFFEB 		bl	HID_SendZeroLengthByCtrlEP
+ 502              		.loc 1 436 0
+ 503 03f4 0220D4E5 		ldrb	r2, [r4, #2]	@ zero_extendqisi2
+ 504 03f8 3C319FE5 		ldr	r3, .L136+44
+ 505              		.loc 1 437 0
+ 506 03fc 0200A0E1 		mov	r0, r2
+ 507              		.loc 1 436 0
+ 508 0400 0020C3E5 		strb	r2, [r3, #0]
+ 509              		.loc 1 437 0
+ 510 0404 FEFFFFEB 		bl	USB_SetAdd
+ 511 0408 3E0000EA 		b	.L128
+ 512              	.L91:
+ 513              		.loc 1 441 0
+ 514 040c B240D4E1 		ldrh	r4, [r4, #2]
+ 515 0410 010054E3 		cmp	r4, #1
+ 516              		.loc 1 451 0
+ 517 0414 0510A011 		movne	r1, r5
+ 518              		.loc 1 441 0
+ 519 0418 0700001A 		bne	.L135
+ 520              		.loc 1 443 0
+ 521 041c 1CC19FE5 		ldr	ip, .L136+48
+ 522              		.loc 1 444 0
+ 523 0420 0410A0E3 		mov	r1, #4
+ 524 0424 0520A0E1 		mov	r2, r5
+ 525 0428 0300A0E3 		mov	r0, #3
+ 526 042c 0530A0E1 		mov	r3, r5
+ 527              		.loc 1 443 0
+ 528 0430 0040CCE5 		strb	r4, [ip, #0]
+ 529              		.loc 1 444 0
+ 530 0434 FEFFFFEB 		bl	USB_RealizeEndPoint
+ 531              		.loc 1 445 0
+ 532 0438 0410A0E1 		mov	r1, r4
+ 533              	.L135:
+ 534              		.loc 1 451 0
+ 535 043c D800A0E3 		mov	r0, #216
+ 536 0440 FEFFFFEB 		bl	USB_Cmd
+ 537 0444 260000EA 		b	.L84
+ 538              	.L90:
+ 539              		.loc 1 457 0
+ 540 0448 F0009FE5 		ldr	r0, .L136+48
+ 541 044c 0110A0E3 		mov	r1, #1
+ 542 0450 D7FFFFEA 		b	.L132
+ 543              	.L131:
+ 544              		.loc 1 462 0
+ 545 0454 E8309FE5 		ldr	r3, .L136+52
+ 546 0458 0020A0E3 		mov	r2, #0	@ movhi
+ 547              		.loc 1 463 0
+ 548 045c 0300A0E1 		mov	r0, r3
+ 549 0460 0210A0E3 		mov	r1, #2
+ 550              		.loc 1 462 0
+ 551 0464 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+ 552 0468 D1FFFFEA 		b	.L132
+ 553              	.L83:
+ 554              		.loc 1 468 0
+ 555 046c CC309FE5 		ldr	r3, .L136+48
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 21
+
+
+ 556 0470 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 557              		.loc 1 467 0
+ 558 0474 C8009FE5 		ldr	r0, .L136+52
+ 559              		.loc 1 468 0
+ 560 0478 000053E3 		cmp	r3, #0
+ 561              		.loc 1 467 0
+ 562 047c B050C0E1 		strh	r5, [r0, #0]	@ movhi
+ 563              		.loc 1 468 0
+ 564 0480 0200000A 		beq	.L114
+ 565 0484 B430D4E1 		ldrh	r3, [r4, #4]
+ 566 0488 010053E3 		cmp	r3, #1
+ 567 048c 0800009A 		bls	.L133
+ 568              	.L114:
+ 569              		.loc 1 472 0
+ 570 0490 A4309FE5 		ldr	r3, .L136+44
+ 571 0494 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 572 0498 000053E3 		cmp	r3, #0
+ 573 049c 1700000A 		beq	.L81
+ 574 04a0 70309FE5 		ldr	r3, .L136+8
+ 575 04a4 B430D3E1 		ldrh	r3, [r3, #4]
+ 576 04a8 000053E3 		cmp	r3, #0
+ 577 04ac 1300001A 		bne	.L81
+ 578              		.loc 1 474 0
+ 579 04b0 8C009FE5 		ldr	r0, .L136+52
+ 580              	.L133:
+ 581 04b4 0210A0E3 		mov	r1, #2
+ 582 04b8 BDFFFFEA 		b	.L132
+ 583              	.L86:
+ 584              		.loc 1 483 0
+ 585 04bc B430D4E1 		ldrh	r3, [r4, #4]
+ 586 04c0 010053E3 		cmp	r3, #1
+ 587 04c4 0600009A 		bls	.L84
+ 588 04c8 0C0000EA 		b	.L81
+ 589              	.L85:
+ 590              		.loc 1 494 0
+ 591 04cc B230D4E1 		ldrh	r3, [r4, #2]
+ 592 04d0 000053E3 		cmp	r3, #0
+ 593 04d4 0900001A 		bne	.L81
+ 594 04d8 B430D4E1 		ldrh	r3, [r4, #4]
+ 595 04dc 010053E3 		cmp	r3, #1
+ 596              	.L134:
+ 597 04e0 0600001A 		bne	.L81
+ 598              	.L84:
+ 599              		.loc 1 523 0
+ 600 04e4 3040BDE8 		ldmfd	sp!, {r4, r5, lr}
+ 601              		.loc 1 507 0
+ 602 04e8 FEFFFFEA 		b	HID_SendZeroLengthByCtrlEP
+ 603              	.L89:
+ 604              		.loc 1 511 0
+ 605 04ec B610D4E1 		ldrh	r1, [r4, #6]
+ 606 04f0 50009FE5 		ldr	r0, .L136+56
+ 607 04f4 320051E3 		cmp	r1, #50
+ 608 04f8 3210A023 		movcs	r1, #50
+ 609 04fc ACFFFFEA 		b	.L132
+ 610              	.L81:
+ 611              		.loc 1 523 0
+ 612 0500 3040BDE8 		ldmfd	sp!, {r4, r5, lr}
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 22
+
+
+ 613              		.loc 1 520 0
+ 614 0504 FEFFFFEA 		b	HID_CtrlStall
+ 615              	.L128:
+ 616              		.loc 1 523 0
+ 617 0508 3040BDE8 		ldmfd	sp!, {r4, r5, lr}
+ 618 050c 1EFF2FE1 		bx	lr
+ 619              	.L137:
+ 620              		.align	2
+ 621              	.L136:
+ 622 0510 000009E0 		.word	-536281088
+ 623 0514 00000000 		.word	Length.1460
+ 624 0518 08000000 		.word	Setup.1458
+ 625 051c 02030000 		.word	770
+ 626 0520 02010000 		.word	258
+ 627 0524 01030000 		.word	769
+ 628 0528 81060000 		.word	1665
+ 629 052c 210A0000 		.word	2593
+ 630 0530 00000000 		.word	devDescriptor
+ 631 0534 00000000 		.word	cfgDescriptor
+ 632 0538 00000000 		.word	StrPoin
+ 633 053c 00000000 		.word	currentAddress
+ 634 0540 00000000 		.word	currentConfiguration
+ 635 0544 02000000 		.word	Status.1459
+ 636 0548 00000000 		.word	mouseDescriptor
+ 637              	.LFE8:
+ 638              		.size	HID_ImplSetupPacket, .-HID_ImplSetupPacket
+ 639              		.align	2
+ 640              		.global	HID_Init
+ 641              		.type	HID_Init, %function
+ 642              	HID_Init:
+ 643              	.LFB2:
+ 644              		.loc 1 179 0
+ 645              		@ Function supports interworking.
+ 646              		@ args = 0, pretend = 0, frame = 0
+ 647              		@ frame_needed = 0, uses_anonymous_args = 0
+ 648 054c 30402DE9 		stmfd	sp!, {r4, r5, lr}
+ 649              	.LCFI5:
+ 650              		.loc 1 180 0
+ 651 0550 50C09FE5 		ldr	ip, .L140
+ 652 0554 0040A0E3 		mov	r4, #0
+ 653              		.loc 1 181 0
+ 654 0558 4C509FE5 		ldr	r5, .L140+4
+ 655              		.loc 1 183 0
+ 656 055c 0400A0E1 		mov	r0, r4
+ 657 0560 0420A0E1 		mov	r2, r4
+ 658 0564 0810A0E3 		mov	r1, #8
+ 659 0568 0130A0E3 		mov	r3, #1
+ 660              		.loc 1 180 0
+ 661 056c 0040CCE5 		strb	r4, [ip, #0]
+ 662              		.loc 1 181 0
+ 663 0570 0040C5E5 		strb	r4, [r5, #0]
+ 664              		.loc 1 183 0
+ 665 0574 FEFFFFEB 		bl	USB_RealizeEndPoint
+ 666              		.loc 1 184 0
+ 667 0578 0420A0E1 		mov	r2, r4
+ 668 057c 0810A0E3 		mov	r1, #8
+ 669 0580 0430A0E1 		mov	r3, r4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 23
+
+
+ 670 0584 0100A0E3 		mov	r0, #1
+ 671 0588 FEFFFFEB 		bl	USB_RealizeEndPoint
+ 672              		.loc 1 186 0
+ 673 058c 0000D5E5 		ldrb	r0, [r5, #0]	@ zero_extendqisi2
+ 674 0590 FEFFFFEB 		bl	USB_SetAdd
+ 675              		.loc 1 188 0
+ 676 0594 0110A0E3 		mov	r1, #1
+ 677 0598 10009FE5 		ldr	r0, .L140+8
+ 678 059c FEFFFFEB 		bl	USB_Cmd
+ 679              		.loc 1 189 0
+ 680 05a0 3040BDE8 		ldmfd	sp!, {r4, r5, lr}
+ 681 05a4 1EFF2FE1 		bx	lr
+ 682              	.L141:
+ 683              		.align	2
+ 684              	.L140:
+ 685 05a8 00000000 		.word	currentConfiguration
+ 686 05ac 00000000 		.word	currentAddress
+ 687 05b0 FE010000 		.word	510
+ 688              	.LFE2:
+ 689              		.size	HID_Init, .-HID_Init
+ 690              		.align	2
+ 691              		.global	HID_CallBack
+ 692              		.type	HID_CallBack, %function
+ 693              	HID_CallBack:
+ 694              	.LFB4:
+ 695              		.loc 1 211 0
+ 696              		@ Function supports interworking.
+ 697              		@ args = 0, pretend = 0, frame = 0
+ 698              		@ frame_needed = 0, uses_anonymous_args = 0
+ 699 05b4 10402DE9 		stmfd	sp!, {r4, lr}
+ 700              	.LCFI6:
+ 701              		.loc 1 212 0
+ 702 05b8 8C409FE5 		ldr	r4, .L156
+ 703 05bc 003094E5 		ldr	r3, [r4, #0]
+ 704 05c0 020C13E3 		tst	r3, #512
+ 705 05c4 0400000A 		beq	.L143
+ 706              		.loc 1 216 0
+ 707 05c8 FB00A0E3 		mov	r0, #251
+ 708 05cc 0010A0E3 		mov	r1, #0
+ 709 05d0 FEFFFFEB 		bl	USB_Cmd
+ 710              		.loc 1 217 0
+ 711 05d4 023CA0E3 		mov	r3, #512
+ 712 05d8 083084E5 		str	r3, [r4, #8]
+ 713              	.L143:
+ 714              		.loc 1 220 0
+ 715 05dc 003094E5 		ldr	r3, [r4, #0]
+ 716 05e0 080013E3 		tst	r3, #8
+ 717 05e4 0600000A 		beq	.L145
+ 718              	.LBB3:
+ 719              		.loc 1 223 0
+ 720 05e8 FE00A0E3 		mov	r0, #254
+ 721 05ec 0010A0E3 		mov	r1, #0
+ 722 05f0 FEFFFFEB 		bl	USB_Cmd
+ 723              		.loc 1 225 0
+ 724 05f4 100010E3 		tst	r0, #16
+ 725              		.loc 1 228 0
+ 726 05f8 FEFFFF1B 		blne	HID_Init
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 24
+
+
+ 727              	.L147:
+ 728              		.loc 1 230 0
+ 729 05fc 0830A0E3 		mov	r3, #8
+ 730 0600 083084E5 		str	r3, [r4, #8]
+ 731              	.L145:
+ 732              	.LBE3:
+ 733              		.loc 1 233 0
+ 734 0604 40409FE5 		ldr	r4, .L156
+ 735 0608 003094E5 		ldr	r3, [r4, #0]
+ 736 060c 020013E3 		tst	r3, #2
+ 737              		.loc 1 235 0
+ 738 0610 0230A013 		movne	r3, #2
+ 739 0614 08308415 		strne	r3, [r4, #8]
+ 740              		.loc 1 238 0
+ 741 0618 003094E5 		ldr	r3, [r4, #0]
+ 742 061c 040013E3 		tst	r3, #4
+ 743 0620 0700000A 		beq	.L155
+ 744              		.loc 1 241 0
+ 745 0624 303094E5 		ldr	r3, [r4, #48]
+ 746 0628 010013E3 		tst	r3, #1
+ 747 062c 0200000A 		beq	.L153
+ 748              		.loc 1 244 0
+ 749 0630 FEFFFFEB 		bl	HID_ImplSetupPacket
+ 750              		.loc 1 245 0
+ 751 0634 0130A0E3 		mov	r3, #1
+ 752 0638 383084E5 		str	r3, [r4, #56]
+ 753              	.L153:
+ 754              		.loc 1 247 0
+ 755 063c 0430A0E3 		mov	r3, #4
+ 756 0640 083084E5 		str	r3, [r4, #8]
+ 757              	.L155:
+ 758              		.loc 1 249 0
+ 759 0644 1040BDE8 		ldmfd	sp!, {r4, lr}
+ 760 0648 1EFF2FE1 		bx	lr
+ 761              	.L157:
+ 762              		.align	2
+ 763              	.L156:
+ 764 064c 000009E0 		.word	-536281088
+ 765              	.LFE4:
+ 766              		.size	HID_CallBack, .-HID_CallBack
+ 767              		.global	mouseDescriptor
+ 768              		.data
+ 769              		.align	3
+ 770              		.type	mouseDescriptor, %object
+ 771              		.size	mouseDescriptor, 50
+ 772              	mouseDescriptor:
+ 773 0000 0501     		.short	261
+ 774 0002 0902     		.short	521
+ 775 0004 A101     		.short	417
+ 776 0006 0901     		.short	265
+ 777 0008 A100     		.short	161
+ 778 000a 0509     		.short	2309
+ 779 000c 1901     		.short	281
+ 780 000e 2903     		.short	809
+ 781 0010 1500     		.short	21
+ 782 0012 2501     		.short	293
+ 783 0014 9503     		.short	917
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 25
+
+
+ 784 0016 7501     		.short	373
+ 785 0018 8102     		.short	641
+ 786 001a 9501     		.short	405
+ 787 001c 7505     		.short	1397
+ 788 001e 8101     		.short	385
+ 789 0020 0501     		.short	261
+ 790 0022 0930     		.short	12297
+ 791 0024 0931     		.short	12553
+ 792 0026 1581     		.short	-32491
+ 793 0028 257F     		.short	32549
+ 794 002a 7508     		.short	2165
+ 795 002c 9502     		.short	661
+ 796 002e 8106     		.short	1665
+ 797 0030 C0C0     		.short	-16192
+ 798              		.global	devDescriptor
+ 799 0032 00000000 		.align	3
+ 799      0000
+ 800              		.type	devDescriptor, %object
+ 801              		.size	devDescriptor, 18
+ 802              	devDescriptor:
+ 803 0038 12       		.byte	18
+ 804 0039 01       		.byte	1
+ 805 003a 10       		.byte	16
+ 806 003b 01       		.byte	1
+ 807 003c 00       		.byte	0
+ 808 003d 00       		.byte	0
+ 809 003e 00       		.byte	0
+ 810 003f 08       		.byte	8
+ 811 0040 FF       		.byte	-1
+ 812 0041 FF       		.byte	-1
+ 813 0042 01       		.byte	1
+ 814 0043 00       		.byte	0
+ 815 0044 00       		.byte	0
+ 816 0045 00       		.byte	0
+ 817 0046 01       		.byte	1
+ 818 0047 02       		.byte	2
+ 819 0048 00       		.byte	0
+ 820 0049 01       		.byte	1
+ 821              		.global	cfgDescriptor
+ 822 004a 00000000 		.align	3
+ 822      0000
+ 823              		.type	cfgDescriptor, %object
+ 824              		.size	cfgDescriptor, 34
+ 825              	cfgDescriptor:
+ 826 0050 09       		.byte	9
+ 827 0051 02       		.byte	2
+ 828 0052 22       		.byte	34
+ 829 0053 00       		.byte	0
+ 830 0054 01       		.byte	1
+ 831 0055 01       		.byte	1
+ 832 0056 00       		.byte	0
+ 833 0057 A0       		.byte	-96
+ 834 0058 32       		.byte	50
+ 835 0059 09       		.byte	9
+ 836 005a 04       		.byte	4
+ 837 005b 00       		.byte	0
+ 838 005c 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 26
+
+
+ 839 005d 01       		.byte	1
+ 840 005e 03       		.byte	3
+ 841 005f 01       		.byte	1
+ 842 0060 02       		.byte	2
+ 843 0061 00       		.byte	0
+ 844 0062 09       		.byte	9
+ 845 0063 21       		.byte	33
+ 846 0064 00       		.byte	0
+ 847 0065 01       		.byte	1
+ 848 0066 00       		.byte	0
+ 849 0067 01       		.byte	1
+ 850 0068 22       		.byte	34
+ 851 0069 32       		.byte	50
+ 852 006a 00       		.byte	0
+ 853 006b 07       		.byte	7
+ 854 006c 05       		.byte	5
+ 855 006d 81       		.byte	-127
+ 856 006e 03       		.byte	3
+ 857 006f 04       		.byte	4
+ 858 0070 00       		.byte	0
+ 859 0071 0A       		.byte	10
+ 860              		.global	LanguagesStr
+ 861 0072 00000000 		.align	3
+ 861      0000
+ 862              		.type	LanguagesStr, %object
+ 863              		.size	LanguagesStr, 4
+ 864              	LanguagesStr:
+ 865 0078 04       		.byte	4
+ 866 0079 03       		.byte	3
+ 867 007a 09       		.byte	9
+ 868 007b 04       		.byte	4
+ 869              		.global	ManufacturerStr
+ 870 007c 00000000 		.align	3
+ 871              		.type	ManufacturerStr, %object
+ 872              		.size	ManufacturerStr, 60
+ 873              	ManufacturerStr:
+ 874 0080 3C       		.byte	60
+ 875 0081 03       		.byte	3
+ 876 0082 50       		.byte	80
+ 877 0083 00       		.byte	0
+ 878 0084 68       		.byte	104
+ 879 0085 00       		.byte	0
+ 880 0086 69       		.byte	105
+ 881 0087 00       		.byte	0
+ 882 0088 6C       		.byte	108
+ 883 0089 00       		.byte	0
+ 884 008a 69       		.byte	105
+ 885 008b 00       		.byte	0
+ 886 008c 70       		.byte	112
+ 887 008d 00       		.byte	0
+ 888 008e 20       		.byte	32
+ 889 008f 00       		.byte	0
+ 890 0090 53       		.byte	83
+ 891 0091 00       		.byte	0
+ 892 0092 65       		.byte	101
+ 893 0093 00       		.byte	0
+ 894 0094 6D       		.byte	109
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 27
+
+
+ 895 0095 00       		.byte	0
+ 896 0096 69       		.byte	105
+ 897 0097 00       		.byte	0
+ 898 0098 63       		.byte	99
+ 899 0099 00       		.byte	0
+ 900 009a 6F       		.byte	111
+ 901 009b 00       		.byte	0
+ 902 009c 6E       		.byte	110
+ 903 009d 00       		.byte	0
+ 904 009e 64       		.byte	100
+ 905 009f 00       		.byte	0
+ 906 00a0 75       		.byte	117
+ 907 00a1 00       		.byte	0
+ 908 00a2 63       		.byte	99
+ 909 00a3 00       		.byte	0
+ 910 00a4 74       		.byte	116
+ 911 00a5 00       		.byte	0
+ 912 00a6 6F       		.byte	111
+ 913 00a7 00       		.byte	0
+ 914 00a8 72       		.byte	114
+ 915 00a9 00       		.byte	0
+ 916 00aa 73       		.byte	115
+ 917 00ab 00       		.byte	0
+ 918 00ac 20       		.byte	32
+ 919 00ad 00       		.byte	0
+ 920 00ae 4C       		.byte	76
+ 921 00af 00       		.byte	0
+ 922 00b0 50       		.byte	80
+ 923 00b1 00       		.byte	0
+ 924 00b2 43       		.byte	67
+ 925 00b3 00       		.byte	0
+ 926 00b4 32       		.byte	50
+ 927 00b5 00       		.byte	0
+ 928 00b6 31       		.byte	49
+ 929 00b7 00       		.byte	0
+ 930 00b8 34       		.byte	52
+ 931 00b9 00       		.byte	0
+ 932 00ba 38       		.byte	56
+ 933 00bb 00       		.byte	0
+ 934              		.global	ProductStr
+ 935 00bc 00000000 		.align	3
+ 936              		.type	ProductStr, %object
+ 937              		.size	ProductStr, 98
+ 938              	ProductStr:
+ 939 00c0 62       		.byte	98
+ 940 00c1 03       		.byte	3
+ 941 00c2 45       		.byte	69
+ 942 00c3 00       		.byte	0
+ 943 00c4 6D       		.byte	109
+ 944 00c5 00       		.byte	0
+ 945 00c6 62       		.byte	98
+ 946 00c7 00       		.byte	0
+ 947 00c8 65       		.byte	101
+ 948 00c9 00       		.byte	0
+ 949 00ca 64       		.byte	100
+ 950 00cb 00       		.byte	0
+ 951 00cc 64       		.byte	100
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 28
+
+
+ 952 00cd 00       		.byte	0
+ 953 00ce 65       		.byte	101
+ 954 00cf 00       		.byte	0
+ 955 00d0 64       		.byte	100
+ 956 00d1 00       		.byte	0
+ 957 00d2 20       		.byte	32
+ 958 00d3 00       		.byte	0
+ 959 00d4 41       		.byte	65
+ 960 00d5 00       		.byte	0
+ 961 00d6 72       		.byte	114
+ 962 00d7 00       		.byte	0
+ 963 00d8 74       		.byte	116
+ 964 00d9 00       		.byte	0
+ 965 00da 69       		.byte	105
+ 966 00db 00       		.byte	0
+ 967 00dc 73       		.byte	115
+ 968 00dd 00       		.byte	0
+ 969 00de 74       		.byte	116
+ 970 00df 00       		.byte	0
+ 971 00e0 73       		.byte	115
+ 972 00e1 00       		.byte	0
+ 973 00e2 20       		.byte	32
+ 974 00e3 00       		.byte	0
+ 975 00e4 51       		.byte	81
+ 976 00e5 00       		.byte	0
+ 977 00e6 75       		.byte	117
+ 978 00e7 00       		.byte	0
+ 979 00e8 69       		.byte	105
+ 980 00e9 00       		.byte	0
+ 981 00ea 63       		.byte	99
+ 982 00eb 00       		.byte	0
+ 983 00ec 6B       		.byte	107
+ 984 00ed 00       		.byte	0
+ 985 00ee 53       		.byte	83
+ 986 00ef 00       		.byte	0
+ 987 00f0 74       		.byte	116
+ 988 00f1 00       		.byte	0
+ 989 00f2 61       		.byte	97
+ 990 00f3 00       		.byte	0
+ 991 00f4 72       		.byte	114
+ 992 00f5 00       		.byte	0
+ 993 00f6 74       		.byte	116
+ 994 00f7 00       		.byte	0
+ 995 00f8 20       		.byte	32
+ 996 00f9 00       		.byte	0
+ 997 00fa 42       		.byte	66
+ 998 00fb 00       		.byte	0
+ 999 00fc 6F       		.byte	111
+ 1000 00fd 00       		.byte	0
+ 1001 00fe 61       		.byte	97
+ 1002 00ff 00       		.byte	0
+ 1003 0100 72       		.byte	114
+ 1004 0101 00       		.byte	0
+ 1005 0102 64       		.byte	100
+ 1006 0103 00       		.byte	0
+ 1007 0104 20       		.byte	32
+ 1008 0105 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 29
+
+
+ 1009 0106 2D       		.byte	45
+ 1010 0107 00       		.byte	0
+ 1011 0108 20       		.byte	32
+ 1012 0109 00       		.byte	0
+ 1013 010a 74       		.byte	116
+ 1014 010b 00       		.byte	0
+ 1015 010c 65       		.byte	101
+ 1016 010d 00       		.byte	0
+ 1017 010e 73       		.byte	115
+ 1018 010f 00       		.byte	0
+ 1019 0110 74       		.byte	116
+ 1020 0111 00       		.byte	0
+ 1021 0112 20       		.byte	32
+ 1022 0113 00       		.byte	0
+ 1023 0114 70       		.byte	112
+ 1024 0115 00       		.byte	0
+ 1025 0116 72       		.byte	114
+ 1026 0117 00       		.byte	0
+ 1027 0118 6F       		.byte	111
+ 1028 0119 00       		.byte	0
+ 1029 011a 67       		.byte	103
+ 1030 011b 00       		.byte	0
+ 1031 011c 72       		.byte	114
+ 1032 011d 00       		.byte	0
+ 1033 011e 61       		.byte	97
+ 1034 011f 00       		.byte	0
+ 1035 0120 6D       		.byte	109
+ 1036 0121 00       		.byte	0
+ 1037              		.global	StrPoin
+ 1038 0122 00000000 		.section	.rodata
+ 1038      0000
+ 1039              		.align	3
+ 1040              		.type	StrPoin, %object
+ 1041              		.size	StrPoin, 12
+ 1042              	StrPoin:
+ 1043 0000 00000000 		.word	LanguagesStr
+ 1044 0004 00000000 		.word	ManufacturerStr
+ 1045 0008 00000000 		.word	ProductStr
+ 1046 000c 00000000 		.bss
+ 1047              		.align	3
+ 1048              	Length.1460:
+ 1049 0000 0000     		.space	2
+ 1050              		.align	1
+ 1051              	Status.1459:
+ 1052 0002 0000     		.space	2
+ 1053 0004 00000000 		.align	3
+ 1054              	Setup.1458:
+ 1055 0008 00000000 		.space	8
+ 1055      00000000 
+ 1056              		.comm	currentConfiguration,1,8
+ 1057              		.comm	currentAddress,1,8
+ 1058              		.section	.debug_frame,"",%progbits
+ 1059              	.Lframe0:
+ 1060 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
+ 1061              	.LSCIE0:
+ 1062 0004 FFFFFFFF 		.4byte	0xffffffff
+ 1063 0008 01       		.byte	0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 30
+
+
+ 1064 0009 00       		.ascii	"\000"
+ 1065 000a 01       		.uleb128 0x1
+ 1066 000b 7C       		.sleb128 -4
+ 1067 000c 0E       		.byte	0xe
+ 1068 000d 0C       		.byte	0xc
+ 1069 000e 0D       		.uleb128 0xd
+ 1070 000f 00       		.uleb128 0x0
+ 1071              		.align	2
+ 1072              	.LECIE0:
+ 1073              	.LSFDE0:
+ 1074 0010 0C000000 		.4byte	.LEFDE0-.LASFDE0
+ 1075              	.LASFDE0:
+ 1076 0014 00000000 		.4byte	.Lframe0
+ 1077 0018 00000000 		.4byte	.LFB3
+ 1078 001c 10000000 		.4byte	.LFE3-.LFB3
+ 1079              		.align	2
+ 1080              	.LEFDE0:
+ 1081              	.LSFDE2:
+ 1082 0020 14000000 		.4byte	.LEFDE2-.LASFDE2
+ 1083              	.LASFDE2:
+ 1084 0024 00000000 		.4byte	.Lframe0
+ 1085 0028 10000000 		.4byte	.LFB9
+ 1086 002c BC000000 		.4byte	.LFE9-.LFB9
+ 1087 0030 02       		.byte	0x4
+ 1088 0031 48       		.4byte	.LCFI0-.LFB9
+ 1089 0032 0E       		.byte	0xe
+ 1090 0033 08       		.uleb128 0x8
+ 1091 0034 8E       		.byte	0x8e
+ 1092 0035 01       		.uleb128 0x1
+ 1093 0036 84       		.byte	0x84
+ 1094 0037 02       		.uleb128 0x2
+ 1095              		.align	2
+ 1096              	.LEFDE2:
+ 1097              	.LSFDE4:
+ 1098 0038 14000000 		.4byte	.LEFDE4-.LASFDE4
+ 1099              	.LASFDE4:
+ 1100 003c 00000000 		.4byte	.Lframe0
+ 1101 0040 CC000000 		.4byte	.LFB6
+ 1102 0044 98000000 		.4byte	.LFE6-.LFB6
+ 1103 0048 4C       		.byte	0x4
+ 1104              		.4byte	.LCFI1-.LFB6
+ 1105 0049 0E       		.byte	0xe
+ 1106 004a 08       		.uleb128 0x8
+ 1107 004b 8E       		.byte	0x8e
+ 1108 004c 01       		.uleb128 0x1
+ 1109 004d 84       		.byte	0x84
+ 1110 004e 02       		.uleb128 0x2
+ 1111 004f 00       		.align	2
+ 1112              	.LEFDE4:
+ 1113              	.LSFDE6:
+ 1114 0050 1C000000 		.4byte	.LEFDE6-.LASFDE6
+ 1115              	.LASFDE6:
+ 1116 0054 00000000 		.4byte	.Lframe0
+ 1117 0058 64010000 		.4byte	.LFB7
+ 1118 005c D4000000 		.4byte	.LFE7-.LFB7
+ 1119 0060 44       		.byte	0x4
+ 1120              		.4byte	.LCFI2-.LFB7
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 31
+
+
+ 1121 0061 0E       		.byte	0xe
+ 1122 0062 18       		.uleb128 0x18
+ 1123 0063 8E       		.byte	0x8e
+ 1124 0064 01       		.uleb128 0x1
+ 1125 0065 88       		.byte	0x88
+ 1126 0066 02       		.uleb128 0x2
+ 1127 0067 87       		.byte	0x87
+ 1128 0068 03       		.uleb128 0x3
+ 1129 0069 86       		.byte	0x86
+ 1130 006a 04       		.uleb128 0x4
+ 1131 006b 85       		.byte	0x85
+ 1132 006c 05       		.uleb128 0x5
+ 1133 006d 84       		.byte	0x84
+ 1134 006e 06       		.uleb128 0x6
+ 1135 006f 00       		.align	2
+ 1136              	.LEFDE6:
+ 1137              	.LSFDE8:
+ 1138 0070 14000000 		.4byte	.LEFDE8-.LASFDE8
+ 1139              	.LASFDE8:
+ 1140 0074 00000000 		.4byte	.Lframe0
+ 1141 0078 38020000 		.4byte	.LFB5
+ 1142 007c 18000000 		.4byte	.LFE5-.LFB5
+ 1143 0080 44       		.byte	0x4
+ 1144              		.4byte	.LCFI3-.LFB5
+ 1145 0081 0E       		.byte	0xe
+ 1146 0082 04       		.uleb128 0x4
+ 1147 0083 8E       		.byte	0x8e
+ 1148 0084 01       		.uleb128 0x1
+ 1149 0085 000000   		.align	2
+ 1150              	.LEFDE8:
+ 1151              	.LSFDE10:
+ 1152 0088 18000000 		.4byte	.LEFDE10-.LASFDE10
+ 1153              	.LASFDE10:
+ 1154 008c 00000000 		.4byte	.Lframe0
+ 1155 0090 50020000 		.4byte	.LFB8
+ 1156 0094 FC020000 		.4byte	.LFE8-.LFB8
+ 1157 0098 44       		.byte	0x4
+ 1158              		.4byte	.LCFI4-.LFB8
+ 1159 0099 0E       		.byte	0xe
+ 1160 009a 0C       		.uleb128 0xc
+ 1161 009b 8E       		.byte	0x8e
+ 1162 009c 01       		.uleb128 0x1
+ 1163 009d 85       		.byte	0x85
+ 1164 009e 02       		.uleb128 0x2
+ 1165 009f 84       		.byte	0x84
+ 1166 00a0 03       		.uleb128 0x3
+ 1167 00a1 000000   		.align	2
+ 1168              	.LEFDE10:
+ 1169              	.LSFDE12:
+ 1170 00a4 18000000 		.4byte	.LEFDE12-.LASFDE12
+ 1171              	.LASFDE12:
+ 1172 00a8 00000000 		.4byte	.Lframe0
+ 1173 00ac 4C050000 		.4byte	.LFB2
+ 1174 00b0 68000000 		.4byte	.LFE2-.LFB2
+ 1175 00b4 44       		.byte	0x4
+ 1176              		.4byte	.LCFI5-.LFB2
+ 1177 00b5 0E       		.byte	0xe
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 32
+
+
+ 1178 00b6 0C       		.uleb128 0xc
+ 1179 00b7 8E       		.byte	0x8e
+ 1180 00b8 01       		.uleb128 0x1
+ 1181 00b9 85       		.byte	0x85
+ 1182 00ba 02       		.uleb128 0x2
+ 1183 00bb 84       		.byte	0x84
+ 1184 00bc 03       		.uleb128 0x3
+ 1185 00bd 000000   		.align	2
+ 1186              	.LEFDE12:
+ 1187              	.LSFDE14:
+ 1188 00c0 14000000 		.4byte	.LEFDE14-.LASFDE14
+ 1189              	.LASFDE14:
+ 1190 00c4 00000000 		.4byte	.Lframe0
+ 1191 00c8 B4050000 		.4byte	.LFB4
+ 1192 00cc 9C000000 		.4byte	.LFE4-.LFB4
+ 1193 00d0 44       		.byte	0x4
+ 1194              		.4byte	.LCFI6-.LFB4
+ 1195 00d1 0E       		.byte	0xe
+ 1196 00d2 08       		.uleb128 0x8
+ 1197 00d3 8E       		.byte	0x8e
+ 1198 00d4 01       		.uleb128 0x1
+ 1199 00d5 84       		.byte	0x84
+ 1200 00d6 02       		.uleb128 0x2
+ 1201 00d7 00       		.align	2
+ 1202              	.LEFDE14:
+ 1203              		.text
+ 1204              	.Letext0:
+ 1205              		.section	.debug_loc,"",%progbits
+ 1206              	.Ldebug_loc0:
+ 1207              	.LLST1:
+ 1208 0000 10000000 		.4byte	.LFB9-.Ltext0
+ 1209 0004 58000000 		.4byte	.LCFI0-.Ltext0
+ 1210 0008 0100     		.2byte	0x1
+ 1211 000a 5D       		.byte	0x5d
+ 1212 000b 58000000 		.4byte	.LCFI0-.Ltext0
+ 1213 000f CC000000 		.4byte	.LFE9-.Ltext0
+ 1214 0013 0200     		.2byte	0x2
+ 1215 0015 7D       		.byte	0x7d
+ 1216 0016 08       		.sleb128 8
+ 1217 0017 00000000 		.4byte	0x0
+ 1218 001b 00000000 		.4byte	0x0
+ 1219              	.LLST2:
+ 1220 001f 10000000 		.4byte	.LVL0-.Ltext0
+ 1221 0023 30000000 		.4byte	.LVL3-.Ltext0
+ 1222 0027 0100     		.2byte	0x1
+ 1223 0029 50       		.byte	0x50
+ 1224 002a 00000000 		.4byte	0x0
+ 1225 002e 00000000 		.4byte	0x0
+ 1226              	.LLST3:
+ 1227 0032 10000000 		.4byte	.LVL0-.Ltext0
+ 1228 0036 28000000 		.4byte	.LVL1-.Ltext0
+ 1229 003a 0100     		.2byte	0x1
+ 1230 003c 51       		.byte	0x51
+ 1231 003d 00000000 		.4byte	0x0
+ 1232 0041 00000000 		.4byte	0x0
+ 1233              	.LLST4:
+ 1234 0045 10000000 		.4byte	.LVL0-.Ltext0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 33
+
+
+ 1235 0049 2C000000 		.4byte	.LVL2-.Ltext0
+ 1236 004d 0100     		.2byte	0x1
+ 1237 004f 52       		.byte	0x52
+ 1238 0050 00000000 		.4byte	0x0
+ 1239 0054 00000000 		.4byte	0x0
+ 1240              	.LLST5:
+ 1241 0058 38000000 		.4byte	.LVL4-.Ltext0
+ 1242 005c 60000000 		.4byte	.LVL5-.Ltext0
+ 1243 0060 0100     		.2byte	0x1
+ 1244 0062 50       		.byte	0x50
+ 1245 0063 68000000 		.4byte	.LVL6-.Ltext0
+ 1246 0067 6C000000 		.4byte	.LVL7-.Ltext0
+ 1247 006b 0100     		.2byte	0x1
+ 1248 006d 50       		.byte	0x50
+ 1249 006e 00000000 		.4byte	0x0
+ 1250 0072 00000000 		.4byte	0x0
+ 1251              	.LLST6:
+ 1252 0076 CC000000 		.4byte	.LFB6-.Ltext0
+ 1253 007a D8000000 		.4byte	.LCFI1-.Ltext0
+ 1254 007e 0100     		.2byte	0x1
+ 1255 0080 5D       		.byte	0x5d
+ 1256 0081 D8000000 		.4byte	.LCFI1-.Ltext0
+ 1257 0085 64010000 		.4byte	.LFE6-.Ltext0
+ 1258 0089 0200     		.2byte	0x2
+ 1259 008b 7D       		.byte	0x7d
+ 1260 008c 08       		.sleb128 8
+ 1261 008d 00000000 		.4byte	0x0
+ 1262 0091 00000000 		.4byte	0x0
+ 1263              	.LLST7:
+ 1264 0095 64010000 		.4byte	.LFB7-.Ltext0
+ 1265 0099 68010000 		.4byte	.LCFI2-.Ltext0
+ 1266 009d 0100     		.2byte	0x1
+ 1267 009f 5D       		.byte	0x5d
+ 1268 00a0 68010000 		.4byte	.LCFI2-.Ltext0
+ 1269 00a4 38020000 		.4byte	.LFE7-.Ltext0
+ 1270 00a8 0200     		.2byte	0x2
+ 1271 00aa 7D       		.byte	0x7d
+ 1272 00ab 18       		.sleb128 24
+ 1273 00ac 00000000 		.4byte	0x0
+ 1274 00b0 00000000 		.4byte	0x0
+ 1275              	.LLST8:
+ 1276 00b4 64010000 		.4byte	.LVL8-.Ltext0
+ 1277 00b8 BC010000 		.4byte	.LVL12-.Ltext0
+ 1278 00bc 0100     		.2byte	0x1
+ 1279 00be 50       		.byte	0x50
+ 1280 00bf 00000000 		.4byte	0x0
+ 1281 00c3 00000000 		.4byte	0x0
+ 1282              	.LLST9:
+ 1283 00c7 64010000 		.4byte	.LVL8-.Ltext0
+ 1284 00cb 74010000 		.4byte	.LVL11-.Ltext0
+ 1285 00cf 0100     		.2byte	0x1
+ 1286 00d1 51       		.byte	0x51
+ 1287 00d2 74010000 		.4byte	.LVL11-.Ltext0
+ 1288 00d6 38020000 		.4byte	.LFE7-.Ltext0
+ 1289 00da 0100     		.2byte	0x1
+ 1290 00dc 54       		.byte	0x54
+ 1291 00dd 00000000 		.4byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 34
+
+
+ 1292 00e1 00000000 		.4byte	0x0
+ 1293              	.LLST10:
+ 1294 00e5 38020000 		.4byte	.LFB5-.Ltext0
+ 1295 00e9 3C020000 		.4byte	.LCFI3-.Ltext0
+ 1296 00ed 0100     		.2byte	0x1
+ 1297 00ef 5D       		.byte	0x5d
+ 1298 00f0 3C020000 		.4byte	.LCFI3-.Ltext0
+ 1299 00f4 50020000 		.4byte	.LFE5-.Ltext0
+ 1300 00f8 0200     		.2byte	0x2
+ 1301 00fa 7D       		.byte	0x7d
+ 1302 00fb 04       		.sleb128 4
+ 1303 00fc 00000000 		.4byte	0x0
+ 1304 0100 00000000 		.4byte	0x0
+ 1305              	.LLST11:
+ 1306 0104 50020000 		.4byte	.LFB8-.Ltext0
+ 1307 0108 54020000 		.4byte	.LCFI4-.Ltext0
+ 1308 010c 0100     		.2byte	0x1
+ 1309 010e 5D       		.byte	0x5d
+ 1310 010f 54020000 		.4byte	.LCFI4-.Ltext0
+ 1311 0113 4C050000 		.4byte	.LFE8-.Ltext0
+ 1312 0117 0200     		.2byte	0x2
+ 1313 0119 7D       		.byte	0x7d
+ 1314 011a 0C       		.sleb128 12
+ 1315 011b 00000000 		.4byte	0x0
+ 1316 011f 00000000 		.4byte	0x0
+ 1317              	.LLST12:
+ 1318 0123 58020000 		.4byte	.LVL13-.Ltext0
+ 1319 0127 B4020000 		.4byte	.LVL14-.Ltext0
+ 1320 012b 0100     		.2byte	0x1
+ 1321 012d 50       		.byte	0x50
+ 1322 012e D0020000 		.4byte	.LVL15-.Ltext0
+ 1323 0132 D4020000 		.4byte	.LVL16-.Ltext0
+ 1324 0136 0100     		.2byte	0x1
+ 1325 0138 50       		.byte	0x50
+ 1326 0139 00000000 		.4byte	0x0
+ 1327 013d 00000000 		.4byte	0x0
+ 1328              	.LLST13:
+ 1329 0141 B4030000 		.4byte	.LVL17-.Ltext0
+ 1330 0145 BC030000 		.4byte	.LVL18-.Ltext0
+ 1331 0149 0100     		.2byte	0x1
+ 1332 014b 50       		.byte	0x50
+ 1333 014c DC030000 		.4byte	.LVL19-.Ltext0
+ 1334 0150 F0030000 		.4byte	.LVL20-.Ltext0
+ 1335 0154 0100     		.2byte	0x1
+ 1336 0156 50       		.byte	0x50
+ 1337 0157 00000000 		.4byte	0x0
+ 1338 015b 00000000 		.4byte	0x0
+ 1339              	.LLST14:
+ 1340 015f 4C050000 		.4byte	.LFB2-.Ltext0
+ 1341 0163 50050000 		.4byte	.LCFI5-.Ltext0
+ 1342 0167 0100     		.2byte	0x1
+ 1343 0169 5D       		.byte	0x5d
+ 1344 016a 50050000 		.4byte	.LCFI5-.Ltext0
+ 1345 016e B4050000 		.4byte	.LFE2-.Ltext0
+ 1346 0172 0200     		.2byte	0x2
+ 1347 0174 7D       		.byte	0x7d
+ 1348 0175 0C       		.sleb128 12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 35
+
+
+ 1349 0176 00000000 		.4byte	0x0
+ 1350 017a 00000000 		.4byte	0x0
+ 1351              	.LLST15:
+ 1352 017e B4050000 		.4byte	.LFB4-.Ltext0
+ 1353 0182 B8050000 		.4byte	.LCFI6-.Ltext0
+ 1354 0186 0100     		.2byte	0x1
+ 1355 0188 5D       		.byte	0x5d
+ 1356 0189 B8050000 		.4byte	.LCFI6-.Ltext0
+ 1357 018d 50060000 		.4byte	.LFE4-.Ltext0
+ 1358 0191 0200     		.2byte	0x2
+ 1359 0193 7D       		.byte	0x7d
+ 1360 0194 08       		.sleb128 8
+ 1361 0195 00000000 		.4byte	0x0
+ 1362 0199 00000000 		.4byte	0x0
+ 1363              		.section	.debug_info
+ 1364 0000 DF030000 		.4byte	0x3df
+ 1365 0004 0200     		.2byte	0x2
+ 1366 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1367 000a 04       		.byte	0x4
+ 1368 000b 01       		.uleb128 0x1
+ 1369 000c 00000000 		.4byte	.Ldebug_line0
+ 1370 0010 50060000 		.4byte	.Letext0
+ 1371 0014 00000000 		.4byte	.Ltext0
+ 1372 0018 FF000000 		.4byte	.LASF39
+ 1373 001c 01       		.byte	0x1
+ 1374 001d F0000000 		.4byte	.LASF40
+ 1375 0021 99010000 		.4byte	.LASF41
+ 1376 0025 02       		.uleb128 0x2
+ 1377 0026 74000000 		.4byte	0x74
+ 1378 002a 08       		.byte	0x8
+ 1379 002b 01       		.byte	0x1
+ 1380 002c 0E       		.byte	0xe
+ 1381 002d 03       		.uleb128 0x3
+ 1382 002e F1010000 		.4byte	.LASF0
+ 1383 0032 01       		.byte	0x1
+ 1384 0033 0F       		.byte	0xf
+ 1385 0034 74000000 		.4byte	0x74
+ 1386 0038 02       		.byte	0x2
+ 1387 0039 23       		.byte	0x23
+ 1388 003a 00       		.uleb128 0x0
+ 1389 003b 03       		.uleb128 0x3
+ 1390 003c C0000000 		.4byte	.LASF1
+ 1391 0040 01       		.byte	0x1
+ 1392 0041 10       		.byte	0x10
+ 1393 0042 74000000 		.4byte	0x74
+ 1394 0046 02       		.byte	0x2
+ 1395 0047 23       		.byte	0x23
+ 1396 0048 01       		.uleb128 0x1
+ 1397 0049 03       		.uleb128 0x3
+ 1398 004a 10010000 		.4byte	.LASF2
+ 1399 004e 01       		.byte	0x1
+ 1400 004f 11       		.byte	0x11
+ 1401 0050 7B000000 		.4byte	0x7b
+ 1402 0054 02       		.byte	0x2
+ 1403 0055 23       		.byte	0x23
+ 1404 0056 02       		.uleb128 0x2
+ 1405 0057 03       		.uleb128 0x3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 36
+
+
+ 1406 0058 51020000 		.4byte	.LASF3
+ 1407 005c 01       		.byte	0x1
+ 1408 005d 12       		.byte	0x12
+ 1409 005e 7B000000 		.4byte	0x7b
+ 1410 0062 02       		.byte	0x2
+ 1411 0063 23       		.byte	0x23
+ 1412 0064 04       		.uleb128 0x4
+ 1413 0065 03       		.uleb128 0x3
+ 1414 0066 27020000 		.4byte	.LASF4
+ 1415 006a 01       		.byte	0x1
+ 1416 006b 13       		.byte	0x13
+ 1417 006c 7B000000 		.4byte	0x7b
+ 1418 0070 02       		.byte	0x2
+ 1419 0071 23       		.byte	0x23
+ 1420 0072 06       		.uleb128 0x6
+ 1421 0073 00       		.byte	0x0
+ 1422 0074 04       		.uleb128 0x4
+ 1423 0075 9F000000 		.4byte	.LASF5
+ 1424 0079 01       		.byte	0x1
+ 1425 007a 08       		.byte	0x8
+ 1426 007b 04       		.uleb128 0x4
+ 1427 007c C8000000 		.4byte	.LASF6
+ 1428 0080 02       		.byte	0x2
+ 1429 0081 07       		.byte	0x7
+ 1430 0082 05       		.uleb128 0x5
+ 1431 0083 AC000000 		.4byte	0xac
+ 1432 0087 08       		.byte	0x8
+ 1433 0088 01       		.byte	0x1
+ 1434 0089 0A       		.byte	0xa
+ 1435 008a 06       		.uleb128 0x6
+ 1436 008b 0B010000 		.4byte	.LASF7
+ 1437 008f 01       		.byte	0x1
+ 1438 0090 0B       		.byte	0xb
+ 1439 0091 AC000000 		.4byte	0xac
+ 1440 0095 06       		.uleb128 0x6
+ 1441 0096 6C010000 		.4byte	.LASF8
+ 1442 009a 01       		.byte	0x1
+ 1443 009b 0C       		.byte	0xc
+ 1444 009c 7B000000 		.4byte	0x7b
+ 1445 00a0 06       		.uleb128 0x6
+ 1446 00a1 E6010000 		.4byte	.LASF9
+ 1447 00a5 01       		.byte	0x1
+ 1448 00a6 14       		.byte	0x14
+ 1449 00a7 25000000 		.4byte	0x25
+ 1450 00ab 00       		.byte	0x0
+ 1451 00ac 07       		.uleb128 0x7
+ 1452 00ad BC000000 		.4byte	0xbc
+ 1453 00b1 C3000000 		.4byte	0xc3
+ 1454 00b5 08       		.uleb128 0x8
+ 1455 00b6 BC000000 		.4byte	0xbc
+ 1456 00ba 01       		.byte	0x1
+ 1457 00bb 00       		.byte	0x0
+ 1458 00bc 04       		.uleb128 0x4
+ 1459 00bd 4E010000 		.4byte	.LASF10
+ 1460 00c1 04       		.byte	0x4
+ 1461 00c2 07       		.byte	0x7
+ 1462 00c3 04       		.uleb128 0x4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 37
+
+
+ 1463 00c4 89000000 		.4byte	.LASF11
+ 1464 00c8 04       		.byte	0x4
+ 1465 00c9 07       		.byte	0x7
+ 1466 00ca 09       		.uleb128 0x9
+ 1467 00cb 23000000 		.4byte	.LASF42
+ 1468 00cf 01       		.byte	0x1
+ 1469 00d0 15       		.byte	0x15
+ 1470 00d1 82000000 		.4byte	0x82
+ 1471 00d5 0A       		.uleb128 0xa
+ 1472 00d6 01       		.byte	0x1
+ 1473 00d7 2E020000 		.4byte	.LASF15
+ 1474 00db 01       		.byte	0x1
+ 1475 00dc C7       		.byte	0xc7
+ 1476 00dd 01       		.byte	0x1
+ 1477 00de 74000000 		.4byte	0x74
+ 1478 00e2 00000000 		.4byte	.LFB3
+ 1479 00e6 10000000 		.4byte	.LFE3
+ 1480 00ea 01       		.byte	0x1
+ 1481 00eb 5D       		.byte	0x5d
+ 1482 00ec 0B       		.uleb128 0xb
+ 1483 00ed 4F010000 		.4byte	0x14f
+ 1484 00f1 01       		.byte	0x1
+ 1485 00f2 6A000000 		.4byte	.LASF17
+ 1486 00f6 01       		.byte	0x1
+ 1487 00f7 1502     		.2byte	0x215
+ 1488 00f9 01       		.byte	0x1
+ 1489 00fa 10000000 		.4byte	.LFB9
+ 1490 00fe CC000000 		.4byte	.LFE9
+ 1491 0102 00000000 		.4byte	.LLST1
+ 1492 0106 0C       		.uleb128 0xc
+ 1493 0107 2D010000 		.4byte	.LASF12
+ 1494 010b 01       		.byte	0x1
+ 1495 010c 1402     		.2byte	0x214
+ 1496 010e 4F010000 		.4byte	0x14f
+ 1497 0112 1F000000 		.4byte	.LLST2
+ 1498 0116 0D       		.uleb128 0xd
+ 1499 0117 7800     		.ascii	"x\000"
+ 1500 0119 01       		.byte	0x1
+ 1501 011a 1402     		.2byte	0x214
+ 1502 011c 4F010000 		.4byte	0x14f
+ 1503 0120 32000000 		.4byte	.LLST3
+ 1504 0124 0D       		.uleb128 0xd
+ 1505 0125 7900     		.ascii	"y\000"
+ 1506 0127 01       		.byte	0x1
+ 1507 0128 1402     		.2byte	0x214
+ 1508 012a 4F010000 		.4byte	0x14f
+ 1509 012e 45000000 		.4byte	.LLST4
+ 1510 0132 0E       		.uleb128 0xe
+ 1511 0133 0B010000 		.4byte	.LASF7
+ 1512 0137 01       		.byte	0x1
+ 1513 0138 1602     		.2byte	0x216
+ 1514 013a C3000000 		.4byte	0xc3
+ 1515 013e 58000000 		.4byte	.LLST5
+ 1516 0142 0F       		.uleb128 0xf
+ 1517 0143 96000000 		.4byte	.LASF13
+ 1518 0147 01       		.byte	0x1
+ 1519 0148 1702     		.2byte	0x217
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 38
+
+
+ 1520 014a C3000000 		.4byte	0xc3
+ 1521 014e 00       		.byte	0x0
+ 1522 014f 04       		.uleb128 0x4
+ 1523 0150 FA000000 		.4byte	.LASF14
+ 1524 0154 01       		.byte	0x1
+ 1525 0155 08       		.byte	0x8
+ 1526 0156 10       		.uleb128 0x10
+ 1527 0157 01       		.byte	0x1
+ 1528 0158 38000000 		.4byte	.LASF16
+ 1529 015c 01       		.byte	0x1
+ 1530 015d 0F01     		.2byte	0x10f
+ 1531 015f 01       		.byte	0x1
+ 1532 0160 CC000000 		.4byte	.LFB6
+ 1533 0164 64010000 		.4byte	.LFE6
+ 1534 0168 76000000 		.4byte	.LLST6
+ 1535 016c 0B       		.uleb128 0xb
+ 1536 016d CF010000 		.4byte	0x1cf
+ 1537 0171 01       		.byte	0x1
+ 1538 0172 DB000000 		.4byte	.LASF18
+ 1539 0176 01       		.byte	0x1
+ 1540 0177 3701     		.2byte	0x137
+ 1541 0179 01       		.byte	0x1
+ 1542 017a 64010000 		.4byte	.LFB7
+ 1543 017e 38020000 		.4byte	.LFE7
+ 1544 0182 95000000 		.4byte	.LLST7
+ 1545 0186 0C       		.uleb128 0xc
+ 1546 0187 0B010000 		.4byte	.LASF7
+ 1547 018b 01       		.byte	0x1
+ 1548 018c 3601     		.2byte	0x136
+ 1549 018e CF010000 		.4byte	0x1cf
+ 1550 0192 B4000000 		.4byte	.LLST8
+ 1551 0196 0C       		.uleb128 0xc
+ 1552 0197 DD010000 		.4byte	.LASF19
+ 1553 019b 01       		.byte	0x1
+ 1554 019c 3601     		.2byte	0x136
+ 1555 019e C3000000 		.4byte	0xc3
+ 1556 01a2 C7000000 		.4byte	.LLST9
+ 1557 01a6 11       		.uleb128 0x11
+ 1558 01a7 FD010000 		.4byte	.LASF20
+ 1559 01ab 01       		.byte	0x1
+ 1560 01ac 3801     		.2byte	0x138
+ 1561 01ae D5010000 		.4byte	0x1d5
+ 1562 01b2 01       		.byte	0x1
+ 1563 01b3 58       		.byte	0x58
+ 1564 01b4 12       		.uleb128 0x12
+ 1565 01b5 6900     		.ascii	"i\000"
+ 1566 01b7 01       		.byte	0x1
+ 1567 01b8 3901     		.2byte	0x139
+ 1568 01ba C3000000 		.4byte	0xc3
+ 1569 01be 01       		.byte	0x1
+ 1570 01bf 56       		.byte	0x56
+ 1571 01c0 11       		.uleb128 0x11
+ 1572 01c1 60010000 		.4byte	.LASF21
+ 1573 01c5 01       		.byte	0x1
+ 1574 01c6 3A01     		.2byte	0x13a
+ 1575 01c8 DB010000 		.4byte	0x1db
+ 1576 01cc 01       		.byte	0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 39
+
+
+ 1577 01cd 57       		.byte	0x57
+ 1578 01ce 00       		.byte	0x0
+ 1579 01cf 13       		.uleb128 0x13
+ 1580 01d0 04       		.byte	0x4
+ 1581 01d1 74000000 		.4byte	0x74
+ 1582 01d5 13       		.uleb128 0x13
+ 1583 01d6 04       		.byte	0x4
+ 1584 01d7 C3000000 		.4byte	0xc3
+ 1585 01db 14       		.uleb128 0x14
+ 1586 01dc 696E7400 		.ascii	"int\000"
+ 1587 01e0 04       		.byte	0x4
+ 1588 01e1 05       		.byte	0x5
+ 1589 01e2 10       		.uleb128 0x10
+ 1590 01e3 01       		.byte	0x1
+ 1591 01e4 03020000 		.4byte	.LASF22
+ 1592 01e8 01       		.byte	0x1
+ 1593 01e9 0301     		.2byte	0x103
+ 1594 01eb 01       		.byte	0x1
+ 1595 01ec 38020000 		.4byte	.LFB5
+ 1596 01f0 50020000 		.4byte	.LFE5
+ 1597 01f4 E5000000 		.4byte	.LLST10
+ 1598 01f8 0B       		.uleb128 0xb
+ 1599 01f9 75020000 		.4byte	0x275
+ 1600 01fd 01       		.byte	0x1
+ 1601 01fe 00000000 		.4byte	.LASF23
+ 1602 0202 01       		.byte	0x1
+ 1603 0203 7301     		.2byte	0x173
+ 1604 0205 01       		.byte	0x1
+ 1605 0206 50020000 		.4byte	.LFB8
+ 1606 020a 4C050000 		.4byte	.LFE8
+ 1607 020e 04010000 		.4byte	.LLST11
+ 1608 0212 15       		.uleb128 0x15
+ 1609 0213 6900     		.ascii	"i\000"
+ 1610 0215 01       		.byte	0x1
+ 1611 0216 7601     		.2byte	0x176
+ 1612 0218 DB010000 		.4byte	0x1db
+ 1613 021c 23010000 		.4byte	.LLST12
+ 1614 0220 16       		.uleb128 0x16
+ 1615 0221 3E020000 		.4byte	0x23e
+ 1616 0225 D4030000 		.4byte	.LBB2
+ 1617 0229 F0030000 		.4byte	.LBE2
+ 1618 022d 0E       		.uleb128 0xe
+ 1619 022e 0B010000 		.4byte	.LASF7
+ 1620 0232 01       		.byte	0x1
+ 1621 0233 A401     		.2byte	0x1a4
+ 1622 0235 75020000 		.4byte	0x275
+ 1623 0239 41010000 		.4byte	.LLST13
+ 1624 023d 00       		.byte	0x0
+ 1625 023e 11       		.uleb128 0x11
+ 1626 023f 27020000 		.4byte	.LASF4
+ 1627 0243 01       		.byte	0x1
+ 1628 0244 7501     		.2byte	0x175
+ 1629 0246 7B000000 		.4byte	0x7b
+ 1630 024a 05       		.byte	0x5
+ 1631 024b 03       		.byte	0x3
+ 1632 024c 00000000 		.4byte	Length.1460
+ 1633 0250 11       		.uleb128 0x11
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 40
+
+
+ 1634 0251 53000000 		.4byte	.LASF24
+ 1635 0255 01       		.byte	0x1
+ 1636 0256 7501     		.2byte	0x175
+ 1637 0258 7B000000 		.4byte	0x7b
+ 1638 025c 05       		.byte	0x5
+ 1639 025d 03       		.byte	0x3
+ 1640 025e 02000000 		.4byte	Status.1459
+ 1641 0262 11       		.uleb128 0x11
+ 1642 0263 BA000000 		.4byte	.LASF25
+ 1643 0267 01       		.byte	0x1
+ 1644 0268 7401     		.2byte	0x174
+ 1645 026a CA000000 		.4byte	0xca
+ 1646 026e 05       		.byte	0x5
+ 1647 026f 03       		.byte	0x3
+ 1648 0270 08000000 		.4byte	Setup.1458
+ 1649 0274 00       		.byte	0x0
+ 1650 0275 13       		.uleb128 0x13
+ 1651 0276 04       		.byte	0x4
+ 1652 0277 7B020000 		.4byte	0x27b
+ 1653 027b 17       		.uleb128 0x17
+ 1654 027c 4F010000 		.4byte	0x14f
+ 1655 0280 18       		.uleb128 0x18
+ 1656 0281 01       		.byte	0x1
+ 1657 0282 34010000 		.4byte	.LASF26
+ 1658 0286 01       		.byte	0x1
+ 1659 0287 B3       		.byte	0xb3
+ 1660 0288 01       		.byte	0x1
+ 1661 0289 4C050000 		.4byte	.LFB2
+ 1662 028d B4050000 		.4byte	.LFE2
+ 1663 0291 5F010000 		.4byte	.LLST14
+ 1664 0295 19       		.uleb128 0x19
+ 1665 0296 C4020000 		.4byte	0x2c4
+ 1666 029a 01       		.byte	0x1
+ 1667 029b AD000000 		.4byte	.LASF27
+ 1668 029f 01       		.byte	0x1
+ 1669 02a0 D3       		.byte	0xd3
+ 1670 02a1 01       		.byte	0x1
+ 1671 02a2 B4050000 		.4byte	.LFB4
+ 1672 02a6 50060000 		.4byte	.LFE4
+ 1673 02aa 7E010000 		.4byte	.LLST15
+ 1674 02ae 1A       		.uleb128 0x1a
+ 1675 02af E8050000 		.4byte	.LBB3
+ 1676 02b3 04060000 		.4byte	.LBE3
+ 1677 02b7 1B       		.uleb128 0x1b
+ 1678 02b8 3D010000 		.4byte	.LASF28
+ 1679 02bc 01       		.byte	0x1
+ 1680 02bd DF       		.byte	0xdf
+ 1681 02be DB010000 		.4byte	0x1db
+ 1682 02c2 00       		.byte	0x0
+ 1683 02c3 00       		.byte	0x0
+ 1684 02c4 1C       		.uleb128 0x1c
+ 1685 02c5 79010000 		.4byte	.LASF29
+ 1686 02c9 01       		.byte	0x1
+ 1687 02ca 19       		.byte	0x19
+ 1688 02cb 74000000 		.4byte	0x74
+ 1689 02cf 01       		.byte	0x1
+ 1690 02d0 05       		.byte	0x5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 41
+
+
+ 1691 02d1 03       		.byte	0x3
+ 1692 02d2 00000000 		.4byte	currentConfiguration
+ 1693 02d6 1C       		.uleb128 0x1c
+ 1694 02d7 14000000 		.4byte	.LASF30
+ 1695 02db 01       		.byte	0x1
+ 1696 02dc 1A       		.byte	0x1a
+ 1697 02dd 74000000 		.4byte	0x74
+ 1698 02e1 01       		.byte	0x1
+ 1699 02e2 05       		.byte	0x5
+ 1700 02e3 03       		.byte	0x3
+ 1701 02e4 00000000 		.4byte	currentAddress
+ 1702 02e8 07       		.uleb128 0x7
+ 1703 02e9 F8020000 		.4byte	0x2f8
+ 1704 02ed F8020000 		.4byte	0x2f8
+ 1705 02f1 08       		.uleb128 0x8
+ 1706 02f2 BC000000 		.4byte	0xbc
+ 1707 02f6 18       		.byte	0x18
+ 1708 02f7 00       		.byte	0x0
+ 1709 02f8 04       		.uleb128 0x4
+ 1710 02f9 16010000 		.4byte	.LASF31
+ 1711 02fd 02       		.byte	0x2
+ 1712 02fe 05       		.byte	0x5
+ 1713 02ff 1C       		.uleb128 0x1c
+ 1714 0300 5A000000 		.4byte	.LASF32
+ 1715 0304 01       		.byte	0x1
+ 1716 0305 1C       		.byte	0x1c
+ 1717 0306 E8020000 		.4byte	0x2e8
+ 1718 030a 01       		.byte	0x1
+ 1719 030b 05       		.byte	0x5
+ 1720 030c 03       		.byte	0x3
+ 1721 030d 00000000 		.4byte	mouseDescriptor
+ 1722 0311 07       		.uleb128 0x7
+ 1723 0312 21030000 		.4byte	0x321
+ 1724 0316 4F010000 		.4byte	0x14f
+ 1725 031a 08       		.uleb128 0x8
+ 1726 031b BC000000 		.4byte	0xbc
+ 1727 031f 11       		.byte	0x11
+ 1728 0320 00       		.byte	0x0
+ 1729 0321 1C       		.uleb128 0x1c
+ 1730 0322 11020000 		.4byte	.LASF33
+ 1731 0326 01       		.byte	0x1
+ 1732 0327 3A       		.byte	0x3a
+ 1733 0328 11030000 		.4byte	0x311
+ 1734 032c 01       		.byte	0x1
+ 1735 032d 05       		.byte	0x5
+ 1736 032e 03       		.byte	0x3
+ 1737 032f 00000000 		.4byte	devDescriptor
+ 1738 0333 07       		.uleb128 0x7
+ 1739 0334 43030000 		.4byte	0x343
+ 1740 0338 4F010000 		.4byte	0x14f
+ 1741 033c 08       		.uleb128 0x8
+ 1742 033d BC000000 		.4byte	0xbc
+ 1743 0341 21       		.byte	0x21
+ 1744 0342 00       		.byte	0x0
+ 1745 0343 1C       		.uleb128 0x1c
+ 1746 0344 43020000 		.4byte	.LASF34
+ 1747 0348 01       		.byte	0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 42
+
+
+ 1748 0349 51       		.byte	0x51
+ 1749 034a 33030000 		.4byte	0x333
+ 1750 034e 01       		.byte	0x1
+ 1751 034f 05       		.byte	0x5
+ 1752 0350 03       		.byte	0x3
+ 1753 0351 00000000 		.4byte	cfgDescriptor
+ 1754 0355 07       		.uleb128 0x7
+ 1755 0356 65030000 		.4byte	0x365
+ 1756 035a 4F010000 		.4byte	0x14f
+ 1757 035e 08       		.uleb128 0x8
+ 1758 035f BC000000 		.4byte	0xbc
+ 1759 0363 03       		.byte	0x3
+ 1760 0364 00       		.byte	0x0
+ 1761 0365 1C       		.uleb128 0x1c
+ 1762 0366 20010000 		.4byte	.LASF35
+ 1763 036a 01       		.byte	0x1
+ 1764 036b 80       		.byte	0x80
+ 1765 036c 55030000 		.4byte	0x355
+ 1766 0370 01       		.byte	0x1
+ 1767 0371 05       		.byte	0x5
+ 1768 0372 03       		.byte	0x3
+ 1769 0373 00000000 		.4byte	LanguagesStr
+ 1770 0377 07       		.uleb128 0x7
+ 1771 0378 87030000 		.4byte	0x387
+ 1772 037c 4F010000 		.4byte	0x14f
+ 1773 0380 08       		.uleb128 0x8
+ 1774 0381 BC000000 		.4byte	0xbc
+ 1775 0385 3B       		.byte	0x3b
+ 1776 0386 00       		.byte	0x0
+ 1777 0387 1C       		.uleb128 0x1c
+ 1778 0388 79000000 		.4byte	.LASF36
+ 1779 038c 01       		.byte	0x1
+ 1780 038d 88       		.byte	0x88
+ 1781 038e 77030000 		.4byte	0x377
+ 1782 0392 01       		.byte	0x1
+ 1783 0393 05       		.byte	0x5
+ 1784 0394 03       		.byte	0x3
+ 1785 0395 00000000 		.4byte	ManufacturerStr
+ 1786 0399 07       		.uleb128 0x7
+ 1787 039a A9030000 		.4byte	0x3a9
+ 1788 039e 4F010000 		.4byte	0x14f
+ 1789 03a2 08       		.uleb128 0x8
+ 1790 03a3 BC000000 		.4byte	0xbc
+ 1791 03a7 61       		.byte	0x61
+ 1792 03a8 00       		.byte	0x0
+ 1793 03a9 1C       		.uleb128 0x1c
+ 1794 03aa 8E010000 		.4byte	.LASF37
+ 1795 03ae 01       		.byte	0x1
+ 1796 03af 95       		.byte	0x95
+ 1797 03b0 99030000 		.4byte	0x399
+ 1798 03b4 01       		.byte	0x1
+ 1799 03b5 05       		.byte	0x5
+ 1800 03b6 03       		.byte	0x3
+ 1801 03b7 00000000 		.4byte	ProductStr
+ 1802 03bb 07       		.uleb128 0x7
+ 1803 03bc CB030000 		.4byte	0x3cb
+ 1804 03c0 75020000 		.4byte	0x275
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 43
+
+
+ 1805 03c4 08       		.uleb128 0x8
+ 1806 03c5 BC000000 		.4byte	0xbc
+ 1807 03c9 02       		.byte	0x2
+ 1808 03ca 00       		.byte	0x0
+ 1809 03cb 1C       		.uleb128 0x1c
+ 1810 03cc 1F020000 		.4byte	.LASF38
+ 1811 03d0 01       		.byte	0x1
+ 1812 03d1 A6       		.byte	0xa6
+ 1813 03d2 DD030000 		.4byte	0x3dd
+ 1814 03d6 01       		.byte	0x1
+ 1815 03d7 05       		.byte	0x5
+ 1816 03d8 03       		.byte	0x3
+ 1817 03d9 00000000 		.4byte	StrPoin
+ 1818 03dd 17       		.uleb128 0x17
+ 1819 03de BB030000 		.4byte	0x3bb
+ 1820 03e2 00       		.byte	0x0
+ 1821              		.section	.debug_abbrev
+ 1822 0000 01       		.uleb128 0x1
+ 1823 0001 11       		.uleb128 0x11
+ 1824 0002 01       		.byte	0x1
+ 1825 0003 10       		.uleb128 0x10
+ 1826 0004 06       		.uleb128 0x6
+ 1827 0005 12       		.uleb128 0x12
+ 1828 0006 01       		.uleb128 0x1
+ 1829 0007 11       		.uleb128 0x11
+ 1830 0008 01       		.uleb128 0x1
+ 1831 0009 25       		.uleb128 0x25
+ 1832 000a 0E       		.uleb128 0xe
+ 1833 000b 13       		.uleb128 0x13
+ 1834 000c 0B       		.uleb128 0xb
+ 1835 000d 03       		.uleb128 0x3
+ 1836 000e 0E       		.uleb128 0xe
+ 1837 000f 1B       		.uleb128 0x1b
+ 1838 0010 0E       		.uleb128 0xe
+ 1839 0011 00       		.byte	0x0
+ 1840 0012 00       		.byte	0x0
+ 1841 0013 02       		.uleb128 0x2
+ 1842 0014 13       		.uleb128 0x13
+ 1843 0015 01       		.byte	0x1
+ 1844 0016 01       		.uleb128 0x1
+ 1845 0017 13       		.uleb128 0x13
+ 1846 0018 0B       		.uleb128 0xb
+ 1847 0019 0B       		.uleb128 0xb
+ 1848 001a 3A       		.uleb128 0x3a
+ 1849 001b 0B       		.uleb128 0xb
+ 1850 001c 3B       		.uleb128 0x3b
+ 1851 001d 0B       		.uleb128 0xb
+ 1852 001e 00       		.byte	0x0
+ 1853 001f 00       		.byte	0x0
+ 1854 0020 03       		.uleb128 0x3
+ 1855 0021 0D       		.uleb128 0xd
+ 1856 0022 00       		.byte	0x0
+ 1857 0023 03       		.uleb128 0x3
+ 1858 0024 0E       		.uleb128 0xe
+ 1859 0025 3A       		.uleb128 0x3a
+ 1860 0026 0B       		.uleb128 0xb
+ 1861 0027 3B       		.uleb128 0x3b
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 44
+
+
+ 1862 0028 0B       		.uleb128 0xb
+ 1863 0029 49       		.uleb128 0x49
+ 1864 002a 13       		.uleb128 0x13
+ 1865 002b 38       		.uleb128 0x38
+ 1866 002c 0A       		.uleb128 0xa
+ 1867 002d 00       		.byte	0x0
+ 1868 002e 00       		.byte	0x0
+ 1869 002f 04       		.uleb128 0x4
+ 1870 0030 24       		.uleb128 0x24
+ 1871 0031 00       		.byte	0x0
+ 1872 0032 03       		.uleb128 0x3
+ 1873 0033 0E       		.uleb128 0xe
+ 1874 0034 0B       		.uleb128 0xb
+ 1875 0035 0B       		.uleb128 0xb
+ 1876 0036 3E       		.uleb128 0x3e
+ 1877 0037 0B       		.uleb128 0xb
+ 1878 0038 00       		.byte	0x0
+ 1879 0039 00       		.byte	0x0
+ 1880 003a 05       		.uleb128 0x5
+ 1881 003b 17       		.uleb128 0x17
+ 1882 003c 01       		.byte	0x1
+ 1883 003d 01       		.uleb128 0x1
+ 1884 003e 13       		.uleb128 0x13
+ 1885 003f 0B       		.uleb128 0xb
+ 1886 0040 0B       		.uleb128 0xb
+ 1887 0041 3A       		.uleb128 0x3a
+ 1888 0042 0B       		.uleb128 0xb
+ 1889 0043 3B       		.uleb128 0x3b
+ 1890 0044 0B       		.uleb128 0xb
+ 1891 0045 00       		.byte	0x0
+ 1892 0046 00       		.byte	0x0
+ 1893 0047 06       		.uleb128 0x6
+ 1894 0048 0D       		.uleb128 0xd
+ 1895 0049 00       		.byte	0x0
+ 1896 004a 03       		.uleb128 0x3
+ 1897 004b 0E       		.uleb128 0xe
+ 1898 004c 3A       		.uleb128 0x3a
+ 1899 004d 0B       		.uleb128 0xb
+ 1900 004e 3B       		.uleb128 0x3b
+ 1901 004f 0B       		.uleb128 0xb
+ 1902 0050 49       		.uleb128 0x49
+ 1903 0051 13       		.uleb128 0x13
+ 1904 0052 00       		.byte	0x0
+ 1905 0053 00       		.byte	0x0
+ 1906 0054 07       		.uleb128 0x7
+ 1907 0055 01       		.uleb128 0x1
+ 1908 0056 01       		.byte	0x1
+ 1909 0057 01       		.uleb128 0x1
+ 1910 0058 13       		.uleb128 0x13
+ 1911 0059 49       		.uleb128 0x49
+ 1912 005a 13       		.uleb128 0x13
+ 1913 005b 00       		.byte	0x0
+ 1914 005c 00       		.byte	0x0
+ 1915 005d 08       		.uleb128 0x8
+ 1916 005e 21       		.uleb128 0x21
+ 1917 005f 00       		.byte	0x0
+ 1918 0060 49       		.uleb128 0x49
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 45
+
+
+ 1919 0061 13       		.uleb128 0x13
+ 1920 0062 2F       		.uleb128 0x2f
+ 1921 0063 0B       		.uleb128 0xb
+ 1922 0064 00       		.byte	0x0
+ 1923 0065 00       		.byte	0x0
+ 1924 0066 09       		.uleb128 0x9
+ 1925 0067 16       		.uleb128 0x16
+ 1926 0068 00       		.byte	0x0
+ 1927 0069 03       		.uleb128 0x3
+ 1928 006a 0E       		.uleb128 0xe
+ 1929 006b 3A       		.uleb128 0x3a
+ 1930 006c 0B       		.uleb128 0xb
+ 1931 006d 3B       		.uleb128 0x3b
+ 1932 006e 0B       		.uleb128 0xb
+ 1933 006f 49       		.uleb128 0x49
+ 1934 0070 13       		.uleb128 0x13
+ 1935 0071 00       		.byte	0x0
+ 1936 0072 00       		.byte	0x0
+ 1937 0073 0A       		.uleb128 0xa
+ 1938 0074 2E       		.uleb128 0x2e
+ 1939 0075 00       		.byte	0x0
+ 1940 0076 3F       		.uleb128 0x3f
+ 1941 0077 0C       		.uleb128 0xc
+ 1942 0078 03       		.uleb128 0x3
+ 1943 0079 0E       		.uleb128 0xe
+ 1944 007a 3A       		.uleb128 0x3a
+ 1945 007b 0B       		.uleb128 0xb
+ 1946 007c 3B       		.uleb128 0x3b
+ 1947 007d 0B       		.uleb128 0xb
+ 1948 007e 27       		.uleb128 0x27
+ 1949 007f 0C       		.uleb128 0xc
+ 1950 0080 49       		.uleb128 0x49
+ 1951 0081 13       		.uleb128 0x13
+ 1952 0082 11       		.uleb128 0x11
+ 1953 0083 01       		.uleb128 0x1
+ 1954 0084 12       		.uleb128 0x12
+ 1955 0085 01       		.uleb128 0x1
+ 1956 0086 40       		.uleb128 0x40
+ 1957 0087 0A       		.uleb128 0xa
+ 1958 0088 00       		.byte	0x0
+ 1959 0089 00       		.byte	0x0
+ 1960 008a 0B       		.uleb128 0xb
+ 1961 008b 2E       		.uleb128 0x2e
+ 1962 008c 01       		.byte	0x1
+ 1963 008d 01       		.uleb128 0x1
+ 1964 008e 13       		.uleb128 0x13
+ 1965 008f 3F       		.uleb128 0x3f
+ 1966 0090 0C       		.uleb128 0xc
+ 1967 0091 03       		.uleb128 0x3
+ 1968 0092 0E       		.uleb128 0xe
+ 1969 0093 3A       		.uleb128 0x3a
+ 1970 0094 0B       		.uleb128 0xb
+ 1971 0095 3B       		.uleb128 0x3b
+ 1972 0096 05       		.uleb128 0x5
+ 1973 0097 27       		.uleb128 0x27
+ 1974 0098 0C       		.uleb128 0xc
+ 1975 0099 11       		.uleb128 0x11
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 46
+
+
+ 1976 009a 01       		.uleb128 0x1
+ 1977 009b 12       		.uleb128 0x12
+ 1978 009c 01       		.uleb128 0x1
+ 1979 009d 40       		.uleb128 0x40
+ 1980 009e 06       		.uleb128 0x6
+ 1981 009f 00       		.byte	0x0
+ 1982 00a0 00       		.byte	0x0
+ 1983 00a1 0C       		.uleb128 0xc
+ 1984 00a2 05       		.uleb128 0x5
+ 1985 00a3 00       		.byte	0x0
+ 1986 00a4 03       		.uleb128 0x3
+ 1987 00a5 0E       		.uleb128 0xe
+ 1988 00a6 3A       		.uleb128 0x3a
+ 1989 00a7 0B       		.uleb128 0xb
+ 1990 00a8 3B       		.uleb128 0x3b
+ 1991 00a9 05       		.uleb128 0x5
+ 1992 00aa 49       		.uleb128 0x49
+ 1993 00ab 13       		.uleb128 0x13
+ 1994 00ac 02       		.uleb128 0x2
+ 1995 00ad 06       		.uleb128 0x6
+ 1996 00ae 00       		.byte	0x0
+ 1997 00af 00       		.byte	0x0
+ 1998 00b0 0D       		.uleb128 0xd
+ 1999 00b1 05       		.uleb128 0x5
+ 2000 00b2 00       		.byte	0x0
+ 2001 00b3 03       		.uleb128 0x3
+ 2002 00b4 08       		.uleb128 0x8
+ 2003 00b5 3A       		.uleb128 0x3a
+ 2004 00b6 0B       		.uleb128 0xb
+ 2005 00b7 3B       		.uleb128 0x3b
+ 2006 00b8 05       		.uleb128 0x5
+ 2007 00b9 49       		.uleb128 0x49
+ 2008 00ba 13       		.uleb128 0x13
+ 2009 00bb 02       		.uleb128 0x2
+ 2010 00bc 06       		.uleb128 0x6
+ 2011 00bd 00       		.byte	0x0
+ 2012 00be 00       		.byte	0x0
+ 2013 00bf 0E       		.uleb128 0xe
+ 2014 00c0 34       		.uleb128 0x34
+ 2015 00c1 00       		.byte	0x0
+ 2016 00c2 03       		.uleb128 0x3
+ 2017 00c3 0E       		.uleb128 0xe
+ 2018 00c4 3A       		.uleb128 0x3a
+ 2019 00c5 0B       		.uleb128 0xb
+ 2020 00c6 3B       		.uleb128 0x3b
+ 2021 00c7 05       		.uleb128 0x5
+ 2022 00c8 49       		.uleb128 0x49
+ 2023 00c9 13       		.uleb128 0x13
+ 2024 00ca 02       		.uleb128 0x2
+ 2025 00cb 06       		.uleb128 0x6
+ 2026 00cc 00       		.byte	0x0
+ 2027 00cd 00       		.byte	0x0
+ 2028 00ce 0F       		.uleb128 0xf
+ 2029 00cf 34       		.uleb128 0x34
+ 2030 00d0 00       		.byte	0x0
+ 2031 00d1 03       		.uleb128 0x3
+ 2032 00d2 0E       		.uleb128 0xe
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 47
+
+
+ 2033 00d3 3A       		.uleb128 0x3a
+ 2034 00d4 0B       		.uleb128 0xb
+ 2035 00d5 3B       		.uleb128 0x3b
+ 2036 00d6 05       		.uleb128 0x5
+ 2037 00d7 49       		.uleb128 0x49
+ 2038 00d8 13       		.uleb128 0x13
+ 2039 00d9 00       		.byte	0x0
+ 2040 00da 00       		.byte	0x0
+ 2041 00db 10       		.uleb128 0x10
+ 2042 00dc 2E       		.uleb128 0x2e
+ 2043 00dd 00       		.byte	0x0
+ 2044 00de 3F       		.uleb128 0x3f
+ 2045 00df 0C       		.uleb128 0xc
+ 2046 00e0 03       		.uleb128 0x3
+ 2047 00e1 0E       		.uleb128 0xe
+ 2048 00e2 3A       		.uleb128 0x3a
+ 2049 00e3 0B       		.uleb128 0xb
+ 2050 00e4 3B       		.uleb128 0x3b
+ 2051 00e5 05       		.uleb128 0x5
+ 2052 00e6 27       		.uleb128 0x27
+ 2053 00e7 0C       		.uleb128 0xc
+ 2054 00e8 11       		.uleb128 0x11
+ 2055 00e9 01       		.uleb128 0x1
+ 2056 00ea 12       		.uleb128 0x12
+ 2057 00eb 01       		.uleb128 0x1
+ 2058 00ec 40       		.uleb128 0x40
+ 2059 00ed 06       		.uleb128 0x6
+ 2060 00ee 00       		.byte	0x0
+ 2061 00ef 00       		.byte	0x0
+ 2062 00f0 11       		.uleb128 0x11
+ 2063 00f1 34       		.uleb128 0x34
+ 2064 00f2 00       		.byte	0x0
+ 2065 00f3 03       		.uleb128 0x3
+ 2066 00f4 0E       		.uleb128 0xe
+ 2067 00f5 3A       		.uleb128 0x3a
+ 2068 00f6 0B       		.uleb128 0xb
+ 2069 00f7 3B       		.uleb128 0x3b
+ 2070 00f8 05       		.uleb128 0x5
+ 2071 00f9 49       		.uleb128 0x49
+ 2072 00fa 13       		.uleb128 0x13
+ 2073 00fb 02       		.uleb128 0x2
+ 2074 00fc 0A       		.uleb128 0xa
+ 2075 00fd 00       		.byte	0x0
+ 2076 00fe 00       		.byte	0x0
+ 2077 00ff 12       		.uleb128 0x12
+ 2078 0100 34       		.uleb128 0x34
+ 2079 0101 00       		.byte	0x0
+ 2080 0102 03       		.uleb128 0x3
+ 2081 0103 08       		.uleb128 0x8
+ 2082 0104 3A       		.uleb128 0x3a
+ 2083 0105 0B       		.uleb128 0xb
+ 2084 0106 3B       		.uleb128 0x3b
+ 2085 0107 05       		.uleb128 0x5
+ 2086 0108 49       		.uleb128 0x49
+ 2087 0109 13       		.uleb128 0x13
+ 2088 010a 02       		.uleb128 0x2
+ 2089 010b 0A       		.uleb128 0xa
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 48
+
+
+ 2090 010c 00       		.byte	0x0
+ 2091 010d 00       		.byte	0x0
+ 2092 010e 13       		.uleb128 0x13
+ 2093 010f 0F       		.uleb128 0xf
+ 2094 0110 00       		.byte	0x0
+ 2095 0111 0B       		.uleb128 0xb
+ 2096 0112 0B       		.uleb128 0xb
+ 2097 0113 49       		.uleb128 0x49
+ 2098 0114 13       		.uleb128 0x13
+ 2099 0115 00       		.byte	0x0
+ 2100 0116 00       		.byte	0x0
+ 2101 0117 14       		.uleb128 0x14
+ 2102 0118 24       		.uleb128 0x24
+ 2103 0119 00       		.byte	0x0
+ 2104 011a 03       		.uleb128 0x3
+ 2105 011b 08       		.uleb128 0x8
+ 2106 011c 0B       		.uleb128 0xb
+ 2107 011d 0B       		.uleb128 0xb
+ 2108 011e 3E       		.uleb128 0x3e
+ 2109 011f 0B       		.uleb128 0xb
+ 2110 0120 00       		.byte	0x0
+ 2111 0121 00       		.byte	0x0
+ 2112 0122 15       		.uleb128 0x15
+ 2113 0123 34       		.uleb128 0x34
+ 2114 0124 00       		.byte	0x0
+ 2115 0125 03       		.uleb128 0x3
+ 2116 0126 08       		.uleb128 0x8
+ 2117 0127 3A       		.uleb128 0x3a
+ 2118 0128 0B       		.uleb128 0xb
+ 2119 0129 3B       		.uleb128 0x3b
+ 2120 012a 05       		.uleb128 0x5
+ 2121 012b 49       		.uleb128 0x49
+ 2122 012c 13       		.uleb128 0x13
+ 2123 012d 02       		.uleb128 0x2
+ 2124 012e 06       		.uleb128 0x6
+ 2125 012f 00       		.byte	0x0
+ 2126 0130 00       		.byte	0x0
+ 2127 0131 16       		.uleb128 0x16
+ 2128 0132 0B       		.uleb128 0xb
+ 2129 0133 01       		.byte	0x1
+ 2130 0134 01       		.uleb128 0x1
+ 2131 0135 13       		.uleb128 0x13
+ 2132 0136 11       		.uleb128 0x11
+ 2133 0137 01       		.uleb128 0x1
+ 2134 0138 12       		.uleb128 0x12
+ 2135 0139 01       		.uleb128 0x1
+ 2136 013a 00       		.byte	0x0
+ 2137 013b 00       		.byte	0x0
+ 2138 013c 17       		.uleb128 0x17
+ 2139 013d 26       		.uleb128 0x26
+ 2140 013e 00       		.byte	0x0
+ 2141 013f 49       		.uleb128 0x49
+ 2142 0140 13       		.uleb128 0x13
+ 2143 0141 00       		.byte	0x0
+ 2144 0142 00       		.byte	0x0
+ 2145 0143 18       		.uleb128 0x18
+ 2146 0144 2E       		.uleb128 0x2e
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 49
+
+
+ 2147 0145 00       		.byte	0x0
+ 2148 0146 3F       		.uleb128 0x3f
+ 2149 0147 0C       		.uleb128 0xc
+ 2150 0148 03       		.uleb128 0x3
+ 2151 0149 0E       		.uleb128 0xe
+ 2152 014a 3A       		.uleb128 0x3a
+ 2153 014b 0B       		.uleb128 0xb
+ 2154 014c 3B       		.uleb128 0x3b
+ 2155 014d 0B       		.uleb128 0xb
+ 2156 014e 27       		.uleb128 0x27
+ 2157 014f 0C       		.uleb128 0xc
+ 2158 0150 11       		.uleb128 0x11
+ 2159 0151 01       		.uleb128 0x1
+ 2160 0152 12       		.uleb128 0x12
+ 2161 0153 01       		.uleb128 0x1
+ 2162 0154 40       		.uleb128 0x40
+ 2163 0155 06       		.uleb128 0x6
+ 2164 0156 00       		.byte	0x0
+ 2165 0157 00       		.byte	0x0
+ 2166 0158 19       		.uleb128 0x19
+ 2167 0159 2E       		.uleb128 0x2e
+ 2168 015a 01       		.byte	0x1
+ 2169 015b 01       		.uleb128 0x1
+ 2170 015c 13       		.uleb128 0x13
+ 2171 015d 3F       		.uleb128 0x3f
+ 2172 015e 0C       		.uleb128 0xc
+ 2173 015f 03       		.uleb128 0x3
+ 2174 0160 0E       		.uleb128 0xe
+ 2175 0161 3A       		.uleb128 0x3a
+ 2176 0162 0B       		.uleb128 0xb
+ 2177 0163 3B       		.uleb128 0x3b
+ 2178 0164 0B       		.uleb128 0xb
+ 2179 0165 27       		.uleb128 0x27
+ 2180 0166 0C       		.uleb128 0xc
+ 2181 0167 11       		.uleb128 0x11
+ 2182 0168 01       		.uleb128 0x1
+ 2183 0169 12       		.uleb128 0x12
+ 2184 016a 01       		.uleb128 0x1
+ 2185 016b 40       		.uleb128 0x40
+ 2186 016c 06       		.uleb128 0x6
+ 2187 016d 00       		.byte	0x0
+ 2188 016e 00       		.byte	0x0
+ 2189 016f 1A       		.uleb128 0x1a
+ 2190 0170 0B       		.uleb128 0xb
+ 2191 0171 01       		.byte	0x1
+ 2192 0172 11       		.uleb128 0x11
+ 2193 0173 01       		.uleb128 0x1
+ 2194 0174 12       		.uleb128 0x12
+ 2195 0175 01       		.uleb128 0x1
+ 2196 0176 00       		.byte	0x0
+ 2197 0177 00       		.byte	0x0
+ 2198 0178 1B       		.uleb128 0x1b
+ 2199 0179 34       		.uleb128 0x34
+ 2200 017a 00       		.byte	0x0
+ 2201 017b 03       		.uleb128 0x3
+ 2202 017c 0E       		.uleb128 0xe
+ 2203 017d 3A       		.uleb128 0x3a
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 50
+
+
+ 2204 017e 0B       		.uleb128 0xb
+ 2205 017f 3B       		.uleb128 0x3b
+ 2206 0180 0B       		.uleb128 0xb
+ 2207 0181 49       		.uleb128 0x49
+ 2208 0182 13       		.uleb128 0x13
+ 2209 0183 00       		.byte	0x0
+ 2210 0184 00       		.byte	0x0
+ 2211 0185 1C       		.uleb128 0x1c
+ 2212 0186 34       		.uleb128 0x34
+ 2213 0187 00       		.byte	0x0
+ 2214 0188 03       		.uleb128 0x3
+ 2215 0189 0E       		.uleb128 0xe
+ 2216 018a 3A       		.uleb128 0x3a
+ 2217 018b 0B       		.uleb128 0xb
+ 2218 018c 3B       		.uleb128 0x3b
+ 2219 018d 0B       		.uleb128 0xb
+ 2220 018e 49       		.uleb128 0x49
+ 2221 018f 13       		.uleb128 0x13
+ 2222 0190 3F       		.uleb128 0x3f
+ 2223 0191 0C       		.uleb128 0xc
+ 2224 0192 02       		.uleb128 0x2
+ 2225 0193 0A       		.uleb128 0xa
+ 2226 0194 00       		.byte	0x0
+ 2227 0195 00       		.byte	0x0
+ 2228 0196 00       		.byte	0x0
+ 2229              		.section	.debug_pubnames,"",%progbits
+ 2230 0000 5E010000 		.4byte	0x15e
+ 2231 0004 0200     		.2byte	0x2
+ 2232 0006 00000000 		.4byte	.Ldebug_info0
+ 2233 000a E3030000 		.4byte	0x3e3
+ 2234 000e D5000000 		.4byte	0xd5
+ 2235 0012 4849445F 		.ascii	"HID_GetConfiguration\000"
+ 2235      47657443 
+ 2235      6F6E6669 
+ 2235      67757261 
+ 2235      74696F6E 
+ 2236 0027 EC000000 		.4byte	0xec
+ 2237 002b 4849445F 		.ascii	"HID_SendReport\000"
+ 2237      53656E64 
+ 2237      5265706F 
+ 2237      727400
+ 2238 003a 56010000 		.4byte	0x156
+ 2239 003e 4849445F 		.ascii	"HID_SendZeroLengthByCtrlEP\000"
+ 2239      53656E64 
+ 2239      5A65726F 
+ 2239      4C656E67 
+ 2239      74684279 
+ 2240 0059 6C010000 		.4byte	0x16c
+ 2241 005d 4849445F 		.ascii	"HID_SendDataByCtrlEP\000"
+ 2241      53656E64 
+ 2241      44617461 
+ 2241      42794374 
+ 2241      726C4550 
+ 2242 0072 E2010000 		.4byte	0x1e2
+ 2243 0076 4849445F 		.ascii	"HID_CtrlStall\000"
+ 2243      4374726C 
+ 2243      5374616C 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 51
+
+
+ 2243      6C00
+ 2244 0084 F8010000 		.4byte	0x1f8
+ 2245 0088 4849445F 		.ascii	"HID_ImplSetupPacket\000"
+ 2245      496D706C 
+ 2245      53657475 
+ 2245      70506163 
+ 2245      6B657400 
+ 2246 009c 80020000 		.4byte	0x280
+ 2247 00a0 4849445F 		.ascii	"HID_Init\000"
+ 2247      496E6974 
+ 2247      00
+ 2248 00a9 95020000 		.4byte	0x295
+ 2249 00ad 4849445F 		.ascii	"HID_CallBack\000"
+ 2249      43616C6C 
+ 2249      4261636B 
+ 2249      00
+ 2250 00ba C4020000 		.4byte	0x2c4
+ 2251 00be 63757272 		.ascii	"currentConfiguration\000"
+ 2251      656E7443 
+ 2251      6F6E6669 
+ 2251      67757261 
+ 2251      74696F6E 
+ 2252 00d3 D6020000 		.4byte	0x2d6
+ 2253 00d7 63757272 		.ascii	"currentAddress\000"
+ 2253      656E7441 
+ 2253      64647265 
+ 2253      737300
+ 2254 00e6 FF020000 		.4byte	0x2ff
+ 2255 00ea 6D6F7573 		.ascii	"mouseDescriptor\000"
+ 2255      65446573 
+ 2255      63726970 
+ 2255      746F7200 
+ 2256 00fa 21030000 		.4byte	0x321
+ 2257 00fe 64657644 		.ascii	"devDescriptor\000"
+ 2257      65736372 
+ 2257      6970746F 
+ 2257      7200
+ 2258 010c 43030000 		.4byte	0x343
+ 2259 0110 63666744 		.ascii	"cfgDescriptor\000"
+ 2259      65736372 
+ 2259      6970746F 
+ 2259      7200
+ 2260 011e 65030000 		.4byte	0x365
+ 2261 0122 4C616E67 		.ascii	"LanguagesStr\000"
+ 2261      75616765 
+ 2261      73537472 
+ 2261      00
+ 2262 012f 87030000 		.4byte	0x387
+ 2263 0133 4D616E75 		.ascii	"ManufacturerStr\000"
+ 2263      66616374 
+ 2263      75726572 
+ 2263      53747200 
+ 2264 0143 A9030000 		.4byte	0x3a9
+ 2265 0147 50726F64 		.ascii	"ProductStr\000"
+ 2265      75637453 
+ 2265      747200
+ 2266 0152 CB030000 		.4byte	0x3cb
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 52
+
+
+ 2267 0156 53747250 		.ascii	"StrPoin\000"
+ 2267      6F696E00 
+ 2268 015e 00000000 		.4byte	0x0
+ 2269              		.section	.debug_aranges,"",%progbits
+ 2270 0000 1C000000 		.4byte	0x1c
+ 2271 0004 0200     		.2byte	0x2
+ 2272 0006 00000000 		.4byte	.Ldebug_info0
+ 2273 000a 04       		.byte	0x4
+ 2274 000b 00       		.byte	0x0
+ 2275 000c 0000     		.2byte	0x0
+ 2276 000e 0000     		.2byte	0x0
+ 2277 0010 00000000 		.4byte	.Ltext0
+ 2278 0014 50060000 		.4byte	.Letext0-.Ltext0
+ 2279 0018 00000000 		.4byte	0x0
+ 2280 001c 00000000 		.4byte	0x0
+ 2281              		.section	.debug_str,"MS",%progbits,1
+ 2282              	.LASF23:
+ 2283 0000 4849445F 		.ascii	"HID_ImplSetupPacket\000"
+ 2283      496D706C 
+ 2283      53657475 
+ 2283      70506163 
+ 2283      6B657400 
+ 2284              	.LASF30:
+ 2285 0014 63757272 		.ascii	"currentAddress\000"
+ 2285      656E7441 
+ 2285      64647265 
+ 2285      737300
+ 2286              	.LASF42:
+ 2287 0023 5553425F 		.ascii	"USB_SETUP_PACKET_DEF\000"
+ 2287      53455455 
+ 2287      505F5041 
+ 2287      434B4554 
+ 2287      5F444546 
+ 2288              	.LASF16:
+ 2289 0038 4849445F 		.ascii	"HID_SendZeroLengthByCtrlEP\000"
+ 2289      53656E64 
+ 2289      5A65726F 
+ 2289      4C656E67 
+ 2289      74684279 
+ 2290              	.LASF24:
+ 2291 0053 53746174 		.ascii	"Status\000"
+ 2291      757300
+ 2292              	.LASF32:
+ 2293 005a 6D6F7573 		.ascii	"mouseDescriptor\000"
+ 2293      65446573 
+ 2293      63726970 
+ 2293      746F7200 
+ 2294              	.LASF17:
+ 2295 006a 4849445F 		.ascii	"HID_SendReport\000"
+ 2295      53656E64 
+ 2295      5265706F 
+ 2295      727400
+ 2296              	.LASF36:
+ 2297 0079 4D616E75 		.ascii	"ManufacturerStr\000"
+ 2297      66616374 
+ 2297      75726572 
+ 2297      53747200 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 53
+
+
+ 2298              	.LASF11:
+ 2299 0089 756E7369 		.ascii	"unsigned int\000"
+ 2299      676E6564 
+ 2299      20696E74 
+ 2299      00
+ 2300              	.LASF13:
+ 2301 0096 6661696C 		.ascii	"failsafe\000"
+ 2301      73616665 
+ 2301      00
+ 2302              	.LASF5:
+ 2303 009f 756E7369 		.ascii	"unsigned char\000"
+ 2303      676E6564 
+ 2303      20636861 
+ 2303      7200
+ 2304              	.LASF27:
+ 2305 00ad 4849445F 		.ascii	"HID_CallBack\000"
+ 2305      43616C6C 
+ 2305      4261636B 
+ 2305      00
+ 2306              	.LASF25:
+ 2307 00ba 53657475 		.ascii	"Setup\000"
+ 2307      7000
+ 2308              	.LASF1:
+ 2309 00c0 52657175 		.ascii	"Request\000"
+ 2309      65737400 
+ 2310              	.LASF6:
+ 2311 00c8 73686F72 		.ascii	"short unsigned int\000"
+ 2311      7420756E 
+ 2311      7369676E 
+ 2311      65642069 
+ 2311      6E7400
+ 2312              	.LASF18:
+ 2313 00db 4849445F 		.ascii	"HID_SendDataByCtrlEP\000"
+ 2313      53656E64 
+ 2313      44617461 
+ 2313      42794374 
+ 2313      726C4550 
+ 2314              	.LASF40:
+ 2315 00f0 4C50435F 		.ascii	"LPC_HID.c\000"
+ 2315      4849442E 
+ 2315      6300
+ 2316              	.LASF14:
+ 2317 00fa 63686172 		.ascii	"char\000"
+ 2317      00
+ 2318              	.LASF39:
+ 2319 00ff 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 2319      4320342E 
+ 2319      312E3100 
+ 2320              	.LASF7:
+ 2321 010b 44617461 		.ascii	"Data\000"
+ 2321      00
+ 2322              	.LASF2:
+ 2323 0110 56616C75 		.ascii	"Value\000"
+ 2323      6500
+ 2324              	.LASF31:
+ 2325 0116 73686F72 		.ascii	"short int\000"
+ 2325      7420696E 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 54
+
+
+ 2325      7400
+ 2326              	.LASF35:
+ 2327 0120 4C616E67 		.ascii	"LanguagesStr\000"
+ 2327      75616765 
+ 2327      73537472 
+ 2327      00
+ 2328              	.LASF12:
+ 2329 012d 62757474 		.ascii	"button\000"
+ 2329      6F6E00
+ 2330              	.LASF26:
+ 2331 0134 4849445F 		.ascii	"HID_Init\000"
+ 2331      496E6974 
+ 2331      00
+ 2332              	.LASF28:
+ 2333 013d 5553425F 		.ascii	"USB_DevIntrStaus\000"
+ 2333      44657649 
+ 2333      6E747253 
+ 2333      74617573 
+ 2333      00
+ 2334              	.LASF10:
+ 2335 014e 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2335      20756E73 
+ 2335      69676E65 
+ 2335      6420696E 
+ 2335      7400
+ 2336              	.LASF21:
+ 2337 0160 5A657272 		.ascii	"ZerroLength\000"
+ 2337      6F4C656E 
+ 2337      67746800 
+ 2338              	.LASF8:
+ 2339 016c 53657475 		.ascii	"SetupRecuest\000"
+ 2339      70526563 
+ 2339      75657374 
+ 2339      00
+ 2340              	.LASF29:
+ 2341 0179 63757272 		.ascii	"currentConfiguration\000"
+ 2341      656E7443 
+ 2341      6F6E6669 
+ 2341      67757261 
+ 2341      74696F6E 
+ 2342              	.LASF37:
+ 2343 018e 50726F64 		.ascii	"ProductStr\000"
+ 2343      75637453 
+ 2343      747200
+ 2344              	.LASF41:
+ 2345 0199 2F637967 		.ascii	"/cygdrive/g/servers/github/SysWbud/2148/testProgram"
+ 2345      64726976 
+ 2345      652F672F 
+ 2345      73657276 
+ 2345      6572732F 
+ 2346 01cc 5F6C7063 		.ascii	"_lpc2148_edu/usb\000"
+ 2346      32313438 
+ 2346      5F656475 
+ 2346      2F757362 
+ 2346      00
+ 2347              	.LASF19:
+ 2348 01dd 44617461 		.ascii	"DataSize\000"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 55
+
+
+ 2348      53697A65 
+ 2348      00
+ 2349              	.LASF9:
+ 2350 01e6 44617461 		.ascii	"DataFields\000"
+ 2350      4669656C 
+ 2350      647300
+ 2351              	.LASF0:
+ 2352 01f1 52657175 		.ascii	"RequestType\000"
+ 2352      65737454 
+ 2352      79706500 
+ 2353              	.LASF20:
+ 2354 01fd 70446174 		.ascii	"pData\000"
+ 2354      6100
+ 2355              	.LASF22:
+ 2356 0203 4849445F 		.ascii	"HID_CtrlStall\000"
+ 2356      4374726C 
+ 2356      5374616C 
+ 2356      6C00
+ 2357              	.LASF33:
+ 2358 0211 64657644 		.ascii	"devDescriptor\000"
+ 2358      65736372 
+ 2358      6970746F 
+ 2358      7200
+ 2359              	.LASF38:
+ 2360 021f 53747250 		.ascii	"StrPoin\000"
+ 2360      6F696E00 
+ 2361              	.LASF4:
+ 2362 0227 4C656E67 		.ascii	"Length\000"
+ 2362      746800
+ 2363              	.LASF15:
+ 2364 022e 4849445F 		.ascii	"HID_GetConfiguration\000"
+ 2364      47657443 
+ 2364      6F6E6669 
+ 2364      67757261 
+ 2364      74696F6E 
+ 2365              	.LASF34:
+ 2366 0243 63666744 		.ascii	"cfgDescriptor\000"
+ 2366      65736372 
+ 2366      6970746F 
+ 2366      7200
+ 2367              	.LASF3:
+ 2368 0251 496E6465 		.ascii	"Index\000"
+ 2368      7800
+ 2369              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s 			page 56
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 LPC_HID.c
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:13     .text:00000000 HID_GetConfiguration
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:22     .text:00000000 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:31     .text:0000000c $d
+                            *COM*:00000001 currentConfiguration
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:42     .text:00000010 HID_SendReport
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:50     .text:00000010 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:134    .text:000000c0 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:142    .text:000000cc HID_SendZeroLengthByCtrlEP
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:149    .text:000000cc $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:207    .text:0000015c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:214    .text:00000164 HID_SendDataByCtrlEP
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:221    .text:00000164 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:315    .text:00000230 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:322    .text:00000238 HID_CtrlStall
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:328    .text:00000238 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:342    .text:00000250 HID_ImplSetupPacket
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:622    .text:00000510 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:1048   .bss:00000000 Length.1460
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:1054   .bss:00000008 Setup.1458
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:802    .data:00000038 devDescriptor
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:825    .data:00000050 cfgDescriptor
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:1042   .rodata:00000000 StrPoin
+                            *COM*:00000001 currentAddress
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:1051   .bss:00000002 Status.1459
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:772    .data:00000000 mouseDescriptor
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:642    .text:0000054c HID_Init
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:648    .text:0000054c $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:685    .text:000005a8 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:693    .text:000005b4 HID_CallBack
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:699    .text:000005b4 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:764    .text:0000064c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:864    .data:00000078 LanguagesStr
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:873    .data:00000080 ManufacturerStr
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:938    .data:000000c0 ProductStr
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccxYau28.s:1043   .rodata:00000000 $d
+
+UNDEFINED SYMBOLS
+simplePrintf
+USB_ValidateBuffer
+USB_Cmd
+USB_ClearBuffer
+USB_SetAdd
+USB_RealizeEndPoint
