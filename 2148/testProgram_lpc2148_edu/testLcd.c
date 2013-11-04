@@ -154,13 +154,13 @@ void WyswietlTekstNaLcd(void)
 		WypiszZnakNaEkran(0, 0x02);
 		osSleep(1);
 
-		WypiszCiag ("M. Kolodziejczyk");
+		WypiszCiag ("Odtwarzacz");
 
 		//move curstor to second row
 		WypiszZnakNaEkran(0, 0x80 | 0x40);
 		delay37us();
 
-		WypiszCiag ("P. Zielinski");
+		WypiszCiag ("MP3");
 
 		//OpóŸnienie przed znikniêciem.
 		osSleep(500);

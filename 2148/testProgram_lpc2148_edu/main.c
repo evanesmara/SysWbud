@@ -10,10 +10,10 @@
 #include "usb/lpc_usb.h"
 #include "usb/lpc_hid.h"
 
+
 static void ProceduraGlowna(void* arg);
 #define PAMIEC_PROCEDURA_GLOWNA  400
 static tU8 ProceduraGlownaPamiec[PAMIEC_PROCEDURA_GLOWNA];
-static tU8 ProceduraGlownaId;
 
 static void proc1(void* arg);
 #define PROC1_STACK_SIZE 2048
@@ -58,12 +58,14 @@ int main(void) {
 static void ProceduraGlowna(void* arg) {
 	tU8 error;
 
+	//wyœwietlacz 1
 	osCreateProcess(proc1, proc1Stack, PROC1_STACK_SIZE, &pid1, 3, NULL, &error);
 	osStartProcess(pid1, &error);
 
 	//eaInit(); //initialize printf
 	//i2cInit(); //initialize I2C
 
+	//wyœwietlacz 2
 	osCreateProcess(proc2, proc2Stack, PROC2_STACK_SIZE, &pid2, 3, NULL, &error);
 	osStartProcess(pid2, &error);
 
@@ -74,7 +76,12 @@ static void proc1(void* arg) {
 	WyswietlTekstNaLcd();
 }
 
-static void drawMenu(void) {
+/*
+ * 0 - Graj
+ * 1 - Zatrzymaj
+ * 2 - Nastepny
+ */
+static void drawMenu(int _akcja) {
 	lcdColor(0, 0);
 	lcdClrscr();
 
@@ -88,86 +95,84 @@ static void drawMenu(void) {
 	lcdGotoxy(22, 20 + (14 * 1));
 	lcdColor(0x00, 0xe0);
 	//  lcdColor(0x00,0xfd);
-	lcdPuts("Graj");
+	switch (_akcja) {
+	case 0: {
+		lcdPuts("Graj");
+		break;
+	}
+	case 1: {
+		lcdPuts("Zatrzymaj");
+		break;
+	}
+	case 2: {
+		lcdPuts("Nastepny");
+		break;
+	}
+	}
 }
 
 static void proc2(void* arg) {
 	static tU8 i = 0;
-
-	printf("\n\n\n\n\n*******************************************************\n");
-	printf("*                                                     *\n");
-	printf("* Demo program for 'Experiment Expansion Board'       *\n");
-	printf("* running on LPC2103 Education Board.                 *\n");
-	printf("* - Snake game                                        *\n");
-	printf("*                                                     *\n");
-	printf("* (C) Embedded Artists 2008                           *\n");
-	printf("*                                                     *\n");
-	printf("*******************************************************\n");
 
 	IODIR |= 0x00006000; //P0.13/14
 	IOSET = 0x00006000;
 
 	lcdInit();
 	initKeyProc();
-	drawMenu();
+	int akcja = 0;
+	drawMenu(akcja);
 	lcdContrast(contrast);
 	while (1) {
-		tU8 anyKey;
+		tU8 anyKey; // ruch joistick'a
 
 		anyKey = checkKey();
 		if (anyKey != KEY_NOTHING) {
-			//select specific function
 			if (anyKey == KEY_CENTER) {
-				//				playSnake();
-				drawMenu();
-			}
-
-			//adjust contrast
-			else if (anyKey == KEY_RIGHT) {
-				contrast++;
-				if (contrast > 127)
-					contrast = 127;
-				lcdContrast(contrast);
+				drawMenu(0);
+			} else if (anyKey == KEY_RIGHT) {
+				drawMenu((++akcja) % 3);
 			} else if (anyKey == KEY_LEFT) {
-				if (contrast > 0)
-					contrast--;
-				lcdContrast(contrast);
+				drawMenu((--akcja) % 3);
+			} else if (anyKey == KEY_DOWN) {
+				drawMenu(akcja);
+			} else if (anyKey == KEY_UP) {
+				drawMenu(akcja);
 			}
 		}
-	}
 
-	//		switch (i) {
-	//		case 0:
-	//			lcdIcon(15, 88, 100, 40, _fire_0_100x40c[2], _fire_0_100x40c[3],
-	//					&_fire_0_100x40c[4]);
-	//			i++;
-	//			break;
-	//		case 1:
-	//			lcdIcon(15, 88, 100, 40, _fire_1_100x40c[2], _fire_1_100x40c[3],
-	//					&_fire_1_100x40c[4]);
-	//			i++;
-	//			break;
-	//		case 2:
-	//			lcdIcon(15, 88, 100, 40, _fire_2_100x40c[2], _fire_2_100x40c[3],
-	//					&_fire_2_100x40c[4]);
-	//			i++;
-	//			break;
-	//		case 3:
-	//			lcdIcon(15, 88, 100, 40, _fire_3_100x40c[2], _fire_3_100x40c[3],
-	//					&_fire_3_100x40c[4]);
-	//			i++;
-	//			break;
-	//		case 4:
-	//			lcdIcon(15, 88, 100, 40, _fire_4_100x40c[2], _fire_4_100x40c[3],
-	//					&_fire_4_100x40c[4]);
-	//			i = 0;
-	//			break;
-	//		default:
-	//			i = 0;
-	//			break;
-	//		}
-	//		osSleep(20);
-	//	}
+//		//rysowanie ognia na dole
+//		switch (i) {
+//		case 0:
+//			lcdIcon(15, 88, 100, 40, _fire_0_100x40c[2], _fire_0_100x40c[3],
+//					&_fire_0_100x40c[4]);
+//			i++;
+//			break;
+//		case 1:
+//			lcdIcon(15, 88, 100, 40, _fire_1_100x40c[2], _fire_1_100x40c[3],
+//					&_fire_1_100x40c[4]);
+//			i++;
+//			break;
+//		case 2:
+//			lcdIcon(15, 88, 100, 40, _fire_2_100x40c[2], _fire_2_100x40c[3],
+//					&_fire_2_100x40c[4]);
+//			i++;
+//			break;
+//		case 3:
+//			lcdIcon(15, 88, 100, 40, _fire_3_100x40c[2], _fire_3_100x40c[3],
+//					&_fire_3_100x40c[4]);
+//			i++;
+//			break;
+//		case 4:
+//			lcdIcon(15, 88, 100, 40, _fire_4_100x40c[2], _fire_4_100x40c[3],
+//					&_fire_4_100x40c[4]);
+//			i = 0;
+//			break;
+//		default:
+//			i = 0;
+//			break;
+//		}
+//		osSleep(20);
+	}
 }
 
 /*****************************************************************************
