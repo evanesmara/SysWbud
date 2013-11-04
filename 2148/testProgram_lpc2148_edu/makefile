@@ -62,12 +62,7 @@ CSRCS   = main.c          \
           testI2C.c       \
           testAdc.c       \
           testXBee.c      \
-          startupSound.c  \
-          lcd.c           \
-          lcd_hw.c        \
-          snake.c         \
-          key.c           \
-          select.c
+          startupSound.c
 
 # List assembler source files here
 ASRCS   = 

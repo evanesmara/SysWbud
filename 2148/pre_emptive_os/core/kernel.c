@@ -142,24 +142,18 @@ osPid(tU8* pError)
 }
 
 
-/*****************************************************************************
+/*
+ * Usypia proces na okreœlony czas.
  *
- * Description:
- *    This function puts a process to sleep for the specified number of ticks. 
- *
- * Params:
- *    [in] ticks - The number of ticks to put the process to sleep. 
- *
- ****************************************************************************/
-void
-osSleep(tU32 ticks)
+ */
+void osSleep (tU32 iloscMiliSekund)
 {
   volatile tSR localSR;  /* declare temporary local space for status word */
 
-  if(ticks > 0)
+  if (iloscMiliSekund > 0)
   {
     m_os_dis_int();
-    pRunProc->sleep = ticks;
+    pRunProc->sleep = iloscMiliSekund;
     rmvFromRdyList();
     addToTimeList();
     m_os_ena_int();
