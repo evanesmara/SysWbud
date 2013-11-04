@@ -1,4 +1,4 @@
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 1
 
 
    1              		.code	16
@@ -9,7 +9,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
    6              	.Ldebug_info0:
    7              		.section	.debug_line,"",%progbits
    8              	.Ldebug_line0:
-   9 0000 75010000 		.text
+   9 0000 6F010000 		.text
    9      02004A00 
    9      00000201 
    9      FB0E0D00 
@@ -45,191 +45,177 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
   20:lcd.c         **** #include "ascii.h"
   21:lcd.c         **** #include "lcd_hw.h"
   22:lcd.c         **** 
-  23:lcd.c         **** 
-  24:lcd.c         **** /******************************************************************************
-  25:lcd.c         ****  * Typedefs and defines
-  26:lcd.c         ****  *****************************************************************************/
-  27:lcd.c         **** #define LCD_CMD_SWRESET   0x01
-  28:lcd.c         **** #define LCD_CMD_BSTRON    0x03
-  29:lcd.c         **** #define LCD_CMD_SLEEPIN   0x10
-  30:lcd.c         **** #define LCD_CMD_SLEEPOUT  0x11
-  31:lcd.c         **** #define LCD_CMD_INVON     0x21
-  32:lcd.c         **** #define LCD_CMD_SETCON    0x25
-  33:lcd.c         **** #define LCD_CMD_DISPON    0x29
-  34:lcd.c         **** #define LCD_CMD_CASET     0x2A
-  35:lcd.c         **** #define LCD_CMD_PASET     0x2B
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 2
+  23:lcd.c         **** /******************************************************************************
+  24:lcd.c         ****  * Typedefs and defines
+  25:lcd.c         ****  *****************************************************************************/
+  26:lcd.c         **** #define LCD_CMD_SWRESET   0x01
+  27:lcd.c         **** #define LCD_CMD_BSTRON    0x03
+  28:lcd.c         **** #define LCD_CMD_SLEEPIN   0x10
+  29:lcd.c         **** #define LCD_CMD_SLEEPOUT  0x11
+  30:lcd.c         **** #define LCD_CMD_INVON     0x21
+  31:lcd.c         **** #define LCD_CMD_SETCON    0x25
+  32:lcd.c         **** #define LCD_CMD_DISPON    0x29
+  33:lcd.c         **** #define LCD_CMD_CASET     0x2A
+  34:lcd.c         **** #define LCD_CMD_PASET     0x2B
+  35:lcd.c         **** #define LCD_CMD_RAMWR     0x2C
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 2
 
 
-  36:lcd.c         **** #define LCD_CMD_RAMWR     0x2C
-  37:lcd.c         **** #define LCD_CMD_RGBSET    0x2D
-  38:lcd.c         **** #define LCD_CMD_MADCTL    0x36
-  39:lcd.c         **** #define LCD_CMD_COLMOD    0x3A
-  40:lcd.c         **** 
-  41:lcd.c         **** #define MADCTL_HORIZ      0x48
-  42:lcd.c         **** #define MADCTL_VERT       0x68
-  43:lcd.c         **** 
-  44:lcd.c         **** 
-  45:lcd.c         **** /*****************************************************************************
-  46:lcd.c         ****  * Local variables
-  47:lcd.c         ****  ****************************************************************************/
-  48:lcd.c         **** static tU8 lcd_x;
-  49:lcd.c         **** static tU8 lcd_y;
-  50:lcd.c         **** static tU8 bkgColor;
-  51:lcd.c         **** static tU8 textColor;
-  52:lcd.c         **** static tU8 setcolmark;
-  53:lcd.c         **** 
-  54:lcd.c         **** /*****************************************************************************
-  55:lcd.c         ****  * Local prototypes
-  56:lcd.c         ****  ****************************************************************************/
-  57:lcd.c         **** static void lcdWindow1(tU8 xp, tU8 yp, tU8 xe, tU8 ye);
-  58:lcd.c         **** 
-  59:lcd.c         **** 
-  60:lcd.c         **** /*****************************************************************************
-  61:lcd.c         ****  *
-  62:lcd.c         ****  * Description:
-  63:lcd.c         ****  *    Initialize the LCD controller and SPI interface
-  64:lcd.c         ****  *    (0,0) is top left and (129,129) is bottom right
-  65:lcd.c         ****  *    8 bits Color mode uses RRRGGGBB layout
-  66:lcd.c         ****  *
-  67:lcd.c         ****  ****************************************************************************/
-  68:lcd.c         **** void
-  69:lcd.c         **** lcdInit(void)
-  70:lcd.c         **** {
-  71:lcd.c         ****   bkgColor  = 0;
-  72:lcd.c         ****   textColor = 0;
-  73:lcd.c         ****   
-  74:lcd.c         ****   //init SPI interface
-  75:lcd.c         ****   initSpiForLcd();
-  76:lcd.c         ****   
-  77:lcd.c         ****   //select controller
-  78:lcd.c         ****   selectLCD(TRUE);
-  79:lcd.c         **** 
-  80:lcd.c         **** 	lcdWrcmd(LCD_CMD_SWRESET);
-  81:lcd.c         **** 
-  82:lcd.c         **** 	osSleep(1);
-  83:lcd.c         **** 	lcdWrcmd(LCD_CMD_SLEEPOUT);
-  84:lcd.c         **** 	lcdWrcmd(LCD_CMD_DISPON);
-  85:lcd.c         **** 	lcdWrcmd(LCD_CMD_BSTRON);
-  86:lcd.c         **** 	osSleep(1);
-  87:lcd.c         **** 		
-  88:lcd.c         **** 	lcdWrcmd(LCD_CMD_MADCTL);   //Memory data acces control
-  89:lcd.c         **** 	lcdWrdata(MADCTL_HORIZ);    //X Mirror and BGR format
-  90:lcd.c         **** 	lcdWrcmd(LCD_CMD_COLMOD);   //Colour mode
-  91:lcd.c         **** 	lcdWrdata(0x02);            //256 colour mode select
-  92:lcd.c         **** 	lcdWrcmd(LCD_CMD_INVON);    //Non Invert mode
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 3
+  36:lcd.c         **** #define LCD_CMD_RGBSET    0x2D
+  37:lcd.c         **** #define LCD_CMD_MADCTL    0x36
+  38:lcd.c         **** #define LCD_CMD_COLMOD    0x3A
+  39:lcd.c         **** 
+  40:lcd.c         **** #define MADCTL_HORIZ      0x48
+  41:lcd.c         **** #define MADCTL_VERT       0x68
+  42:lcd.c         **** 
+  43:lcd.c         **** /*****************************************************************************
+  44:lcd.c         ****  * Local variables
+  45:lcd.c         ****  ****************************************************************************/
+  46:lcd.c         **** static tU8 lcd_x;
+  47:lcd.c         **** static tU8 lcd_y;
+  48:lcd.c         **** static tU8 bkgColor;
+  49:lcd.c         **** static tU8 textColor;
+  50:lcd.c         **** static tU8 setcolmark;
+  51:lcd.c         **** 
+  52:lcd.c         **** /*****************************************************************************
+  53:lcd.c         ****  * Local prototypes
+  54:lcd.c         ****  ****************************************************************************/
+  55:lcd.c         **** static void lcdWindow1(tU8 xp, tU8 yp, tU8 xe, tU8 ye);
+  56:lcd.c         **** 
+  57:lcd.c         **** /*****************************************************************************
+  58:lcd.c         ****  *
+  59:lcd.c         ****  * Description:
+  60:lcd.c         ****  *    Initialize the LCD controller and SPI interface
+  61:lcd.c         ****  *    (0,0) is top left and (129,129) is bottom right
+  62:lcd.c         ****  *    8 bits Color mode uses RRRGGGBB layout
+  63:lcd.c         ****  *
+  64:lcd.c         ****  ****************************************************************************/
+  65:lcd.c         **** void lcdInit(void) {
+  66:lcd.c         **** 	bkgColor = 0;
+  67:lcd.c         **** 	textColor = 0;
+  68:lcd.c         **** 
+  69:lcd.c         **** 	//init SPI interface
+  70:lcd.c         **** 	initSpiForLcd();
+  71:lcd.c         **** 
+  72:lcd.c         **** 	//select controller
+  73:lcd.c         **** 	selectLCD(TRUE);
+  74:lcd.c         **** 
+  75:lcd.c         **** 	lcdWrcmd(LCD_CMD_SWRESET);
+  76:lcd.c         **** 
+  77:lcd.c         **** 	osSleep(1);
+  78:lcd.c         **** 	lcdWrcmd(LCD_CMD_SLEEPOUT);
+  79:lcd.c         **** 	lcdWrcmd(LCD_CMD_DISPON);
+  80:lcd.c         **** 	lcdWrcmd(LCD_CMD_BSTRON);
+  81:lcd.c         **** 	osSleep(1);
+  82:lcd.c         **** 
+  83:lcd.c         **** 	lcdWrcmd(LCD_CMD_MADCTL); //Memory data acces control
+  84:lcd.c         **** 	lcdWrdata(MADCTL_HORIZ); //X Mirror and BGR format
+  85:lcd.c         **** 	lcdWrcmd(LCD_CMD_COLMOD); //Colour mode
+  86:lcd.c         **** 	lcdWrdata(0x02); //256 colour mode select
+  87:lcd.c         **** 	lcdWrcmd(LCD_CMD_INVON); //Non Invert mode
+  88:lcd.c         **** 
+  89:lcd.c         **** 	lcdWrcmd(LCD_CMD_RGBSET); //LUT write
+  90:lcd.c         **** 	lcdWrdata(0); //Red
+  91:lcd.c         **** 	lcdWrdata(2);
+  92:lcd.c         **** 	lcdWrdata(4);
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 3
 
 
-  93:lcd.c         **** 
-  94:lcd.c         **** 	lcdWrcmd(LCD_CMD_RGBSET);   //LUT write
-  95:lcd.c         ****   lcdWrdata(0);               //Red
-  96:lcd.c         ****   lcdWrdata(2);
-  97:lcd.c         ****   lcdWrdata(4);
-  98:lcd.c         ****   lcdWrdata(6);
-  99:lcd.c         ****   lcdWrdata(9);
- 100:lcd.c         ****   lcdWrdata(11);
- 101:lcd.c         ****   lcdWrdata(13);
- 102:lcd.c         ****   lcdWrdata(15);
- 103:lcd.c         ****   lcdWrdata(0);               //Green
- 104:lcd.c         ****   lcdWrdata(2);
- 105:lcd.c         ****   lcdWrdata(4);
- 106:lcd.c         ****   lcdWrdata(6);
- 107:lcd.c         ****   lcdWrdata(9);
- 108:lcd.c         ****   lcdWrdata(11);
- 109:lcd.c         ****   lcdWrdata(13);
- 110:lcd.c         ****   lcdWrdata(15);
- 111:lcd.c         ****   lcdWrdata(0);               //Blue
- 112:lcd.c         ****   lcdWrdata(6);
- 113:lcd.c         **** 	lcdWrdata(10);
- 114:lcd.c         **** 	lcdWrdata(15);
+  93:lcd.c         **** 	lcdWrdata(6);
+  94:lcd.c         **** 	lcdWrdata(9);
+  95:lcd.c         **** 	lcdWrdata(11);
+  96:lcd.c         **** 	lcdWrdata(13);
+  97:lcd.c         **** 	lcdWrdata(15);
+  98:lcd.c         **** 	lcdWrdata(0); //Green
+  99:lcd.c         **** 	lcdWrdata(2);
+ 100:lcd.c         **** 	lcdWrdata(4);
+ 101:lcd.c         **** 	lcdWrdata(6);
+ 102:lcd.c         **** 	lcdWrdata(9);
+ 103:lcd.c         **** 	lcdWrdata(11);
+ 104:lcd.c         **** 	lcdWrdata(13);
+ 105:lcd.c         **** 	lcdWrdata(15);
+ 106:lcd.c         **** 	lcdWrdata(0); //Blue
+ 107:lcd.c         **** 	lcdWrdata(6);
+ 108:lcd.c         **** 	lcdWrdata(10);
+ 109:lcd.c         **** 	lcdWrdata(15);
+ 110:lcd.c         **** 
+ 111:lcd.c         **** 	//deselect controller
+ 112:lcd.c         **** 	selectLCD(FALSE);
+ 113:lcd.c         **** 
+ 114:lcd.c         **** 	lcdContrast(56);
  115:lcd.c         **** 
- 116:lcd.c         ****   //deselect controller
- 117:lcd.c         ****   selectLCD(FALSE);
+ 116:lcd.c         **** 	lcdClrscr();
+ 117:lcd.c         **** }
  118:lcd.c         **** 
- 119:lcd.c         **** 	lcdContrast(56);
- 120:lcd.c         **** 
- 121:lcd.c         **** 	lcdClrscr();
- 122:lcd.c         **** }
- 123:lcd.c         **** 
- 124:lcd.c         **** 
- 125:lcd.c         **** /*****************************************************************************
- 126:lcd.c         ****  *
- 127:lcd.c         ****  * Description:
- 128:lcd.c         ****  *    Clear screen (with current background color)
- 129:lcd.c         ****  *
- 130:lcd.c         ****  ****************************************************************************/
- 131:lcd.c         **** void
- 132:lcd.c         **** lcdClrscr(void)
- 133:lcd.c         **** {
- 134:lcd.c         ****   tU32 i;
+ 119:lcd.c         **** /*****************************************************************************
+ 120:lcd.c         ****  *
+ 121:lcd.c         ****  * Description:
+ 122:lcd.c         ****  *    Clear screen (with current background color)
+ 123:lcd.c         ****  *
+ 124:lcd.c         ****  ****************************************************************************/
+ 125:lcd.c         **** void lcdClrscr(void) {
+ 126:lcd.c         **** 	tU32 i;
+ 127:lcd.c         **** 
+ 128:lcd.c         **** 	lcd_x = 0;
+ 129:lcd.c         **** 	lcd_y = 0;
+ 130:lcd.c         **** 
+ 131:lcd.c         **** 	//select controller
+ 132:lcd.c         **** 	selectLCD(TRUE);
+ 133:lcd.c         **** 
+ 134:lcd.c         **** 	lcdWindow1(255, 255, 128, 128);
  135:lcd.c         **** 
- 136:lcd.c         **** 	lcd_x = 0;
- 137:lcd.c         ****   lcd_y = 0;
- 138:lcd.c         **** 
- 139:lcd.c         ****   //select controller
- 140:lcd.c         ****   selectLCD(TRUE);   
- 141:lcd.c         **** 
- 142:lcd.c         ****   lcdWindow1(255,255,128,128);
- 143:lcd.c         ****   
- 144:lcd.c         ****   lcdWrcmd(LCD_CMD_RAMWR);    //write memory
- 145:lcd.c         ****   
- 146:lcd.c         ****   for(i=0; i<16900; i++)
- 147:lcd.c         ****     lcdWrdata(bkgColor);
- 148:lcd.c         **** 
- 149:lcd.c         ****   //deselect controller
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 4
+ 136:lcd.c         **** 	lcdWrcmd(LCD_CMD_RAMWR); //write memory
+ 137:lcd.c         **** 
+ 138:lcd.c         **** 	for (i = 0; i < 16900; i++)
+ 139:lcd.c         **** 		lcdWrdata(bkgColor);
+ 140:lcd.c         **** 
+ 141:lcd.c         **** 	//deselect controller
+ 142:lcd.c         **** 	selectLCD(FALSE);
+ 143:lcd.c         **** }
+ 144:lcd.c         **** 
+ 145:lcd.c         **** /*****************************************************************************
+ 146:lcd.c         ****  *
+ 147:lcd.c         ****  * Description:
+ 148:lcd.c         ****  *    Shut down the LCD controller
+ 149:lcd.c         ****  *
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 4
 
 
- 150:lcd.c         ****   selectLCD(FALSE);
- 151:lcd.c         **** }
- 152:lcd.c         **** 
+ 150:lcd.c         ****  ****************************************************************************/
+ 151:lcd.c         **** void lcdOff(void) {
+ 152:lcd.c         **** 	lcdClrscr();
  153:lcd.c         **** 
- 154:lcd.c         **** /*****************************************************************************
- 155:lcd.c         ****  *
- 156:lcd.c         ****  * Description:
- 157:lcd.c         ****  *    Shut down the LCD controller
- 158:lcd.c         ****  *
- 159:lcd.c         ****  ****************************************************************************/
- 160:lcd.c         **** void
- 161:lcd.c         **** lcdOff(void)
- 162:lcd.c         **** {
- 163:lcd.c         ****   lcdClrscr();
- 164:lcd.c         **** 
- 165:lcd.c         ****   //select controller
- 166:lcd.c         ****   selectLCD(TRUE);   
- 167:lcd.c         **** 
- 168:lcd.c         ****   lcdWrcmd(LCD_CMD_SLEEPIN);
- 169:lcd.c         **** 
- 170:lcd.c         ****   //deselect controller
- 171:lcd.c         ****   selectLCD(FALSE);
- 172:lcd.c         **** }
- 173:lcd.c         **** 
- 174:lcd.c         **** 
- 175:lcd.c         **** /*****************************************************************************
- 176:lcd.c         ****  *
- 177:lcd.c         ****  * Description:
- 178:lcd.c         ****  *    Set current foreground and background color
- 179:lcd.c         ****  *
- 180:lcd.c         ****  ****************************************************************************/
- 181:lcd.c         **** void
- 182:lcd.c         **** lcdColor(tU8 bkg, tU8 text)
- 183:lcd.c         **** {
-  19              		.loc 1 183 0
+ 154:lcd.c         **** 	//select controller
+ 155:lcd.c         **** 	selectLCD(TRUE);
+ 156:lcd.c         **** 
+ 157:lcd.c         **** 	lcdWrcmd(LCD_CMD_SLEEPIN);
+ 158:lcd.c         **** 
+ 159:lcd.c         **** 	//deselect controller
+ 160:lcd.c         **** 	selectLCD(FALSE);
+ 161:lcd.c         **** }
+ 162:lcd.c         **** 
+ 163:lcd.c         **** /*****************************************************************************
+ 164:lcd.c         ****  *
+ 165:lcd.c         ****  * Description:
+ 166:lcd.c         ****  *    Set current foreground and background color
+ 167:lcd.c         ****  *
+ 168:lcd.c         ****  ****************************************************************************/
+ 169:lcd.c         **** void lcdColor(tU8 bkg, tU8 text) {
+  19              		.loc 1 169 0
   20              	.LVL0:
- 184:lcd.c         ****   bkgColor  = bkg;
-  21              		.loc 1 184 0
+ 170:lcd.c         **** 	bkgColor = bkg;
+  21              		.loc 1 170 0
   22 0000 024B     		ldr	r3, .L3
   23 0002 1870     		strb	r0, [r3]
- 185:lcd.c         ****   textColor = text;
-  24              		.loc 1 185 0
+ 171:lcd.c         **** 	textColor = text;
+  24              		.loc 1 171 0
   25 0004 024B     		ldr	r3, .L3+4
-  26              		.loc 1 183 0
+  26              		.loc 1 169 0
   27              		@ lr needed for prologue
-  28              		.loc 1 185 0
+  28              		.loc 1 171 0
   29 0006 1970     		strb	r1, [r3]
- 186:lcd.c         **** }
-  30              		.loc 1 186 0
+ 172:lcd.c         **** }
+  30              		.loc 1 172 0
   31              		@ sp needed for prologue
   32 0008 7047     		bx	lr
   33              	.L4:
@@ -238,9 +224,6 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
   36 000c 02000000 		.word	bkgColor
   37 0010 03000000 		.word	textColor
   38              	.LFE5:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 5
-
-
   39              		.size	lcdColor, .-lcdColor
   40              		.align	2
   41              		.global	lcdWrdata
@@ -249,370 +232,321 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
   44              		.type	lcdWrdata, %function
   45              	lcdWrdata:
   46              	.LFB18:
- 187:lcd.c         **** 
+ 173:lcd.c         **** 
+ 174:lcd.c         **** /*****************************************************************************
+ 175:lcd.c         ****  *
+ 176:lcd.c         ****  * Description:
+ 177:lcd.c         ****  *    Set display contrast
+ 178:lcd.c         ****  *
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 5
+
+
+ 179:lcd.c         ****  ****************************************************************************/
+ 180:lcd.c         **** void lcdContrast(tU8 cont) //vary between 0 - 127
+ 181:lcd.c         **** {
+ 182:lcd.c         **** 	//select controller
+ 183:lcd.c         **** 	selectLCD(TRUE);
+ 184:lcd.c         **** 
+ 185:lcd.c         **** 	//set contrast cmd.
+ 186:lcd.c         **** 	lcdWrcmd(LCD_CMD_SETCON);
+ 187:lcd.c         **** 	lcdWrdata(cont);
  188:lcd.c         **** 
- 189:lcd.c         **** /*****************************************************************************
- 190:lcd.c         ****  *
- 191:lcd.c         ****  * Description:
- 192:lcd.c         ****  *    Set display contrast
- 193:lcd.c         ****  *
- 194:lcd.c         ****  ****************************************************************************/
- 195:lcd.c         **** void
- 196:lcd.c         **** lcdContrast(tU8 cont) //vary between 0 - 127
- 197:lcd.c         **** {
- 198:lcd.c         ****   //select controller
- 199:lcd.c         ****   selectLCD(TRUE);
- 200:lcd.c         **** 
- 201:lcd.c         ****   //set contrast cmd.
- 202:lcd.c         ****   lcdWrcmd(LCD_CMD_SETCON);
- 203:lcd.c         **** 	lcdWrdata(cont);
- 204:lcd.c         **** 
- 205:lcd.c         ****   //deselect controller
- 206:lcd.c         ****   selectLCD(FALSE);
- 207:lcd.c         **** }
- 208:lcd.c         **** 
+ 189:lcd.c         **** 	//deselect controller
+ 190:lcd.c         **** 	selectLCD(FALSE);
+ 191:lcd.c         **** }
+ 192:lcd.c         **** 
+ 193:lcd.c         **** /*****************************************************************************
+ 194:lcd.c         ****  *
+ 195:lcd.c         ****  * Description:
+ 196:lcd.c         ****  *    Draw a rectangular area with specified color.
+ 197:lcd.c         ****  *
+ 198:lcd.c         ****  ****************************************************************************/
+ 199:lcd.c         **** void lcdRect(tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 color) {
+ 200:lcd.c         **** 	tU32 i;
+ 201:lcd.c         **** 	tU32 len;
+ 202:lcd.c         **** 
+ 203:lcd.c         **** 	//select controller
+ 204:lcd.c         **** 	selectLCD(TRUE);
+ 205:lcd.c         **** 
+ 206:lcd.c         **** 	lcdWindow1(x, y, x + xLen - 1, y + yLen - 1);
+ 207:lcd.c         **** 
+ 208:lcd.c         **** 	lcdWrcmd(LCD_CMD_RAMWR); //write memory
  209:lcd.c         **** 
- 210:lcd.c         **** /*****************************************************************************
- 211:lcd.c         ****  *
- 212:lcd.c         ****  * Description:
- 213:lcd.c         ****  *    Draw a rectangular area with specified color.
- 214:lcd.c         ****  *
- 215:lcd.c         ****  ****************************************************************************/
- 216:lcd.c         **** void
- 217:lcd.c         **** lcdRect(tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 color)
- 218:lcd.c         **** {
- 219:lcd.c         ****   tU32 i;
- 220:lcd.c         ****   tU32 len;
- 221:lcd.c         **** 
- 222:lcd.c         ****   //select controller
- 223:lcd.c         ****   selectLCD(TRUE);   
- 224:lcd.c         **** 
- 225:lcd.c         ****   lcdWindow1(x,y,x+xLen-1,y+yLen-1);
- 226:lcd.c         ****   
- 227:lcd.c         ****   lcdWrcmd(LCD_CMD_RAMWR);    //write memory
- 228:lcd.c         ****   
- 229:lcd.c         ****   len = xLen*yLen;
- 230:lcd.c         ****   for(i=0; i<len; i++)
- 231:lcd.c         ****     lcdWrdata(color);
- 232:lcd.c         **** 
- 233:lcd.c         ****   //deselect controller
- 234:lcd.c         ****   selectLCD(FALSE);
- 235:lcd.c         **** }
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 6
+ 210:lcd.c         **** 	len = xLen * yLen;
+ 211:lcd.c         **** 	for (i = 0; i < len; i++)
+ 212:lcd.c         **** 		lcdWrdata(color);
+ 213:lcd.c         **** 
+ 214:lcd.c         **** 	//deselect controller
+ 215:lcd.c         **** 	selectLCD(FALSE);
+ 216:lcd.c         **** }
+ 217:lcd.c         **** 
+ 218:lcd.c         **** /*****************************************************************************
+ 219:lcd.c         ****  *
+ 220:lcd.c         ****  * Description:
+ 221:lcd.c         ****  *    Draw rectangular area with different boardser colors. Currently used
+ 222:lcd.c         ****  *    by example game.
+ 223:lcd.c         ****  *
+ 224:lcd.c         ****  ****************************************************************************/
+ 225:lcd.c         **** void lcdRectBrd(tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 color1, tU8 color2,
+ 226:lcd.c         **** 		tU8 color3) {
+ 227:lcd.c         **** 	tU32 i, j;
+ 228:lcd.c         **** 
+ 229:lcd.c         **** 	//select controller
+ 230:lcd.c         **** 	selectLCD(TRUE);
+ 231:lcd.c         **** 
+ 232:lcd.c         **** 	lcdWindow1(x, y, x + xLen - 1, y + yLen - 1);
+ 233:lcd.c         **** 
+ 234:lcd.c         **** 	lcdWrcmd(LCD_CMD_RAMWR); //write memory
+ 235:lcd.c         **** 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 6
 
 
- 236:lcd.c         **** 
- 237:lcd.c         **** 
- 238:lcd.c         **** /*****************************************************************************
- 239:lcd.c         ****  *
- 240:lcd.c         ****  * Description:
- 241:lcd.c         ****  *    Draw rectangular area with different boardser colors. Currently used
- 242:lcd.c         ****  *    by example game.
- 243:lcd.c         ****  *
- 244:lcd.c         ****  ****************************************************************************/
- 245:lcd.c         **** void
- 246:lcd.c         **** lcdRectBrd(tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 color1, tU8 color2, tU8 color3)
- 247:lcd.c         **** {
- 248:lcd.c         ****   tU32 i,j;
- 249:lcd.c         **** 
- 250:lcd.c         ****   //select controller
- 251:lcd.c         ****   selectLCD(TRUE);   
- 252:lcd.c         **** 
- 253:lcd.c         ****   lcdWindow1(x,y,x+xLen-1,y+yLen-1);
- 254:lcd.c         ****   
- 255:lcd.c         ****   lcdWrcmd(LCD_CMD_RAMWR);    //write memory
- 256:lcd.c         ****   
- 257:lcd.c         ****   for(i=0; i<xLen; i++)
- 258:lcd.c         ****     lcdWrdata(color2);
- 259:lcd.c         ****   for(j=1; j<(yLen-2); j++)
- 260:lcd.c         ****   {
- 261:lcd.c         ****     lcdWrdata(color2);
- 262:lcd.c         ****     for(i=0; i<(xLen-2); i++)
- 263:lcd.c         ****       lcdWrdata(color1);
- 264:lcd.c         ****     lcdWrdata(color3);
- 265:lcd.c         ****   }
- 266:lcd.c         ****   for(i=0; i<xLen; i++)
- 267:lcd.c         ****     lcdWrdata(color3);
- 268:lcd.c         **** 
- 269:lcd.c         ****   //deselect controller
- 270:lcd.c         ****   selectLCD(FALSE);
- 271:lcd.c         **** }
+ 236:lcd.c         **** 	for (i = 0; i < xLen; i++)
+ 237:lcd.c         **** 		lcdWrdata(color2);
+ 238:lcd.c         **** 	for (j = 1; j < (yLen - 2); j++) {
+ 239:lcd.c         **** 		lcdWrdata(color2);
+ 240:lcd.c         **** 		for (i = 0; i < (xLen - 2); i++)
+ 241:lcd.c         **** 			lcdWrdata(color1);
+ 242:lcd.c         **** 		lcdWrdata(color3);
+ 243:lcd.c         **** 	}
+ 244:lcd.c         **** 	for (i = 0; i < xLen; i++)
+ 245:lcd.c         **** 		lcdWrdata(color3);
+ 246:lcd.c         **** 
+ 247:lcd.c         **** 	//deselect controller
+ 248:lcd.c         **** 	selectLCD(FALSE);
+ 249:lcd.c         **** }
+ 250:lcd.c         **** 
+ 251:lcd.c         **** /*****************************************************************************
+ 252:lcd.c         ****  *
+ 253:lcd.c         ****  * Description:
+ 254:lcd.c         ****  *    Draw rectangular area from bitmap. Specify xy-position and xy-length.
+ 255:lcd.c         ****  *    Compressed format is supported.
+ 256:lcd.c         ****  *
+ 257:lcd.c         ****  *    In uncompressed color mode, pData points to an area of xLen * yLen
+ 258:lcd.c         ****  *    bytes with the icon.
+ 259:lcd.c         ****  *    In compressed mode the escapeChar is used to denote that the next
+ 260:lcd.c         ****  *    two bytes contain a length and a color (run length encoding)
+ 261:lcd.c         ****  *    Note that is is still possible to specify the color value that
+ 262:lcd.c         ****  *    equals the escape value in a compressed string.
+ 263:lcd.c         ****  *
+ 264:lcd.c         ****  ****************************************************************************/
+ 265:lcd.c         **** void lcdIcon(tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 compressionOn,
+ 266:lcd.c         **** 		tU8 escapeChar, const tU8* pData) {
+ 267:lcd.c         **** 	tU32 i, j;
+ 268:lcd.c         **** 	tS32 len;
+ 269:lcd.c         **** 
+ 270:lcd.c         **** 	//select controller
+ 271:lcd.c         **** 	selectLCD(TRUE);
  272:lcd.c         **** 
- 273:lcd.c         **** 
- 274:lcd.c         **** /*****************************************************************************
- 275:lcd.c         ****  *
- 276:lcd.c         ****  * Description:
- 277:lcd.c         ****  *    Draw rectangular area from bitmap. Specify xy-position and xy-length.
- 278:lcd.c         ****  *    Compressed format is supported.
- 279:lcd.c         ****  *
- 280:lcd.c         ****  *    In uncompressed color mode, pData points to an area of xLen * yLen
- 281:lcd.c         ****  *    bytes with the icon.
- 282:lcd.c         ****  *    In compressed mode the escapeChar is used to denote that the next
- 283:lcd.c         ****  *    two bytes contain a length and a color (run length encoding)
- 284:lcd.c         ****  *    Note that is is still possible to specify the color value that
- 285:lcd.c         ****  *    equals the escape value in a compressed string.
- 286:lcd.c         ****  *
- 287:lcd.c         ****  ****************************************************************************/
- 288:lcd.c         **** void
- 289:lcd.c         **** lcdIcon(tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 compressionOn, tU8 escapeChar, const tU8* pData)
- 290:lcd.c         **** {
- 291:lcd.c         ****   tU32 i,j;
- 292:lcd.c         ****   tS32 len;
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 7
+ 273:lcd.c         **** 	lcdWindow1(x, y, x + xLen - 1, y + yLen - 1);
+ 274:lcd.c         **** 
+ 275:lcd.c         **** 	lcdWrcmd(LCD_CMD_RAMWR); //write memory
+ 276:lcd.c         **** 
+ 277:lcd.c         **** 	len = xLen * yLen;
+ 278:lcd.c         **** 	if (compressionOn == FALSE) {
+ 279:lcd.c         **** 		for (i = 0; i < len; i++)
+ 280:lcd.c         **** 			lcdWrdata(*pData++);
+ 281:lcd.c         **** 	} else
+ 282:lcd.c         **** 		while (len > 0) {
+ 283:lcd.c         **** 			if (*pData == escapeChar) {
+ 284:lcd.c         **** 				pData++;
+ 285:lcd.c         **** 				j = *pData++;
+ 286:lcd.c         **** 				for (i = 0; i < j; i++)
+ 287:lcd.c         **** 					lcdWrdata(*pData);
+ 288:lcd.c         **** 				pData++;
+ 289:lcd.c         **** 				len -= j;
+ 290:lcd.c         **** 			} else {
+ 291:lcd.c         **** 				lcdWrdata(*pData++);
+ 292:lcd.c         **** 				len--;
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 7
 
 
- 293:lcd.c         **** 
- 294:lcd.c         ****   //select controller
- 295:lcd.c         ****   selectLCD(TRUE);   
- 296:lcd.c         **** 
- 297:lcd.c         ****   lcdWindow1(x,y,x+xLen-1,y+yLen-1);
- 298:lcd.c         ****   
- 299:lcd.c         ****   lcdWrcmd(LCD_CMD_RAMWR);    //write memory
- 300:lcd.c         ****   
- 301:lcd.c         ****   len = xLen*yLen;
- 302:lcd.c         ****   if (compressionOn == FALSE)
- 303:lcd.c         ****   {
- 304:lcd.c         ****     for(i=0; i<len; i++)
- 305:lcd.c         ****       lcdWrdata(*pData++);
- 306:lcd.c         ****   }
- 307:lcd.c         ****   else
- 308:lcd.c         ****     while(len > 0)
- 309:lcd.c         ****     {
- 310:lcd.c         ****       if(*pData == escapeChar)
- 311:lcd.c         ****       {
- 312:lcd.c         ****         pData++;
- 313:lcd.c         ****         j = *pData++;
- 314:lcd.c         ****         for(i=0;i<j;i++)
- 315:lcd.c         ****           lcdWrdata(*pData);
- 316:lcd.c         ****         pData++;
- 317:lcd.c         ****         len -= j;
- 318:lcd.c         ****       }
- 319:lcd.c         ****       else
- 320:lcd.c         ****       {
- 321:lcd.c         ****         lcdWrdata(*pData++);
- 322:lcd.c         ****         len--;
- 323:lcd.c         ****       }
- 324:lcd.c         ****     }
+ 293:lcd.c         **** 			}
+ 294:lcd.c         **** 		}
+ 295:lcd.c         **** 
+ 296:lcd.c         **** 	//deselect controller
+ 297:lcd.c         **** 	selectLCD(FALSE);
+ 298:lcd.c         **** }
+ 299:lcd.c         **** 
+ 300:lcd.c         **** /*****************************************************************************
+ 301:lcd.c         ****  *
+ 302:lcd.c         ****  * Description:
+ 303:lcd.c         ****  *    Update xy-position (by also creating a window).
+ 304:lcd.c         ****  *
+ 305:lcd.c         ****  ****************************************************************************/
+ 306:lcd.c         **** void lcdGotoxy(tU8 x, tU8 y) {
+ 307:lcd.c         **** 	lcd_x = x;
+ 308:lcd.c         **** 	lcd_y = y;
+ 309:lcd.c         **** 	lcdWindow(x, y, 129, 129);
+ 310:lcd.c         **** }
+ 311:lcd.c         **** 
+ 312:lcd.c         **** /*****************************************************************************
+ 313:lcd.c         ****  *
+ 314:lcd.c         ****  * Description:
+ 315:lcd.c         ****  *    Initialize LCD controller for a window (to write in).
+ 316:lcd.c         ****  *    Set start xy-position and xy-length.
+ 317:lcd.c         ****  *    Selects/deselects LCD controller.
+ 318:lcd.c         ****  *
+ 319:lcd.c         ****  ****************************************************************************/
+ 320:lcd.c         **** void lcdWindow(tU8 xp, tU8 yp, tU8 xe, tU8 ye) {
+ 321:lcd.c         **** 	//select controller
+ 322:lcd.c         **** 	selectLCD(TRUE);
+ 323:lcd.c         **** 
+ 324:lcd.c         **** 	lcdWindow1(xp, yp, xe, ye);
  325:lcd.c         **** 
- 326:lcd.c         ****   //deselect controller
- 327:lcd.c         ****   selectLCD(FALSE);
+ 326:lcd.c         **** 	//deselect controller
+ 327:lcd.c         **** 	selectLCD(FALSE);
  328:lcd.c         **** }
  329:lcd.c         **** 
- 330:lcd.c         **** 
- 331:lcd.c         **** /*****************************************************************************
- 332:lcd.c         ****  *
- 333:lcd.c         ****  * Description:
- 334:lcd.c         ****  *    Update xy-position (by also creating a window).
- 335:lcd.c         ****  *
- 336:lcd.c         ****  ****************************************************************************/
- 337:lcd.c         **** void
- 338:lcd.c         **** lcdGotoxy(tU8 x, tU8 y)
- 339:lcd.c         **** {
- 340:lcd.c         ****   lcd_x = x;
- 341:lcd.c         ****   lcd_y = y;
- 342:lcd.c         ****   lcdWindow(x, y, 129, 129);
- 343:lcd.c         **** }
- 344:lcd.c         **** 
- 345:lcd.c         **** 
- 346:lcd.c         **** /*****************************************************************************
- 347:lcd.c         ****  *
- 348:lcd.c         ****  * Description:
- 349:lcd.c         ****  *    Initialize LCD controller for a window (to write in).
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 8
+ 330:lcd.c         **** /*****************************************************************************
+ 331:lcd.c         ****  *
+ 332:lcd.c         ****  * Description:
+ 333:lcd.c         ****  *    Initialize LCD controller for a window (to write in).
+ 334:lcd.c         ****  *    Set start xy-position and xy-length
+ 335:lcd.c         ****  *    No select/deselect of LCD controller.
+ 336:lcd.c         ****  *
+ 337:lcd.c         ****  ****************************************************************************/
+ 338:lcd.c         **** static void lcdWindow1(tU8 xp, tU8 yp, tU8 xe, tU8 ye) {
+ 339:lcd.c         **** 	lcdWrcmd(LCD_CMD_CASET); //set X
+ 340:lcd.c         **** 	lcdWrdata(xp + 2);
+ 341:lcd.c         **** 	lcdWrdata(xe + 2);
+ 342:lcd.c         **** 
+ 343:lcd.c         **** 	lcdWrcmd(LCD_CMD_PASET); //set Y
+ 344:lcd.c         **** 	lcdWrdata(yp + 2);
+ 345:lcd.c         **** 	lcdWrdata(ye + 2);
+ 346:lcd.c         **** }
+ 347:lcd.c         **** 
+ 348:lcd.c         **** /*****************************************************************************
+ 349:lcd.c         ****  *
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 8
 
 
- 350:lcd.c         ****  *    Set start xy-position and xy-length.
- 351:lcd.c         ****  *    Selects/deselects LCD controller.
+ 350:lcd.c         ****  * Description:
+ 351:lcd.c         ****  *    Update xy-position for newline situation.
  352:lcd.c         ****  *
  353:lcd.c         ****  ****************************************************************************/
- 354:lcd.c         **** void
- 355:lcd.c         **** lcdWindow(tU8 xp, tU8 yp, tU8 xe, tU8 ye)
- 356:lcd.c         **** {
- 357:lcd.c         ****   //select controller
- 358:lcd.c         ****   selectLCD(TRUE);
- 359:lcd.c         **** 
- 360:lcd.c         **** 	lcdWindow1(xp, yp, xe, ye);
- 361:lcd.c         **** 
- 362:lcd.c         ****   //deselect controller
- 363:lcd.c         ****   selectLCD(FALSE);
- 364:lcd.c         **** }
- 365:lcd.c         **** 
- 366:lcd.c         **** 
- 367:lcd.c         **** /*****************************************************************************
- 368:lcd.c         ****  *
- 369:lcd.c         ****  * Description:
- 370:lcd.c         ****  *    Initialize LCD controller for a window (to write in).
- 371:lcd.c         ****  *    Set start xy-position and xy-length
- 372:lcd.c         ****  *    No select/deselect of LCD controller.
- 373:lcd.c         ****  *
- 374:lcd.c         ****  ****************************************************************************/
- 375:lcd.c         **** static void
- 376:lcd.c         **** lcdWindow1(tU8 xp, tU8 yp, tU8 xe, tU8 ye)
- 377:lcd.c         **** {
- 378:lcd.c         ****   lcdWrcmd(LCD_CMD_CASET);    //set X
- 379:lcd.c         ****   lcdWrdata(xp+2);
- 380:lcd.c         **** 	lcdWrdata(xe+2);
- 381:lcd.c         **** 
- 382:lcd.c         **** 	lcdWrcmd(LCD_CMD_PASET);    //set Y
- 383:lcd.c         **** 	lcdWrdata(yp+2);
- 384:lcd.c         **** 	lcdWrdata(ye+2);
- 385:lcd.c         **** }
+ 354:lcd.c         **** static void lcdNewline(void) {
+ 355:lcd.c         **** 	lcd_x = 0;
+ 356:lcd.c         **** 	lcd_y += 14;
+ 357:lcd.c         **** 	if (lcd_y >= 126)
+ 358:lcd.c         **** 		lcd_y = 126;
+ 359:lcd.c         **** }
+ 360:lcd.c         **** 
+ 361:lcd.c         **** /*****************************************************************************
+ 362:lcd.c         ****  *
+ 363:lcd.c         ****  * Description:
+ 364:lcd.c         ****  *    Draw one character withc current foreground and background color
+ 365:lcd.c         ****  *    at current xy position on display. Update x-position (+8).
+ 366:lcd.c         ****  *
+ 367:lcd.c         ****  ****************************************************************************/
+ 368:lcd.c         **** void lcdData(tU8 data) {
+ 369:lcd.c         **** 	//select controller
+ 370:lcd.c         **** 	selectLCD(TRUE);
+ 371:lcd.c         **** 
+ 372:lcd.c         **** 	if (data <= 127) {
+ 373:lcd.c         **** 		tU32 mapOffset;
+ 374:lcd.c         **** 		tU8 i, j, byteToShift;
+ 375:lcd.c         **** 
+ 376:lcd.c         **** 		data -= 30;
+ 377:lcd.c         **** 		mapOffset = 14 * data;
+ 378:lcd.c         **** 
+ 379:lcd.c         **** 		lcdWrcmd(LCD_CMD_CASET);
+ 380:lcd.c         **** 		lcdWrdata(lcd_x + 2);
+ 381:lcd.c         **** 		lcdWrdata(lcd_x + 9);
+ 382:lcd.c         **** 		lcdWrcmd(LCD_CMD_PASET);
+ 383:lcd.c         **** 		lcdWrdata(lcd_y + 2);
+ 384:lcd.c         **** 		lcdWrdata(lcd_y + 15);
+ 385:lcd.c         **** 		lcdWrcmd(LCD_CMD_RAMWR);
  386:lcd.c         **** 
- 387:lcd.c         **** 
- 388:lcd.c         **** /*****************************************************************************
- 389:lcd.c         ****  *
- 390:lcd.c         ****  * Description:
- 391:lcd.c         ****  *    Update xy-position for newline situation.
- 392:lcd.c         ****  *
- 393:lcd.c         ****  ****************************************************************************/
- 394:lcd.c         **** static void
- 395:lcd.c         **** lcdNewline(void)
- 396:lcd.c         **** {
- 397:lcd.c         ****   lcd_x  = 0;
- 398:lcd.c         ****   lcd_y	+= 14;
- 399:lcd.c         ****   if (lcd_y >= 126)
- 400:lcd.c         ****     lcd_y = 126;
- 401:lcd.c         **** }
- 402:lcd.c         **** 
- 403:lcd.c         **** 
- 404:lcd.c         **** /*****************************************************************************
- 405:lcd.c         ****  *
- 406:lcd.c         ****  * Description:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 9
+ 387:lcd.c         **** 		for (i = 0; i < 14; i++) {
+ 388:lcd.c         **** 			byteToShift = charMap[mapOffset++];
+ 389:lcd.c         **** 			for (j = 0; j < 8; j++) {
+ 390:lcd.c         **** 				if (byteToShift & 0x80)
+ 391:lcd.c         **** 					lcdWrdata(textColor);
+ 392:lcd.c         **** 				else
+ 393:lcd.c         **** 					lcdWrdata(bkgColor);
+ 394:lcd.c         **** 				byteToShift <<= 1;
+ 395:lcd.c         **** 			}
+ 396:lcd.c         **** 		}
+ 397:lcd.c         **** 	}
+ 398:lcd.c         **** 
+ 399:lcd.c         **** 	//deselect controller
+ 400:lcd.c         **** 	selectLCD(FALSE);
+ 401:lcd.c         **** 
+ 402:lcd.c         **** 	lcd_x += 8;
+ 403:lcd.c         **** }
+ 404:lcd.c         **** 
+ 405:lcd.c         **** /*****************************************************************************
+ 406:lcd.c         ****  *
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 9
 
 
- 407:lcd.c         ****  *    Draw one character withc current foreground and background color
- 408:lcd.c         ****  *    at current xy position on display. Update x-position (+8).
- 409:lcd.c         ****  *
- 410:lcd.c         ****  ****************************************************************************/
- 411:lcd.c         **** void
- 412:lcd.c         **** lcdData(tU8 data)
- 413:lcd.c         **** {
- 414:lcd.c         ****   //select controller
- 415:lcd.c         ****   selectLCD(TRUE);
- 416:lcd.c         ****   
- 417:lcd.c         ****   if (data <= 127)
- 418:lcd.c         ****   {
- 419:lcd.c         ****     tU32 mapOffset;
- 420:lcd.c         ****     tU8 i,j,byteToShift;
- 421:lcd.c         **** 
- 422:lcd.c         ****     data -= 30;
- 423:lcd.c         ****     mapOffset = 14*data;
- 424:lcd.c         **** 
- 425:lcd.c         ****     lcdWrcmd(LCD_CMD_CASET);
- 426:lcd.c         ****     lcdWrdata(lcd_x+2);
- 427:lcd.c         ****     lcdWrdata(lcd_x+9);
- 428:lcd.c         ****     lcdWrcmd(LCD_CMD_PASET);
- 429:lcd.c         ****     lcdWrdata(lcd_y+2);
- 430:lcd.c         ****     lcdWrdata(lcd_y+15);
- 431:lcd.c         ****     lcdWrcmd(LCD_CMD_RAMWR);
- 432:lcd.c         ****     
- 433:lcd.c         ****     for(i=0; i<14; i++)
- 434:lcd.c         ****     {
- 435:lcd.c         ****       byteToShift = charMap[mapOffset++];
- 436:lcd.c         ****       for(j=0; j<8; j++)
- 437:lcd.c         ****       {
- 438:lcd.c         ****         if (byteToShift & 0x80)
- 439:lcd.c         ****           lcdWrdata(textColor);
- 440:lcd.c         ****         else
- 441:lcd.c         ****           lcdWrdata(bkgColor);
- 442:lcd.c         ****         byteToShift <<= 1;
- 443:lcd.c         ****       }
- 444:lcd.c         ****     }
- 445:lcd.c         ****   }
- 446:lcd.c         **** 
- 447:lcd.c         ****   //deselect controller
- 448:lcd.c         ****   selectLCD(FALSE);
- 449:lcd.c         **** 
- 450:lcd.c         ****   lcd_x += 8;
- 451:lcd.c         **** }
- 452:lcd.c         **** 
- 453:lcd.c         **** 
- 454:lcd.c         **** /*****************************************************************************
- 455:lcd.c         ****  *
- 456:lcd.c         ****  * Description:
- 457:lcd.c         ****  *    Write/draw one character at current xy-position.
- 458:lcd.c         ****  *    The xy-position is updated afterwards
- 459:lcd.c         ****  *
- 460:lcd.c         ****  ****************************************************************************/
- 461:lcd.c         **** void
- 462:lcd.c         **** lcdPutchar(tU8 data)
- 463:lcd.c         **** {
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 10
-
-
- 464:lcd.c         ****   if (data == '\n')
- 465:lcd.c         ****     lcdNewline();
- 466:lcd.c         ****   else if (data != '\r')
- 467:lcd.c         ****   {
- 468:lcd.c         ****     if (setcolmark == TRUE)
- 469:lcd.c         ****     {
- 470:lcd.c         ****       textColor = data;
- 471:lcd.c         ****       setcolmark = FALSE;
- 472:lcd.c         ****     }
- 473:lcd.c         ****     else if (data == 0xff)
- 474:lcd.c         ****       setcolmark = TRUE;
- 475:lcd.c         ****     else if (lcd_x <= 124)
- 476:lcd.c         ****     {
- 477:lcd.c         ****       lcdData(data);
- 478:lcd.c         ****     }
- 479:lcd.c         ****   }
- 480:lcd.c         **** }
- 481:lcd.c         **** 
- 482:lcd.c         **** /*****************************************************************************
- 483:lcd.c         ****  *
- 484:lcd.c         ****  * Description:
- 485:lcd.c         ****  *    Write/draw (null-terminated) string of character at current xy-position
- 486:lcd.c         ****  *
- 487:lcd.c         ****  ****************************************************************************/
- 488:lcd.c         **** void
- 489:lcd.c         **** lcdPuts(char *s)
- 490:lcd.c         **** {
- 491:lcd.c         ****   while(*s != '\0')
- 492:lcd.c         ****     lcdPutchar(*s++);
- 493:lcd.c         **** }
- 494:lcd.c         **** 
- 495:lcd.c         **** 
- 496:lcd.c         **** /*****************************************************************************
- 497:lcd.c         ****  *
- 498:lcd.c         ****  * Description:
- 499:lcd.c         ****  *    Send command data to LCD controller
- 500:lcd.c         ****  *
- 501:lcd.c         ****  ****************************************************************************/
- 502:lcd.c         **** void
- 503:lcd.c         **** lcdWrcmd(tU8 data)
- 504:lcd.c         **** {
- 505:lcd.c         ****   sendToLCD(0, data);
- 506:lcd.c         **** }
- 507:lcd.c         **** 
- 508:lcd.c         **** 
- 509:lcd.c         **** /*****************************************************************************
- 510:lcd.c         ****  *
- 511:lcd.c         ****  * Description:
- 512:lcd.c         ****  *    Send data byte to LCD controller
- 513:lcd.c         ****  *
- 514:lcd.c         ****  ****************************************************************************/
- 515:lcd.c         **** void
- 516:lcd.c         **** lcdWrdata(tU8 data)
- 517:lcd.c         **** {
-  47              		.loc 1 517 0
+ 407:lcd.c         ****  * Description:
+ 408:lcd.c         ****  *    Write/draw one character at current xy-position.
+ 409:lcd.c         ****  *    The xy-position is updated afterwards
+ 410:lcd.c         ****  *
+ 411:lcd.c         ****  ****************************************************************************/
+ 412:lcd.c         **** void lcdPutchar(tU8 data) {
+ 413:lcd.c         **** 	if (data == '\n')
+ 414:lcd.c         **** 		lcdNewline();
+ 415:lcd.c         **** 	else if (data != '\r') {
+ 416:lcd.c         **** 		if (setcolmark == TRUE) {
+ 417:lcd.c         **** 			textColor = data;
+ 418:lcd.c         **** 			setcolmark = FALSE;
+ 419:lcd.c         **** 		} else if (data == 0xff)
+ 420:lcd.c         **** 			setcolmark = TRUE;
+ 421:lcd.c         **** 		else if (lcd_x <= 124) {
+ 422:lcd.c         **** 			lcdData(data);
+ 423:lcd.c         **** 		}
+ 424:lcd.c         **** 	}
+ 425:lcd.c         **** }
+ 426:lcd.c         **** 
+ 427:lcd.c         **** /*****************************************************************************
+ 428:lcd.c         ****  *
+ 429:lcd.c         ****  * Description:
+ 430:lcd.c         ****  *    Write/draw (null-terminated) string of character at current xy-position
+ 431:lcd.c         ****  *
+ 432:lcd.c         ****  ****************************************************************************/
+ 433:lcd.c         **** void lcdPuts(char *s) {
+ 434:lcd.c         **** 	while (*s != '\0')
+ 435:lcd.c         **** 		lcdPutchar(*s++);
+ 436:lcd.c         **** }
+ 437:lcd.c         **** 
+ 438:lcd.c         **** /*****************************************************************************
+ 439:lcd.c         ****  *
+ 440:lcd.c         ****  * Description:
+ 441:lcd.c         ****  *    Send command data to LCD controller
+ 442:lcd.c         ****  *
+ 443:lcd.c         ****  ****************************************************************************/
+ 444:lcd.c         **** void lcdWrcmd(tU8 data) {
+ 445:lcd.c         **** 	sendToLCD(0, data);
+ 446:lcd.c         **** }
+ 447:lcd.c         **** 
+ 448:lcd.c         **** /*****************************************************************************
+ 449:lcd.c         ****  *
+ 450:lcd.c         ****  * Description:
+ 451:lcd.c         ****  *    Send data byte to LCD controller
+ 452:lcd.c         ****  *
+ 453:lcd.c         ****  ****************************************************************************/
+ 454:lcd.c         **** void lcdWrdata(tU8 data) {
+  47              		.loc 1 454 0
   48 0014 00B5     		push	{lr}
   49              	.LCFI0:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 11
-
-
   50              	.LVL1:
-  51              		.loc 1 517 0
+  51              		.loc 1 454 0
   52 0016 0106     		lsl	r1, r0, #24
   53 0018 090E     		lsr	r1, r1, #24
- 518:lcd.c         ****   sendToLCD(1, data);
-  54              		.loc 1 518 0
+ 455:lcd.c         **** 	sendToLCD(1, data);
+  54              		.loc 1 455 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 10
+
+
   55 001a 0120     		mov	r0, #1
   56              	.LVL2:
   57 001c FFF7FEFF 		bl	sendToLCD
   58              	.LVL3:
- 519:lcd.c         **** }
-  59              		.loc 1 519 0
+ 456:lcd.c         **** }
+  59              		.loc 1 456 0
   60              		@ sp needed for prologue
   61 0020 01BC     		pop	{r0}
   62 0022 0047     		bx	r0
@@ -625,19 +559,19 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
   69              		.type	lcdWrcmd, %function
   70              	lcdWrcmd:
   71              	.LFB17:
-  72              		.loc 1 504 0
+  72              		.loc 1 444 0
   73 0024 00B5     		push	{lr}
   74              	.LCFI1:
   75              	.LVL4:
-  76              		.loc 1 504 0
+  76              		.loc 1 444 0
   77 0026 0106     		lsl	r1, r0, #24
   78 0028 090E     		lsr	r1, r1, #24
-  79              		.loc 1 505 0
+  79              		.loc 1 445 0
   80 002a 0020     		mov	r0, #0
   81              	.LVL5:
   82 002c FFF7FEFF 		bl	sendToLCD
   83              	.LVL6:
-  84              		.loc 1 506 0
+  84              		.loc 1 446 0
   85              		@ sp needed for prologue
   86 0030 01BC     		pop	{r0}
   87 0032 0047     		bx	r0
@@ -649,144 +583,144 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
   93              		.type	lcdWindow1, %function
   94              	lcdWindow1:
   95              	.LFB12:
-  96              		.loc 1 377 0
+  96              		.loc 1 338 0
   97 0034 F0B5     		push	{r4, r5, r6, r7, lr}
   98              	.LCFI2:
   99              	.LVL7:
- 100              		.loc 1 377 0
+ 100              		.loc 1 338 0
  101 0036 0406     		lsl	r4, r0, #24
  102 0038 1506     		lsl	r5, r2, #24
  103 003a 240E     		lsr	r4, r4, #24
  104 003c 2D0E     		lsr	r5, r5, #24
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 12
-
-
- 105              		.loc 1 379 0
+ 105              		.loc 1 340 0
  106 003e 0234     		add	r4, r4, #2
- 107              		.loc 1 377 0
+ 107              		.loc 1 338 0
  108 0040 0E06     		lsl	r6, r1, #24
- 109              		.loc 1 379 0
+ 109              		.loc 1 340 0
  110 0042 2406     		lsl	r4, r4, #24
- 111              		.loc 1 380 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 11
+
+
+ 111              		.loc 1 341 0
  112 0044 0235     		add	r5, r5, #2
- 113              		.loc 1 377 0
+ 113              		.loc 1 338 0
  114 0046 1B06     		lsl	r3, r3, #24
  115              	.LVL8:
- 116              		.loc 1 378 0
+ 116              		.loc 1 339 0
  117 0048 2A20     		mov	r0, #42
  118              	.LVL9:
- 119              		.loc 1 379 0
+ 119              		.loc 1 340 0
  120 004a 240E     		lsr	r4, r4, #24
- 121              		.loc 1 377 0
+ 121              		.loc 1 338 0
  122 004c 360E     		lsr	r6, r6, #24
- 123              		.loc 1 380 0
+ 123              		.loc 1 341 0
  124 004e 2D06     		lsl	r5, r5, #24
- 125              		.loc 1 377 0
+ 125              		.loc 1 338 0
  126 0050 1F0E     		lsr	r7, r3, #24
  127              	.LVL10:
- 128              		.loc 1 380 0
+ 128              		.loc 1 341 0
  129 0052 2D0E     		lsr	r5, r5, #24
- 130              		.loc 1 378 0
+ 130              		.loc 1 339 0
  131 0054 FFF7FEFF 		bl	lcdWrcmd
  132              	.LVL11:
- 133              		.loc 1 383 0
+ 133              		.loc 1 344 0
  134 0058 0236     		add	r6, r6, #2
  135              	.LVL12:
- 136              		.loc 1 379 0
+ 136              		.loc 1 340 0
  137 005a 201C     		mov	r0, r4
  138 005c FFF7FEFF 		bl	lcdWrdata
- 139              		.loc 1 383 0
+ 139              		.loc 1 344 0
  140 0060 3606     		lsl	r6, r6, #24
- 141              		.loc 1 380 0
+ 141              		.loc 1 341 0
  142 0062 281C     		mov	r0, r5
  143 0064 FFF7FEFF 		bl	lcdWrdata
- 144              		.loc 1 383 0
+ 144              		.loc 1 344 0
  145 0068 360E     		lsr	r6, r6, #24
- 146              		.loc 1 382 0
+ 146              		.loc 1 343 0
  147 006a 2B20     		mov	r0, #43
  148 006c FFF7FEFF 		bl	lcdWrcmd
- 149              		.loc 1 383 0
+ 149              		.loc 1 344 0
  150 0070 301C     		mov	r0, r6
  151 0072 FFF7FEFF 		bl	lcdWrdata
- 152              		.loc 1 384 0
+ 152              		.loc 1 345 0
  153 0076 BB1C     		add	r3, r7, #2
  154 0078 1806     		lsl	r0, r3, #24
  155 007a 000E     		lsr	r0, r0, #24
  156 007c FFF7FEFF 		bl	lcdWrdata
- 157              		.loc 1 385 0
+ 157              		.loc 1 346 0
  158              		@ sp needed for prologue
  159              	.LVL13:
  160 0080 F0BC     		pop	{r4, r5, r6, r7}
  161 0082 01BC     		pop	{r0}
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 13
-
-
  162 0084 0047     		bx	r0
  163              	.LFE12:
  164              		.size	lcdWindow1, .-lcdWindow1
  165 0086 0000     		.align	2
  166              		.global	lcdData
  167              		.code 16
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 12
+
+
  168              		.thumb_func
  169              		.type	lcdData, %function
  170              	lcdData:
  171              	.LFB14:
- 172              		.loc 1 413 0
+ 172              		.loc 1 368 0
  173 0088 F0B5     		push	{r4, r5, r6, r7, lr}
  174              	.LCFI3:
  175              	.LVL14:
- 176              		.loc 1 413 0
+ 176              		.loc 1 368 0
  177 008a 0006     		lsl	r0, r0, #24
  178              	.LVL15:
  179 008c 050E     		lsr	r5, r0, #24
  180              	.LVL16:
- 181              		.loc 1 415 0
+ 181              		.loc 1 370 0
  182 008e 0120     		mov	r0, #1
  183 0090 FFF7FEFF 		bl	selectLCD
- 184              		.loc 1 417 0
+ 184              		.loc 1 372 0
  185 0094 2B06     		lsl	r3, r5, #24
  186 0096 002B     		cmp	r3, #0
  187 0098 45DB     		blt	.L12
  188              	.LBB2:
- 189              		.loc 1 425 0
+ 189              		.loc 1 379 0
  190 009a 2A20     		mov	r0, #42
  191 009c FFF7FEFF 		bl	lcdWrcmd
- 192              		.loc 1 426 0
+ 192              		.loc 1 380 0
  193 00a0 264C     		ldr	r4, .L24
  194 00a2 2078     		ldrb	r0, [r4]
  195 00a4 0230     		add	r0, r0, #2
  196 00a6 0006     		lsl	r0, r0, #24
  197 00a8 000E     		lsr	r0, r0, #24
  198 00aa FFF7FEFF 		bl	lcdWrdata
- 199              		.loc 1 427 0
+ 199              		.loc 1 381 0
  200 00ae 2078     		ldrb	r0, [r4]
  201 00b0 0930     		add	r0, r0, #9
  202 00b2 0006     		lsl	r0, r0, #24
  203 00b4 000E     		lsr	r0, r0, #24
  204 00b6 FFF7FEFF 		bl	lcdWrdata
- 205              		.loc 1 428 0
+ 205              		.loc 1 382 0
  206 00ba 2B20     		mov	r0, #43
  207 00bc FFF7FEFF 		bl	lcdWrcmd
- 208              		.loc 1 429 0
+ 208              		.loc 1 383 0
  209 00c0 1F4C     		ldr	r4, .L24+4
  210 00c2 2078     		ldrb	r0, [r4]
  211 00c4 0230     		add	r0, r0, #2
  212 00c6 0006     		lsl	r0, r0, #24
  213 00c8 000E     		lsr	r0, r0, #24
  214 00ca FFF7FEFF 		bl	lcdWrdata
- 215              		.loc 1 430 0
+ 215              		.loc 1 384 0
  216 00ce 2078     		ldrb	r0, [r4]
  217 00d0 0F30     		add	r0, r0, #15
  218 00d2 0006     		lsl	r0, r0, #24
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 14
-
-
  219 00d4 000E     		lsr	r0, r0, #24
  220 00d6 FFF7FEFF 		bl	lcdWrdata
- 221              		.loc 1 431 0
+ 221              		.loc 1 385 0
  222 00da 2C20     		mov	r0, #44
  223 00dc FFF7FEFF 		bl	lcdWrcmd
  224 00e0 2B1C     		mov	r3, r5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 13
+
+
  225 00e2 1E3B     		sub	r3, r3, #30
  226 00e4 1B06     		lsl	r3, r3, #24
  227 00e6 1B0E     		lsr	r3, r3, #24
@@ -800,35 +734,35 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  235              	.LVL18:
  236              	.LVL19:
  237              	.L14:
- 238              		.loc 1 435 0
+ 238              		.loc 1 388 0
  239 00f4 2C78     		ldrb	r4, [r5]
  240 00f6 0026     		mov	r6, #0
  241              	.L15:
- 242              		.loc 1 438 0
+ 242              		.loc 1 390 0
  243 00f8 2306     		lsl	r3, r4, #24
  244 00fa 002B     		cmp	r3, #0
  245 00fc 01DA     		bge	.L16
- 246              		.loc 1 439 0
+ 246              		.loc 1 391 0
  247 00fe 124B     		ldr	r3, .L24+12
  248 0100 00E0     		b	.L23
  249              	.L16:
- 250              		.loc 1 441 0
+ 250              		.loc 1 393 0
  251 0102 124B     		ldr	r3, .L24+16
  252              	.L23:
  253 0104 1878     		ldrb	r0, [r3]
  254 0106 FFF7FEFF 		bl	lcdWrdata
- 255              		.loc 1 436 0
+ 255              		.loc 1 389 0
  256 010a 731C     		add	r3, r6, #1
  257 010c 1B06     		lsl	r3, r3, #24
  258 010e 1E0E     		lsr	r6, r3, #24
  259 0110 082E     		cmp	r6, #8
  260 0112 02D0     		beq	.L19
- 261              		.loc 1 442 0
+ 261              		.loc 1 394 0
  262 0114 6306     		lsl	r3, r4, #25
  263 0116 1C0E     		lsr	r4, r3, #24
  264 0118 EEE7     		b	.L15
  265              	.L19:
- 266              		.loc 1 433 0
+ 266              		.loc 1 387 0
  267 011a 7B1C     		add	r3, r7, #1
  268 011c 1B06     		lsl	r3, r3, #24
  269 011e 1F0E     		lsr	r7, r3, #24
@@ -838,18 +772,18 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  273              	.LVL20:
  274              	.L12:
  275              	.LBE2:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 15
-
-
- 276              		.loc 1 448 0
+ 276              		.loc 1 400 0
  277 0126 0020     		mov	r0, #0
  278 0128 FFF7FEFF 		bl	selectLCD
- 279              		.loc 1 450 0
+ 279              		.loc 1 402 0
  280 012c 034A     		ldr	r2, .L24
  281 012e 1378     		ldrb	r3, [r2]
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 14
+
+
  282 0130 0833     		add	r3, r3, #8
  283 0132 1370     		strb	r3, [r2]
- 284              		.loc 1 451 0
+ 284              		.loc 1 403 0
  285              		@ sp needed for prologue
  286              	.LVL21:
  287              	.LVL22:
@@ -875,78 +809,78 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  307              		.type	lcdPutchar, %function
  308              	lcdPutchar:
  309              	.LFB15:
- 310              		.loc 1 463 0
+ 310              		.loc 1 412 0
  311 0150 00B5     		push	{lr}
  312              	.LCFI4:
  313              	.LVL25:
- 314              		.loc 1 463 0
+ 314              		.loc 1 412 0
  315 0152 0006     		lsl	r0, r0, #24
  316              	.LVL26:
  317 0154 000E     		lsr	r0, r0, #24
  318              	.LVL27:
- 319              		.loc 1 464 0
+ 319              		.loc 1 413 0
  320 0156 0A28     		cmp	r0, #10
  321 0158 0CD1     		bne	.L27
  322              	.LBB5:
  323              	.LBB6:
- 324              		.loc 1 397 0
+ 324              		.loc 1 355 0
  325 015a 124A     		ldr	r2, .L39
  326 015c 0023     		mov	r3, #0
  327 015e 1370     		strb	r3, [r2]
- 328              		.loc 1 398 0
+ 328              		.loc 1 356 0
  329 0160 114A     		ldr	r2, .L39+4
  330 0162 1378     		ldrb	r3, [r2]
  331 0164 0E33     		add	r3, r3, #14
  332 0166 1B06     		lsl	r3, r3, #24
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 16
-
-
  333 0168 1B0E     		lsr	r3, r3, #24
  334 016a 1370     		strb	r3, [r2]
- 335              		.loc 1 399 0
+ 335              		.loc 1 357 0
  336 016c 7D2B     		cmp	r3, #125
  337 016e 16D9     		bls	.L37
- 338              		.loc 1 400 0
+ 338              		.loc 1 358 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 15
+
+
  339 0170 7E23     		mov	r3, #126
  340 0172 08E0     		b	.L38
  341              	.L27:
  342              	.LBE6:
  343              	.LBE5:
- 344              		.loc 1 466 0
+ 344              		.loc 1 415 0
  345 0174 0D28     		cmp	r0, #13
  346 0176 12D0     		beq	.L37
- 347              		.loc 1 468 0
+ 347              		.loc 1 416 0
  348 0178 0C4A     		ldr	r2, .L39+8
  349 017a 1378     		ldrb	r3, [r2]
  350 017c 012B     		cmp	r3, #1
  351 017e 04D1     		bne	.L32
- 352              		.loc 1 470 0
+ 352              		.loc 1 417 0
  353 0180 0B4B     		ldr	r3, .L39+12
  354 0182 1870     		strb	r0, [r3]
- 355              		.loc 1 471 0
+ 355              		.loc 1 418 0
  356 0184 0023     		mov	r3, #0
  357              	.L38:
  358 0186 1370     		strb	r3, [r2]
  359 0188 09E0     		b	.L37
  360              	.L32:
- 361              		.loc 1 473 0
+ 361              		.loc 1 419 0
  362 018a FF28     		cmp	r0, #255
  363 018c 01D1     		bne	.L34
- 364              		.loc 1 474 0
+ 364              		.loc 1 420 0
  365 018e 0123     		mov	r3, #1
  366 0190 F9E7     		b	.L38
  367              	.L34:
- 368              		.loc 1 475 0
+ 368              		.loc 1 421 0
  369 0192 044B     		ldr	r3, .L39
  370 0194 1B78     		ldrb	r3, [r3]
  371 0196 7C2B     		cmp	r3, #124
  372 0198 01D8     		bhi	.L37
- 373              		.loc 1 477 0
+ 373              		.loc 1 422 0
  374 019a FFF7FEFF 		bl	lcdData
  375              	.LVL28:
  376              	.LVL29:
  377              	.L37:
- 378              		.loc 1 480 0
+ 378              		.loc 1 425 0
  379              		@ sp needed for prologue
  380 019e 01BC     		pop	{r0}
  381 01a0 0047     		bx	r0
@@ -958,36 +892,36 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  387 01ac 04000000 		.word	setcolmark
  388 01b0 03000000 		.word	textColor
  389              	.LFE15:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 17
-
-
  390              		.size	lcdPutchar, .-lcdPutchar
  391              		.align	2
  392              		.global	lcdPuts
  393              		.code 16
  394              		.thumb_func
  395              		.type	lcdPuts, %function
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 16
+
+
  396              	lcdPuts:
  397              	.LFB16:
- 398              		.loc 1 490 0
+ 398              		.loc 1 433 0
  399 01b4 10B5     		push	{r4, lr}
  400              	.LCFI5:
  401              	.LVL30:
- 402              		.loc 1 490 0
+ 402              		.loc 1 433 0
  403 01b6 041C     		mov	r4, r0
  404 01b8 02E0     		b	.L42
  405              	.LVL31:
  406              	.L43:
- 407              		.loc 1 492 0
+ 407              		.loc 1 435 0
  408 01ba 0134     		add	r4, r4, #1
  409 01bc FFF7FEFF 		bl	lcdPutchar
  410              	.LVL32:
  411              	.L42:
- 412              		.loc 1 491 0
+ 412              		.loc 1 434 0
  413 01c0 2078     		ldrb	r0, [r4]
  414 01c2 0028     		cmp	r0, #0
  415 01c4 F9D1     		bne	.L43
- 416              		.loc 1 493 0
+ 416              		.loc 1 436 0
  417              		@ sp needed for prologue
  418              	.LVL33:
  419 01c6 10BC     		pop	{r4}
@@ -1002,11 +936,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  428              		.type	lcdWindow, %function
  429              	lcdWindow:
  430              	.LFB11:
- 431              		.loc 1 356 0
+ 431              		.loc 1 320 0
  432 01cc F0B5     		push	{r4, r5, r6, r7, lr}
  433              	.LCFI6:
  434              	.LVL34:
- 435              		.loc 1 356 0
+ 435              		.loc 1 320 0
  436 01ce 0D06     		lsl	r5, r1, #24
  437 01d0 1606     		lsl	r6, r2, #24
  438 01d2 1B06     		lsl	r3, r3, #24
@@ -1017,24 +951,24 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  443 01d8 2D0E     		lsr	r5, r5, #24
  444 01da 360E     		lsr	r6, r6, #24
  445 01dc 240E     		lsr	r4, r4, #24
- 446              		.loc 1 358 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 18
-
-
+ 446              		.loc 1 322 0
  447 01de 0120     		mov	r0, #1
  448              	.LVL37:
  449 01e0 FFF7FEFF 		bl	selectLCD
  450              	.LVL38:
- 451              		.loc 1 360 0
+ 451              		.loc 1 324 0
  452 01e4 291C     		mov	r1, r5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 17
+
+
  453 01e6 321C     		mov	r2, r6
  454 01e8 3B1C     		mov	r3, r7
  455 01ea 201C     		mov	r0, r4
  456 01ec FFF722FF 		bl	lcdWindow1
- 457              		.loc 1 363 0
+ 457              		.loc 1 327 0
  458 01f0 0020     		mov	r0, #0
  459 01f2 FFF7FEFF 		bl	selectLCD
- 460              		.loc 1 364 0
+ 460              		.loc 1 328 0
  461              		@ sp needed for prologue
  462              	.LVL39:
  463              	.LVL40:
@@ -1052,41 +986,41 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  475              		.type	lcdGotoxy, %function
  476              	lcdGotoxy:
  477              	.LFB10:
- 478              		.loc 1 339 0
+ 478              		.loc 1 306 0
  479 01fc 00B5     		push	{lr}
  480              	.LCFI7:
  481              	.LVL43:
- 482              		.loc 1 340 0
+ 482              		.loc 1 307 0
  483 01fe 074B     		ldr	r3, .L50
- 484              		.loc 1 339 0
+ 484              		.loc 1 306 0
  485 0200 0006     		lsl	r0, r0, #24
  486              	.LVL44:
  487 0202 000E     		lsr	r0, r0, #24
  488              	.LVL45:
- 489              		.loc 1 340 0
+ 489              		.loc 1 307 0
  490 0204 1870     		strb	r0, [r3]
- 491              		.loc 1 339 0
+ 491              		.loc 1 306 0
  492 0206 0906     		lsl	r1, r1, #24
  493              	.LVL46:
- 494              		.loc 1 341 0
+ 494              		.loc 1 308 0
  495 0208 054B     		ldr	r3, .L50+4
- 496              		.loc 1 339 0
+ 496              		.loc 1 306 0
  497 020a 090E     		lsr	r1, r1, #24
  498              	.LVL47:
- 499              		.loc 1 341 0
+ 499              		.loc 1 308 0
  500 020c 1970     		strb	r1, [r3]
- 501              		.loc 1 342 0
+ 501              		.loc 1 309 0
  502 020e 8122     		mov	r2, #129
  503 0210 8123     		mov	r3, #129
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 19
-
-
  504 0212 FFF7FEFF 		bl	lcdWindow
  505              	.LVL48:
- 506              		.loc 1 343 0
+ 506              		.loc 1 310 0
  507              		@ sp needed for prologue
  508 0216 01BC     		pop	{r0}
  509 0218 0047     		bx	r0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 18
+
+
  510              	.L51:
  511 021a 0000     		.align	2
  512              	.L50:
@@ -1101,13 +1035,13 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  521              		.type	lcdIcon, %function
  522              	lcdIcon:
  523              	.LFB9:
- 524              		.loc 1 290 0
+ 524              		.loc 1 266 0
  525 0224 F0B5     		push	{r4, r5, r6, r7, lr}
  526              	.LCFI8:
  527              	.LVL49:
  528 0226 84B0     		sub	sp, sp, #16
  529              	.LCFI9:
- 530              		.loc 1 290 0
+ 530              		.loc 1 266 0
  531 0228 0D1C     		mov	r5, r1
  532 022a 1E1C     		mov	r6, r3
  533 022c 0999     		ldr	r1, [sp, #36]
@@ -1124,33 +1058,33 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  544 023a 120E     		lsr	r2, r2, #24
  545 023c 1B0E     		lsr	r3, r3, #24
  546 023e 0406     		lsl	r4, r0, #24
- 547              		.loc 1 295 0
+ 547              		.loc 1 271 0
  548 0240 0120     		mov	r0, #1
  549              	.LVL54:
- 550              		.loc 1 290 0
+ 550              		.loc 1 266 0
  551 0242 0192     		str	r2, [sp, #4]
  552 0244 0093     		str	r3, [sp]
  553 0246 0B9F     		ldr	r7, [sp, #44]
  554 0248 2D06     		lsl	r5, r5, #24
  555              	.LVL55:
- 556              		.loc 1 295 0
+ 556              		.loc 1 271 0
  557 024a FFF7FEFF 		bl	selectLCD
- 558              		.loc 1 290 0
+ 558              		.loc 1 266 0
  559 024e 3606     		lsl	r6, r6, #24
  560              	.LVL56:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 20
-
-
- 561              		.loc 1 297 0
+ 561              		.loc 1 273 0
  562 0250 029B     		ldr	r3, [sp, #8]
- 563              		.loc 1 290 0
+ 563              		.loc 1 266 0
  564 0252 240E     		lsr	r4, r4, #24
  565              	.LVL57:
  566 0254 2D0E     		lsr	r5, r5, #24
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 19
+
+
  567              	.LVL58:
  568 0256 360E     		lsr	r6, r6, #24
  569              	.LVL59:
- 570              		.loc 1 297 0
+ 570              		.loc 1 273 0
  571 0258 E218     		add	r2, r4, r3
  572 025a AB19     		add	r3, r5, r6
  573 025c 013A     		sub	r2, r2, #1
@@ -1162,17 +1096,17 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  579 0268 201C     		mov	r0, r4
  580 026a 291C     		mov	r1, r5
  581 026c FFF7E2FE 		bl	lcdWindow1
- 582              		.loc 1 299 0
+ 582              		.loc 1 275 0
  583 0270 2C20     		mov	r0, #44
  584 0272 FFF7FEFF 		bl	lcdWrcmd
- 585              		.loc 1 301 0
+ 585              		.loc 1 277 0
  586 0276 029A     		ldr	r2, [sp, #8]
- 587              		.loc 1 302 0
+ 587              		.loc 1 278 0
  588 0278 019B     		ldr	r3, [sp, #4]
- 589              		.loc 1 301 0
+ 589              		.loc 1 277 0
  590 027a 5643     		mul	r6, r2
  591              	.LVL60:
- 592              		.loc 1 302 0
+ 592              		.loc 1 278 0
  593 027c 002B     		cmp	r3, #0
  594 027e 20D1     		bne	.L71
  595              	.LVL61:
@@ -1180,10 +1114,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  597              	.LVL62:
  598 0282 03E0     		b	.L55
  599              	.L56:
- 600              		.loc 1 305 0
+ 600              		.loc 1 280 0
  601 0284 E05D     		ldrb	r0, [r4, r7]
  602 0286 FFF7FEFF 		bl	lcdWrdata
- 603              		.loc 1 304 0
+ 603              		.loc 1 279 0
  604 028a 0134     		add	r4, r4, #1
  605              	.L55:
  606 028c B442     		cmp	r4, r6
@@ -1191,56 +1125,56 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  608 0290 19E0     		b	.L57
  609              	.LVL63:
  610              	.L58:
- 611              		.loc 1 310 0
+ 611              		.loc 1 283 0
  612 0292 3878     		ldrb	r0, [r7]
  613 0294 009A     		ldr	r2, [sp]
  614 0296 7B1C     		add	r3, r7, #1
  615 0298 9042     		cmp	r0, r2
  616 029a 0ED1     		bne	.L59
- 617              		.loc 1 313 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 21
-
-
+ 617              		.loc 1 285 0
  618 029c 7F78     		ldrb	r7, [r7, #1]
  619              	.LVL64:
  620 029e 5D1C     		add	r5, r3, #1
  621              	.LVL65:
  622 02a0 0024     		mov	r4, #0
  623              	.LVL66:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 20
+
+
  624 02a2 0397     		str	r7, [sp, #12]
  625 02a4 03E0     		b	.L61
  626              	.L62:
- 627              		.loc 1 315 0
+ 627              		.loc 1 287 0
  628 02a6 2878     		ldrb	r0, [r5]
  629 02a8 FFF7FEFF 		bl	lcdWrdata
- 630              		.loc 1 314 0
+ 630              		.loc 1 286 0
  631 02ac 0134     		add	r4, r4, #1
  632              	.L61:
  633 02ae 039B     		ldr	r3, [sp, #12]
  634 02b0 9C42     		cmp	r4, r3
  635 02b2 F8D1     		bne	.L62
- 636              		.loc 1 316 0
+ 636              		.loc 1 288 0
  637 02b4 6F1C     		add	r7, r5, #1
- 638              		.loc 1 317 0
+ 638              		.loc 1 289 0
  639 02b6 F61A     		sub	r6, r6, r3
  640 02b8 03E0     		b	.L71
  641              	.LVL67:
  642              	.L59:
- 643              		.loc 1 321 0
+ 643              		.loc 1 291 0
  644 02ba 1F1C     		mov	r7, r3
  645 02bc FFF7FEFF 		bl	lcdWrdata
- 646              		.loc 1 322 0
+ 646              		.loc 1 292 0
  647 02c0 013E     		sub	r6, r6, #1
  648              	.L71:
- 649              		.loc 1 308 0
+ 649              		.loc 1 282 0
  650 02c2 002E     		cmp	r6, #0
  651 02c4 E5DC     		bgt	.L58
  652              	.LVL68:
  653              	.L57:
- 654              		.loc 1 327 0
+ 654              		.loc 1 297 0
  655 02c6 0020     		mov	r0, #0
  656 02c8 FFF7FEFF 		bl	selectLCD
- 657              		.loc 1 328 0
+ 657              		.loc 1 298 0
  658 02cc 04B0     		add	sp, sp, #16
  659              		@ sp needed for prologue
  660              	.LVL69:
@@ -1258,17 +1192,17 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  672              		.thumb_func
  673              		.type	lcdRectBrd, %function
  674              	lcdRectBrd:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 22
-
-
  675              	.LFB8:
- 676              		.loc 1 247 0
+ 676              		.loc 1 226 0
  677 02d4 F0B5     		push	{r4, r5, r6, r7, lr}
  678              	.LCFI10:
  679              	.LVL73:
  680 02d6 83B0     		sub	sp, sp, #12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 21
+
+
  681              	.LCFI11:
- 682              		.loc 1 247 0
+ 682              		.loc 1 226 0
  683 02d8 051C     		mov	r5, r0
  684 02da 0998     		ldr	r0, [sp, #36]
  685              	.LVL74:
@@ -1285,9 +1219,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  696 02ea 1B0E     		lsr	r3, r3, #24
  697 02ec 090E     		lsr	r1, r1, #24
  698 02ee 0090     		str	r0, [sp]
- 699              		.loc 1 251 0
+ 699              		.loc 1 230 0
  700 02f0 0120     		mov	r0, #1
- 701              		.loc 1 247 0
+ 701              		.loc 1 226 0
  702 02f2 0A9C     		ldr	r4, [sp, #40]
  703 02f4 170E     		lsr	r7, r2, #24
  704              	.LVL78:
@@ -1296,19 +1230,19 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  707 02f8 0191     		str	r1, [sp, #4]
  708 02fa 2D06     		lsl	r5, r5, #24
  709              	.LVL80:
- 710              		.loc 1 251 0
+ 710              		.loc 1 230 0
  711 02fc FFF7FEFF 		bl	selectLCD
- 712              		.loc 1 247 0
+ 712              		.loc 1 226 0
  713 0300 3606     		lsl	r6, r6, #24
  714              	.LVL81:
- 715              		.loc 1 253 0
+ 715              		.loc 1 232 0
  716 0302 0299     		ldr	r1, [sp, #8]
- 717              		.loc 1 247 0
+ 717              		.loc 1 226 0
  718 0304 2D0E     		lsr	r5, r5, #24
  719              	.LVL82:
  720 0306 360E     		lsr	r6, r6, #24
  721              	.LVL83:
- 722              		.loc 1 253 0
+ 722              		.loc 1 232 0
  723 0308 EA19     		add	r2, r5, r7
  724 030a 7318     		add	r3, r6, r1
  725 030c 013A     		sub	r2, r2, #1
@@ -1318,27 +1252,27 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  729 0314 281C     		mov	r0, r5
  730 0316 120E     		lsr	r2, r2, #24
  731 0318 1B0E     		lsr	r3, r3, #24
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 23
-
-
  732 031a 311C     		mov	r1, r6
  733 031c FFF78AFE 		bl	lcdWindow1
- 734              		.loc 1 255 0
+ 734              		.loc 1 234 0
  735 0320 2C20     		mov	r0, #44
  736 0322 FFF7FEFF 		bl	lcdWrcmd
- 737              		.loc 1 247 0
+ 737              		.loc 1 226 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 22
+
+
  738 0326 2406     		lsl	r4, r4, #24
  739 0328 240E     		lsr	r4, r4, #24
- 740              		.loc 1 255 0
+ 740              		.loc 1 234 0
  741 032a 0025     		mov	r5, #0
  742              	.LVL84:
  743 032c 03E0     		b	.L73
  744              	.LVL85:
  745              	.L74:
- 746              		.loc 1 258 0
+ 746              		.loc 1 237 0
  747 032e 0098     		ldr	r0, [sp]
  748 0330 FFF7FEFF 		bl	lcdWrdata
- 749              		.loc 1 257 0
+ 749              		.loc 1 236 0
  750 0334 0135     		add	r5, r5, #1
  751              	.L73:
  752 0336 BD42     		cmp	r5, r7
@@ -1348,26 +1282,26 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  756 033c 0FE0     		b	.L76
  757              	.LVL87:
  758              	.L77:
- 759              		.loc 1 261 0
+ 759              		.loc 1 239 0
  760 033e 0098     		ldr	r0, [sp]
  761 0340 FFF7FEFF 		bl	lcdWrdata
  762 0344 0025     		mov	r5, #0
  763              	.LVL88:
  764 0346 03E0     		b	.L78
  765              	.L79:
- 766              		.loc 1 263 0
+ 766              		.loc 1 241 0
  767 0348 0198     		ldr	r0, [sp, #4]
  768 034a FFF7FEFF 		bl	lcdWrdata
- 769              		.loc 1 262 0
+ 769              		.loc 1 240 0
  770 034e 0135     		add	r5, r5, #1
  771              	.L78:
  772 0350 BB1E     		sub	r3, r7, #2
  773 0352 9D42     		cmp	r5, r3
  774 0354 F8D1     		bne	.L79
- 775              		.loc 1 264 0
+ 775              		.loc 1 242 0
  776 0356 201C     		mov	r0, r4
  777 0358 FFF7FEFF 		bl	lcdWrdata
- 778              		.loc 1 259 0
+ 778              		.loc 1 238 0
  779 035c 0136     		add	r6, r6, #1
  780              	.LVL89:
  781              	.L76:
@@ -1378,22 +1312,22 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  786 0366 0025     		mov	r5, #0
  787              	.LVL90:
  788 0368 03E0     		b	.L82
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 24
-
-
  789              	.L83:
- 790              		.loc 1 267 0
+ 790              		.loc 1 245 0
  791 036a 201C     		mov	r0, r4
  792 036c FFF7FEFF 		bl	lcdWrdata
- 793              		.loc 1 266 0
+ 793              		.loc 1 244 0
  794 0370 0135     		add	r5, r5, #1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 23
+
+
  795              	.L82:
  796 0372 BD42     		cmp	r5, r7
  797 0374 F9D1     		bne	.L83
- 798              		.loc 1 270 0
+ 798              		.loc 1 248 0
  799 0376 0020     		mov	r0, #0
  800 0378 FFF7FEFF 		bl	selectLCD
- 801              		.loc 1 271 0
+ 801              		.loc 1 249 0
  802 037c 03B0     		add	sp, sp, #12
  803              		@ sp needed for prologue
  804              	.LVL91:
@@ -1412,13 +1346,13 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  817              		.type	lcdRect, %function
  818              	lcdRect:
  819              	.LFB7:
- 820              		.loc 1 218 0
+ 820              		.loc 1 199 0
  821 0384 F0B5     		push	{r4, r5, r6, r7, lr}
  822              	.LCFI12:
  823              	.LVL95:
  824 0386 81B0     		sub	sp, sp, #4
  825              	.LCFI13:
- 826              		.loc 1 218 0
+ 826              		.loc 1 199 0
  827 0388 1E1C     		mov	r6, r3
  828 038a 069B     		ldr	r3, [sp, #24]
  829              	.LVL96:
@@ -1436,18 +1370,18 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  841 039c 2D0E     		lsr	r5, r5, #24
  842 039e 360E     		lsr	r6, r6, #24
  843              	.LVL100:
- 844              		.loc 1 223 0
+ 844              		.loc 1 204 0
  845 03a0 0120     		mov	r0, #1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 25
-
-
  846              	.LVL101:
- 847              		.loc 1 218 0
+ 847              		.loc 1 199 0
  848 03a2 0093     		str	r3, [sp]
- 849              		.loc 1 223 0
+ 849              		.loc 1 204 0
  850 03a4 FFF7FEFF 		bl	selectLCD
  851              	.LVL102:
- 852              		.loc 1 225 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 24
+
+
+ 852              		.loc 1 206 0
  853 03a8 E219     		add	r2, r4, r7
  854 03aa AB19     		add	r3, r5, r6
  855 03ac 013A     		sub	r2, r2, #1
@@ -1459,10 +1393,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  861 03b8 1B0E     		lsr	r3, r3, #24
  862 03ba 291C     		mov	r1, r5
  863 03bc FFF73AFE 		bl	lcdWindow1
- 864              		.loc 1 227 0
+ 864              		.loc 1 208 0
  865 03c0 2C20     		mov	r0, #44
  866 03c2 FFF7FEFF 		bl	lcdWrcmd
- 867              		.loc 1 229 0
+ 867              		.loc 1 210 0
  868 03c6 7E43     		mul	r6, r7
  869              	.LVL103:
  870 03c8 0024     		mov	r4, #0
@@ -1470,18 +1404,18 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  872 03ca 03E0     		b	.L87
  873              	.LVL105:
  874              	.L88:
- 875              		.loc 1 231 0
+ 875              		.loc 1 212 0
  876 03cc 0098     		ldr	r0, [sp]
  877 03ce FFF7FEFF 		bl	lcdWrdata
- 878              		.loc 1 230 0
+ 878              		.loc 1 211 0
  879 03d2 0134     		add	r4, r4, #1
  880              	.L87:
  881 03d4 B442     		cmp	r4, r6
  882 03d6 F9D1     		bne	.L88
- 883              		.loc 1 234 0
+ 883              		.loc 1 215 0
  884 03d8 0020     		mov	r0, #0
  885 03da FFF7FEFF 		bl	selectLCD
- 886              		.loc 1 235 0
+ 886              		.loc 1 216 0
  887 03de 01B0     		add	sp, sp, #4
  888              		@ sp needed for prologue
  889              	.LVL106:
@@ -1498,34 +1432,34 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  900              		.code 16
  901              		.thumb_func
  902              		.type	lcdContrast, %function
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 26
-
-
  903              	lcdContrast:
  904              	.LFB6:
- 905              		.loc 1 197 0
+ 905              		.loc 1 181 0
  906 03e8 10B5     		push	{r4, lr}
  907              	.LCFI14:
  908              	.LVL110:
- 909              		.loc 1 197 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 25
+
+
+ 909              		.loc 1 181 0
  910 03ea 0406     		lsl	r4, r0, #24
- 911              		.loc 1 199 0
+ 911              		.loc 1 183 0
  912 03ec 0120     		mov	r0, #1
  913              	.LVL111:
  914 03ee FFF7FEFF 		bl	selectLCD
- 915              		.loc 1 197 0
+ 915              		.loc 1 181 0
  916 03f2 240E     		lsr	r4, r4, #24
  917              	.LVL112:
- 918              		.loc 1 202 0
+ 918              		.loc 1 186 0
  919 03f4 2520     		mov	r0, #37
  920 03f6 FFF7FEFF 		bl	lcdWrcmd
- 921              		.loc 1 203 0
+ 921              		.loc 1 187 0
  922 03fa 201C     		mov	r0, r4
  923 03fc FFF7FEFF 		bl	lcdWrdata
- 924              		.loc 1 206 0
+ 924              		.loc 1 190 0
  925 0400 0020     		mov	r0, #0
  926 0402 FFF7FEFF 		bl	selectLCD
- 927              		.loc 1 207 0
+ 927              		.loc 1 191 0
  928              		@ sp needed for prologue
  929              	.LVL113:
  930 0406 10BC     		pop	{r4}
@@ -1540,49 +1474,49 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  939              		.type	lcdClrscr, %function
  940              	lcdClrscr:
  941              	.LFB3:
- 942              		.loc 1 133 0
+ 942              		.loc 1 125 0
  943 040c 10B5     		push	{r4, lr}
  944              	.LCFI15:
- 945              		.loc 1 136 0
+ 945              		.loc 1 128 0
  946 040e 104B     		ldr	r3, .L99
  947 0410 0022     		mov	r2, #0
  948 0412 1A70     		strb	r2, [r3]
- 949              		.loc 1 137 0
+ 949              		.loc 1 129 0
  950 0414 0F4B     		ldr	r3, .L99+4
- 951              		.loc 1 140 0
+ 951              		.loc 1 132 0
  952 0416 0120     		mov	r0, #1
- 953              		.loc 1 137 0
+ 953              		.loc 1 129 0
  954 0418 1A70     		strb	r2, [r3]
- 955              		.loc 1 140 0
+ 955              		.loc 1 132 0
  956 041a FFF7FEFF 		bl	selectLCD
- 957              		.loc 1 142 0
+ 957              		.loc 1 134 0
  958 041e FF20     		mov	r0, #255
  959 0420 FF21     		mov	r1, #255
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 27
-
-
  960 0422 8022     		mov	r2, #128
  961 0424 8023     		mov	r3, #128
  962 0426 FFF705FE 		bl	lcdWindow1
- 963              		.loc 1 144 0
+ 963              		.loc 1 136 0
  964 042a 2C20     		mov	r0, #44
  965 042c FFF7FEFF 		bl	lcdWrcmd
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 26
+
+
  966 0430 0024     		mov	r4, #0
  967              	.LVL114:
  968              	.L94:
- 969              		.loc 1 147 0
+ 969              		.loc 1 139 0
  970 0432 094B     		ldr	r3, .L99+8
  971 0434 1878     		ldrb	r0, [r3]
  972 0436 FFF7FEFF 		bl	lcdWrdata
- 973              		.loc 1 146 0
+ 973              		.loc 1 138 0
  974 043a 084B     		ldr	r3, .L99+12
  975 043c 0134     		add	r4, r4, #1
  976 043e 9C42     		cmp	r4, r3
  977 0440 F7D1     		bne	.L94
- 978              		.loc 1 150 0
+ 978              		.loc 1 142 0
  979 0442 0020     		mov	r0, #0
  980 0444 FFF7FEFF 		bl	selectLCD
- 981              		.loc 1 151 0
+ 981              		.loc 1 143 0
  982              		@ sp needed for prologue
  983              	.LVL115:
  984 0448 10BC     		pop	{r4}
@@ -1604,29 +1538,29 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1000              		.type	lcdOff, %function
  1001              	lcdOff:
  1002              	.LFB4:
- 1003              		.loc 1 162 0
+ 1003              		.loc 1 151 0
  1004 0460 00B5     		push	{lr}
  1005              	.LCFI16:
- 1006              		.loc 1 163 0
+ 1006              		.loc 1 152 0
  1007 0462 FFF7FEFF 		bl	lcdClrscr
- 1008              		.loc 1 166 0
+ 1008              		.loc 1 155 0
  1009 0466 0120     		mov	r0, #1
  1010 0468 FFF7FEFF 		bl	selectLCD
- 1011              		.loc 1 168 0
+ 1011              		.loc 1 157 0
  1012 046c 1020     		mov	r0, #16
  1013 046e FFF7FEFF 		bl	lcdWrcmd
- 1014              		.loc 1 171 0
+ 1014              		.loc 1 160 0
  1015 0472 0020     		mov	r0, #0
  1016 0474 FFF7FEFF 		bl	selectLCD
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 28
-
-
- 1017              		.loc 1 172 0
+ 1017              		.loc 1 161 0
  1018              		@ sp needed for prologue
  1019 0478 01BC     		pop	{r0}
  1020 047a 0047     		bx	r0
  1021              	.LFE4:
  1022              		.size	lcdOff, .-lcdOff
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 27
+
+
  1023              		.align	2
  1024              		.global	lcdInit
  1025              		.code 16
@@ -1634,132 +1568,132 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1027              		.type	lcdInit, %function
  1028              	lcdInit:
  1029              	.LFB2:
- 1030              		.loc 1 70 0
+ 1030              		.loc 1 65 0
  1031 047c 00B5     		push	{lr}
  1032              	.LCFI17:
- 1033              		.loc 1 71 0
+ 1033              		.loc 1 66 0
  1034 047e 3A4B     		ldr	r3, .L105
  1035 0480 0022     		mov	r2, #0
  1036 0482 1A70     		strb	r2, [r3]
- 1037              		.loc 1 72 0
+ 1037              		.loc 1 67 0
  1038 0484 394B     		ldr	r3, .L105+4
  1039 0486 1A70     		strb	r2, [r3]
- 1040              		.loc 1 75 0
+ 1040              		.loc 1 70 0
  1041 0488 FFF7FEFF 		bl	initSpiForLcd
- 1042              		.loc 1 78 0
+ 1042              		.loc 1 73 0
  1043 048c 0120     		mov	r0, #1
  1044 048e FFF7FEFF 		bl	selectLCD
- 1045              		.loc 1 80 0
+ 1045              		.loc 1 75 0
  1046 0492 0120     		mov	r0, #1
  1047 0494 FFF7FEFF 		bl	lcdWrcmd
- 1048              		.loc 1 82 0
+ 1048              		.loc 1 77 0
  1049 0498 0120     		mov	r0, #1
  1050 049a FFF7FEFF 		bl	osSleep
- 1051              		.loc 1 83 0
+ 1051              		.loc 1 78 0
  1052 049e 1120     		mov	r0, #17
  1053 04a0 FFF7FEFF 		bl	lcdWrcmd
- 1054              		.loc 1 84 0
+ 1054              		.loc 1 79 0
  1055 04a4 2920     		mov	r0, #41
  1056 04a6 FFF7FEFF 		bl	lcdWrcmd
- 1057              		.loc 1 85 0
+ 1057              		.loc 1 80 0
  1058 04aa 0320     		mov	r0, #3
  1059 04ac FFF7FEFF 		bl	lcdWrcmd
- 1060              		.loc 1 86 0
+ 1060              		.loc 1 81 0
  1061 04b0 0120     		mov	r0, #1
  1062 04b2 FFF7FEFF 		bl	osSleep
- 1063              		.loc 1 88 0
+ 1063              		.loc 1 83 0
  1064 04b6 3620     		mov	r0, #54
  1065 04b8 FFF7FEFF 		bl	lcdWrcmd
- 1066              		.loc 1 89 0
+ 1066              		.loc 1 84 0
  1067 04bc 4820     		mov	r0, #72
  1068 04be FFF7FEFF 		bl	lcdWrdata
- 1069              		.loc 1 90 0
+ 1069              		.loc 1 85 0
  1070 04c2 3A20     		mov	r0, #58
  1071 04c4 FFF7FEFF 		bl	lcdWrcmd
- 1072              		.loc 1 91 0
+ 1072              		.loc 1 86 0
  1073 04c8 0220     		mov	r0, #2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 29
-
-
  1074 04ca FFF7FEFF 		bl	lcdWrdata
- 1075              		.loc 1 92 0
+ 1075              		.loc 1 87 0
  1076 04ce 2120     		mov	r0, #33
  1077 04d0 FFF7FEFF 		bl	lcdWrcmd
- 1078              		.loc 1 94 0
+ 1078              		.loc 1 89 0
  1079 04d4 2D20     		mov	r0, #45
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 28
+
+
  1080 04d6 FFF7FEFF 		bl	lcdWrcmd
- 1081              		.loc 1 95 0
+ 1081              		.loc 1 90 0
  1082 04da 0020     		mov	r0, #0
  1083 04dc FFF7FEFF 		bl	lcdWrdata
- 1084              		.loc 1 96 0
+ 1084              		.loc 1 91 0
  1085 04e0 0220     		mov	r0, #2
  1086 04e2 FFF7FEFF 		bl	lcdWrdata
- 1087              		.loc 1 97 0
+ 1087              		.loc 1 92 0
  1088 04e6 0420     		mov	r0, #4
  1089 04e8 FFF7FEFF 		bl	lcdWrdata
- 1090              		.loc 1 98 0
+ 1090              		.loc 1 93 0
  1091 04ec 0620     		mov	r0, #6
  1092 04ee FFF7FEFF 		bl	lcdWrdata
- 1093              		.loc 1 99 0
+ 1093              		.loc 1 94 0
  1094 04f2 0920     		mov	r0, #9
  1095 04f4 FFF7FEFF 		bl	lcdWrdata
- 1096              		.loc 1 100 0
+ 1096              		.loc 1 95 0
  1097 04f8 0B20     		mov	r0, #11
  1098 04fa FFF7FEFF 		bl	lcdWrdata
- 1099              		.loc 1 101 0
+ 1099              		.loc 1 96 0
  1100 04fe 0D20     		mov	r0, #13
  1101 0500 FFF7FEFF 		bl	lcdWrdata
- 1102              		.loc 1 102 0
+ 1102              		.loc 1 97 0
  1103 0504 0F20     		mov	r0, #15
  1104 0506 FFF7FEFF 		bl	lcdWrdata
- 1105              		.loc 1 103 0
+ 1105              		.loc 1 98 0
  1106 050a 0020     		mov	r0, #0
  1107 050c FFF7FEFF 		bl	lcdWrdata
- 1108              		.loc 1 104 0
+ 1108              		.loc 1 99 0
  1109 0510 0220     		mov	r0, #2
  1110 0512 FFF7FEFF 		bl	lcdWrdata
- 1111              		.loc 1 105 0
+ 1111              		.loc 1 100 0
  1112 0516 0420     		mov	r0, #4
  1113 0518 FFF7FEFF 		bl	lcdWrdata
- 1114              		.loc 1 106 0
+ 1114              		.loc 1 101 0
  1115 051c 0620     		mov	r0, #6
  1116 051e FFF7FEFF 		bl	lcdWrdata
- 1117              		.loc 1 107 0
+ 1117              		.loc 1 102 0
  1118 0522 0920     		mov	r0, #9
  1119 0524 FFF7FEFF 		bl	lcdWrdata
- 1120              		.loc 1 108 0
+ 1120              		.loc 1 103 0
  1121 0528 0B20     		mov	r0, #11
  1122 052a FFF7FEFF 		bl	lcdWrdata
- 1123              		.loc 1 109 0
+ 1123              		.loc 1 104 0
  1124 052e 0D20     		mov	r0, #13
  1125 0530 FFF7FEFF 		bl	lcdWrdata
- 1126              		.loc 1 110 0
+ 1126              		.loc 1 105 0
  1127 0534 0F20     		mov	r0, #15
  1128 0536 FFF7FEFF 		bl	lcdWrdata
- 1129              		.loc 1 111 0
+ 1129              		.loc 1 106 0
  1130 053a 0020     		mov	r0, #0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 30
-
-
  1131 053c FFF7FEFF 		bl	lcdWrdata
- 1132              		.loc 1 112 0
+ 1132              		.loc 1 107 0
  1133 0540 0620     		mov	r0, #6
  1134 0542 FFF7FEFF 		bl	lcdWrdata
- 1135              		.loc 1 113 0
+ 1135              		.loc 1 108 0
  1136 0546 0A20     		mov	r0, #10
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 29
+
+
  1137 0548 FFF7FEFF 		bl	lcdWrdata
- 1138              		.loc 1 114 0
+ 1138              		.loc 1 109 0
  1139 054c 0F20     		mov	r0, #15
  1140 054e FFF7FEFF 		bl	lcdWrdata
- 1141              		.loc 1 117 0
+ 1141              		.loc 1 112 0
  1142 0552 0020     		mov	r0, #0
  1143 0554 FFF7FEFF 		bl	selectLCD
- 1144              		.loc 1 119 0
+ 1144              		.loc 1 114 0
  1145 0558 3820     		mov	r0, #56
  1146 055a FFF7FEFF 		bl	lcdContrast
- 1147              		.loc 1 121 0
+ 1147              		.loc 1 116 0
  1148 055e FFF7FEFF 		bl	lcdClrscr
- 1149              		.loc 1 122 0
+ 1149              		.loc 1 117 0
  1150              		@ sp needed for prologue
  1151 0562 01BC     		pop	{r0}
  1152 0564 0047     		bx	r0
@@ -1798,15 +1732,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1185 0014 3E       		.byte	62
  1186 0015 FE       		.byte	-2
  1187 0016 3E       		.byte	62
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 31
-
-
  1188 0017 0E       		.byte	14
  1189 0018 06       		.byte	6
  1190 0019 02       		.byte	2
  1191 001a 00       		.byte	0
  1192 001b 00       		.byte	0
  1193 001c 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 30
+
+
  1194 001d 00       		.byte	0
  1195 001e 00       		.byte	0
  1196 001f 00       		.byte	0
@@ -1858,15 +1792,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1242 004d 6C       		.byte	108
  1243 004e 6C       		.byte	108
  1244 004f FE       		.byte	-2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 32
-
-
  1245 0050 6C       		.byte	108
  1246 0051 6C       		.byte	108
  1247 0052 00       		.byte	0
  1248 0053 00       		.byte	0
  1249 0054 00       		.byte	0
  1250 0055 18       		.byte	24
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 31
+
+
  1251 0056 18       		.byte	24
  1252 0057 7C       		.byte	124
  1253 0058 C6       		.byte	-58
@@ -1918,15 +1852,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1299 0086 00       		.byte	0
  1300 0087 00       		.byte	0
  1301 0088 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 33
-
-
  1302 0089 00       		.byte	0
  1303 008a 00       		.byte	0
  1304 008b 00       		.byte	0
  1305 008c 00       		.byte	0
  1306 008d 00       		.byte	0
  1307 008e 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 32
+
+
  1308 008f 0C       		.byte	12
  1309 0090 18       		.byte	24
  1310 0091 30       		.byte	48
@@ -1978,15 +1912,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1356 00bf 18       		.byte	24
  1357 00c0 00       		.byte	0
  1358 00c1 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 34
-
-
  1359 00c2 00       		.byte	0
  1360 00c3 00       		.byte	0
  1361 00c4 00       		.byte	0
  1362 00c5 00       		.byte	0
  1363 00c6 00       		.byte	0
  1364 00c7 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 33
+
+
  1365 00c8 00       		.byte	0
  1366 00c9 00       		.byte	0
  1367 00ca 00       		.byte	0
@@ -2038,15 +1972,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1413 00f8 80       		.byte	-128
  1414 00f9 00       		.byte	0
  1415 00fa 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 35
-
-
  1416 00fb 00       		.byte	0
  1417 00fc 00       		.byte	0
  1418 00fd 00       		.byte	0
  1419 00fe 00       		.byte	0
  1420 00ff 38       		.byte	56
  1421 0100 6C       		.byte	108
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 34
+
+
  1422 0101 C6       		.byte	-58
  1423 0102 C6       		.byte	-58
  1424 0103 D6       		.byte	-42
@@ -2098,15 +2032,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1470 0131 7C       		.byte	124
  1471 0132 00       		.byte	0
  1472 0133 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 36
-
-
  1473 0134 00       		.byte	0
  1474 0135 00       		.byte	0
  1475 0136 00       		.byte	0
  1476 0137 0C       		.byte	12
  1477 0138 1C       		.byte	28
  1478 0139 3C       		.byte	60
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 35
+
+
  1479 013a 6C       		.byte	108
  1480 013b CC       		.byte	-52
  1481 013c FE       		.byte	-2
@@ -2158,15 +2092,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1527 016a 00       		.byte	0
  1528 016b 00       		.byte	0
  1529 016c 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 37
-
-
  1530 016d 00       		.byte	0
  1531 016e 00       		.byte	0
  1532 016f 7C       		.byte	124
  1533 0170 C6       		.byte	-58
  1534 0171 C6       		.byte	-58
  1535 0172 C6       		.byte	-58
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 36
+
+
  1536 0173 7C       		.byte	124
  1537 0174 C6       		.byte	-58
  1538 0175 C6       		.byte	-58
@@ -2218,15 +2152,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1584 01a3 00       		.byte	0
  1585 01a4 00       		.byte	0
  1586 01a5 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 38
-
-
  1587 01a6 00       		.byte	0
  1588 01a7 0C       		.byte	12
  1589 01a8 18       		.byte	24
  1590 01a9 30       		.byte	48
  1591 01aa 60       		.byte	96
  1592 01ab C0       		.byte	-64
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 37
+
+
  1593 01ac 60       		.byte	96
  1594 01ad 30       		.byte	48
  1595 01ae 18       		.byte	24
@@ -2278,15 +2212,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1641 01dc 00       		.byte	0
  1642 01dd 00       		.byte	0
  1643 01de 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 39
-
-
  1644 01df 7C       		.byte	124
  1645 01e0 C6       		.byte	-58
  1646 01e1 C6       		.byte	-58
  1647 01e2 DE       		.byte	-34
  1648 01e3 DE       		.byte	-34
  1649 01e4 DE       		.byte	-34
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 38
+
+
  1650 01e5 DC       		.byte	-36
  1651 01e6 C0       		.byte	-64
  1652 01e7 7C       		.byte	124
@@ -2338,15 +2272,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1698 0215 00       		.byte	0
  1699 0216 00       		.byte	0
  1700 0217 F8       		.byte	-8
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 40
-
-
  1701 0218 6C       		.byte	108
  1702 0219 66       		.byte	102
  1703 021a 66       		.byte	102
  1704 021b 66       		.byte	102
  1705 021c 66       		.byte	102
  1706 021d 66       		.byte	102
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 39
+
+
  1707 021e 6C       		.byte	108
  1708 021f F8       		.byte	-8
  1709 0220 00       		.byte	0
@@ -2398,15 +2332,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1755 024e 00       		.byte	0
  1756 024f C6       		.byte	-58
  1757 0250 C6       		.byte	-58
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 41
-
-
  1758 0251 C6       		.byte	-58
  1759 0252 C6       		.byte	-58
  1760 0253 FE       		.byte	-2
  1761 0254 C6       		.byte	-58
  1762 0255 C6       		.byte	-58
  1763 0256 C6       		.byte	-58
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 40
+
+
  1764 0257 C6       		.byte	-58
  1765 0258 00       		.byte	0
  1766 0259 00       		.byte	0
@@ -2458,15 +2392,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1812 0287 F0       		.byte	-16
  1813 0288 60       		.byte	96
  1814 0289 60       		.byte	96
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 42
-
-
  1815 028a 60       		.byte	96
  1816 028b 60       		.byte	96
  1817 028c 60       		.byte	96
  1818 028d 62       		.byte	98
  1819 028e 66       		.byte	102
  1820 028f FE       		.byte	-2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 41
+
+
  1821 0290 00       		.byte	0
  1822 0291 00       		.byte	0
  1823 0292 00       		.byte	0
@@ -2518,15 +2452,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1869 02c0 66       		.byte	102
  1870 02c1 66       		.byte	102
  1871 02c2 66       		.byte	102
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 43
-
-
  1872 02c3 7C       		.byte	124
  1873 02c4 60       		.byte	96
  1874 02c5 60       		.byte	96
  1875 02c6 60       		.byte	96
  1876 02c7 F0       		.byte	-16
  1877 02c8 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 42
+
+
  1878 02c9 00       		.byte	0
  1879 02ca 00       		.byte	0
  1880 02cb 00       		.byte	0
@@ -2578,15 +2512,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1926 02f9 5A       		.byte	90
  1927 02fa 18       		.byte	24
  1928 02fb 18       		.byte	24
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 44
-
-
  1929 02fc 18       		.byte	24
  1930 02fd 18       		.byte	24
  1931 02fe 18       		.byte	24
  1932 02ff 3C       		.byte	60
  1933 0300 00       		.byte	0
  1934 0301 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 43
+
+
  1935 0302 00       		.byte	0
  1936 0303 00       		.byte	0
  1937 0304 00       		.byte	0
@@ -2638,15 +2572,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  1983 0332 7C       		.byte	124
  1984 0333 38       		.byte	56
  1985 0334 7C       		.byte	124
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 45
-
-
  1986 0335 C6       		.byte	-58
  1987 0336 C6       		.byte	-58
  1988 0337 C6       		.byte	-58
  1989 0338 00       		.byte	0
  1990 0339 00       		.byte	0
  1991 033a 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 44
+
+
  1992 033b 00       		.byte	0
  1993 033c 00       		.byte	0
  1994 033d 66       		.byte	102
@@ -2698,15 +2632,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2040 036b 38       		.byte	56
  2041 036c 1C       		.byte	28
  2042 036d 0E       		.byte	14
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 46
-
-
  2043 036e 06       		.byte	6
  2044 036f 02       		.byte	2
  2045 0370 00       		.byte	0
  2046 0371 00       		.byte	0
  2047 0372 00       		.byte	0
  2048 0373 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 45
+
+
  2049 0374 00       		.byte	0
  2050 0375 3C       		.byte	60
  2051 0376 0C       		.byte	12
@@ -2758,15 +2692,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2097 03a4 00       		.byte	0
  2098 03a5 00       		.byte	0
  2099 03a6 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 47
-
-
  2100 03a7 00       		.byte	0
  2101 03a8 00       		.byte	0
  2102 03a9 00       		.byte	0
  2103 03aa 00       		.byte	0
  2104 03ab 00       		.byte	0
  2105 03ac 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 46
+
+
  2106 03ad 00       		.byte	0
  2107 03ae 00       		.byte	0
  2108 03af 00       		.byte	0
@@ -2818,15 +2752,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2154 03dd CC       		.byte	-52
  2155 03de CC       		.byte	-52
  2156 03df 76       		.byte	118
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 48
-
-
  2157 03e0 00       		.byte	0
  2158 03e1 00       		.byte	0
  2159 03e2 00       		.byte	0
  2160 03e3 00       		.byte	0
  2161 03e4 00       		.byte	0
  2162 03e5 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 47
+
+
  2163 03e6 00       		.byte	0
  2164 03e7 00       		.byte	0
  2165 03e8 7C       		.byte	124
@@ -2878,15 +2812,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2211 0416 66       		.byte	102
  2212 0417 E6       		.byte	-26
  2213 0418 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 49
-
-
  2214 0419 00       		.byte	0
  2215 041a 00       		.byte	0
  2216 041b 00       		.byte	0
  2217 041c 00       		.byte	0
  2218 041d 18       		.byte	24
  2219 041e 18       		.byte	24
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 48
+
+
  2220 041f 00       		.byte	0
  2221 0420 38       		.byte	56
  2222 0421 18       		.byte	24
@@ -2938,15 +2872,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2268 044f 3C       		.byte	60
  2269 0450 00       		.byte	0
  2270 0451 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 50
-
-
  2271 0452 00       		.byte	0
  2272 0453 00       		.byte	0
  2273 0454 00       		.byte	0
  2274 0455 00       		.byte	0
  2275 0456 00       		.byte	0
  2276 0457 00       		.byte	0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 49
+
+
  2277 0458 EC       		.byte	-20
  2278 0459 FE       		.byte	-2
  2279 045a D6       		.byte	-42
@@ -2998,15 +2932,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2325 0488 60       		.byte	96
  2326 0489 F0       		.byte	-16
  2327 048a 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 51
-
-
  2328 048b 00       		.byte	0
  2329 048c 00       		.byte	0
  2330 048d 00       		.byte	0
  2331 048e 00       		.byte	0
  2332 048f 00       		.byte	0
  2333 0490 76       		.byte	118
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 50
+
+
  2334 0491 CC       		.byte	-52
  2335 0492 CC       		.byte	-52
  2336 0493 CC       		.byte	-52
@@ -3058,15 +2992,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2382 04c1 00       		.byte	0
  2383 04c2 00       		.byte	0
  2384 04c3 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 52
-
-
  2385 04c4 00       		.byte	0
  2386 04c5 00       		.byte	0
  2387 04c6 00       		.byte	0
  2388 04c7 00       		.byte	0
  2389 04c8 CC       		.byte	-52
  2390 04c9 CC       		.byte	-52
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 51
+
+
  2391 04ca CC       		.byte	-52
  2392 04cb CC       		.byte	-52
  2393 04cc CC       		.byte	-52
@@ -3118,15 +3052,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2439 04fa 00       		.byte	0
  2440 04fb 00       		.byte	0
  2441 04fc 00       		.byte	0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 53
-
-
  2442 04fd 00       		.byte	0
  2443 04fe 00       		.byte	0
  2444 04ff 00       		.byte	0
  2445 0500 C6       		.byte	-58
  2446 0501 C6       		.byte	-58
  2447 0502 C6       		.byte	-58
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 52
+
+
  2448 0503 C6       		.byte	-58
  2449 0504 7E       		.byte	126
  2450 0505 06       		.byte	6
@@ -3178,15 +3112,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2496 0533 00       		.byte	0
  2497 0534 00       		.byte	0
  2498 0535 70       		.byte	112
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 54
-
-
  2499 0536 18       		.byte	24
  2500 0537 18       		.byte	24
  2501 0538 18       		.byte	24
  2502 0539 0E       		.byte	14
  2503 053a 18       		.byte	24
  2504 053b 18       		.byte	24
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 53
+
+
  2505 053c 18       		.byte	24
  2506 053d 70       		.byte	112
  2507 053e 00       		.byte	0
@@ -3238,15 +3172,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2553 0008 01       		.byte	0x1
  2554 0009 00       		.ascii	"\000"
  2555 000a 01       		.uleb128 0x1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 55
-
-
  2556 000b 7C       		.sleb128 -4
  2557 000c 0E       		.byte	0xe
  2558 000d 0C       		.byte	0xc
  2559 000e 0D       		.uleb128 0xd
  2560 000f 00       		.uleb128 0x0
  2561              		.align	2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 54
+
+
  2562              	.LECIE0:
  2563              	.LSFDE0:
  2564 0010 0C000000 		.4byte	.LEFDE0-.LASFDE0
@@ -3298,15 +3232,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2610 0064 05       		.uleb128 0x5
  2611 0065 85       		.byte	0x85
  2612 0066 04       		.uleb128 0x4
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 56
-
-
  2613 0067 86       		.byte	0x86
  2614 0068 03       		.uleb128 0x3
  2615 0069 87       		.byte	0x87
  2616 006a 02       		.uleb128 0x2
  2617 006b 8E       		.byte	0x8e
  2618 006c 01       		.uleb128 0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 55
+
+
  2619 006d 000000   		.align	2
  2620              	.LEFDE6:
  2621              	.LSFDE8:
@@ -3358,15 +3292,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2667 00bb 84       		.byte	0x84
  2668 00bc 02       		.uleb128 0x2
  2669 00bd 8E       		.byte	0x8e
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 57
-
-
  2670 00be 01       		.uleb128 0x1
  2671 00bf 00       		.align	2
  2672              	.LEFDE12:
  2673              	.LSFDE14:
  2674 00c0 1C000000 		.4byte	.LEFDE14-.LASFDE14
  2675              	.LASFDE14:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 56
+
+
  2676 00c4 00000000 		.4byte	.Lframe0
  2677 00c8 CC010000 		.4byte	.LFB11
  2678 00cc 30000000 		.4byte	.LFE11-.LFB11
@@ -3418,15 +3352,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2724 0110 03       		.uleb128 0x3
  2725 0111 87       		.byte	0x87
  2726 0112 02       		.uleb128 0x2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 58
-
-
  2727 0113 8E       		.byte	0x8e
  2728 0114 01       		.uleb128 0x1
  2729 0115 42       		.byte	0x4
  2730              		.4byte	.LCFI9-.LCFI8
  2731 0116 0E       		.byte	0xe
  2732 0117 24       		.uleb128 0x24
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 57
+
+
  2733              		.align	2
  2734              	.LEFDE18:
  2735              	.LSFDE20:
@@ -3478,15 +3412,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2781 0155 42       		.byte	0x4
  2782              		.4byte	.LCFI13-.LCFI12
  2783 0156 0E       		.byte	0xe
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 59
-
-
  2784 0157 18       		.uleb128 0x18
  2785              		.align	2
  2786              	.LEFDE22:
  2787              	.LSFDE24:
  2788 0158 14000000 		.4byte	.LEFDE24-.LASFDE24
  2789              	.LASFDE24:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 58
+
+
  2790 015c 00000000 		.4byte	.Lframe0
  2791 0160 E8030000 		.4byte	.LFB6
  2792 0164 24000000 		.4byte	.LFE6-.LFB6
@@ -3538,15 +3472,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2838 01ac F4000000 		.4byte	.LFE2-.LFB2
  2839 01b0 42       		.byte	0x4
  2840              		.4byte	.LCFI17-.LFB2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 60
-
-
  2841 01b1 0E       		.byte	0xe
  2842 01b2 04       		.uleb128 0x4
  2843 01b3 8E       		.byte	0x8e
  2844 01b4 01       		.uleb128 0x1
  2845 01b5 000000   		.align	2
  2846              	.LEFDE30:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 59
+
+
  2847              		.file 2 "../pre_emptive_os/api/general.h"
  2848              		.file 3 "ascii.h"
  2849              		.text
@@ -3598,15 +3532,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2895 006f 0100     		.2byte	0x1
  2896 0071 51       		.byte	0x51
  2897 0072 00000000 		.4byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 61
-
-
  2898 0076 00000000 		.4byte	0x0
  2899              	.LLST5:
  2900 007a 34000000 		.4byte	.LFB12-.Ltext0
  2901 007e 36000000 		.4byte	.LCFI2-.Ltext0
  2902 0082 0100     		.2byte	0x1
  2903 0084 5D       		.byte	0x5d
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 60
+
+
  2904 0085 36000000 		.4byte	.LCFI2-.Ltext0
  2905 0089 86000000 		.4byte	.LFE12-.Ltext0
  2906 008d 0200     		.2byte	0x2
@@ -3658,15 +3592,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  2952 0106 8A000000 		.4byte	.LCFI3-.Ltext0
  2953 010a 50010000 		.4byte	.LFE14-.Ltext0
  2954 010e 0200     		.2byte	0x2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 62
-
-
  2955 0110 7D       		.byte	0x7d
  2956 0111 14       		.sleb128 20
  2957 0112 00000000 		.4byte	0x0
  2958 0116 00000000 		.4byte	0x0
  2959              	.LLST11:
  2960 011a 8A000000 		.4byte	.LVL14-.Ltext0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 61
+
+
  2961 011e 8C000000 		.4byte	.LVL15-.Ltext0
  2962 0122 0100     		.2byte	0x1
  2963 0124 50       		.byte	0x50
@@ -3718,15 +3652,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3009 019f 54010000 		.4byte	.LVL26-.Ltext0
  3010 01a3 0100     		.2byte	0x1
  3011 01a5 50       		.byte	0x50
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 63
-
-
  3012 01a6 56010000 		.4byte	.LVL27-.Ltext0
  3013 01aa 9E010000 		.4byte	.LVL28-.Ltext0
  3014 01ae 0100     		.2byte	0x1
  3015 01b0 50       		.byte	0x50
  3016 01b1 9E010000 		.4byte	.LVL29-.Ltext0
  3017 01b5 B4010000 		.4byte	.LFE15-.Ltext0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 62
+
+
  3018 01b9 0100     		.2byte	0x1
  3019 01bb 50       		.byte	0x50
  3020 01bc 00000000 		.4byte	0x0
@@ -3778,15 +3712,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3066 0236 00000000 		.4byte	0x0
  3067 023a 00000000 		.4byte	0x0
  3068              	.LLST21:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 64
-
-
  3069 023e CE010000 		.4byte	.LVL34-.Ltext0
  3070 0242 E4010000 		.4byte	.LVL38-.Ltext0
  3071 0246 0100     		.2byte	0x1
  3072 0248 51       		.byte	0x51
  3073 0249 E4010000 		.4byte	.LVL38-.Ltext0
  3074 024d F6010000 		.4byte	.LVL40-.Ltext0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 63
+
+
  3075 0251 0100     		.2byte	0x1
  3076 0253 55       		.byte	0x55
  3077 0254 00000000 		.4byte	0x0
@@ -3838,15 +3772,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3123 02d1 00000000 		.4byte	0x0
  3124              	.LLST26:
  3125 02d5 FE010000 		.4byte	.LVL43-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 65
-
-
  3126 02d9 08020000 		.4byte	.LVL46-.Ltext0
  3127 02dd 0100     		.2byte	0x1
  3128 02df 51       		.byte	0x51
  3129 02e0 0C020000 		.4byte	.LVL47-.Ltext0
  3130 02e4 16020000 		.4byte	.LVL48-.Ltext0
  3131 02e8 0100     		.2byte	0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 64
+
+
  3132 02ea 51       		.byte	0x51
  3133 02eb 00000000 		.4byte	0x0
  3134 02ef 00000000 		.4byte	0x0
@@ -3898,15 +3832,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3180 0368 56020000 		.4byte	.LVL58-.Ltext0
  3181 036c A0020000 		.4byte	.LVL65-.Ltext0
  3182 0370 0100     		.2byte	0x1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 66
-
-
  3183 0372 55       		.byte	0x55
  3184 0373 BA020000 		.4byte	.LVL67-.Ltext0
  3185 0377 CE020000 		.4byte	.LVL70-.Ltext0
  3186 037b 0100     		.2byte	0x1
  3187 037d 55       		.byte	0x55
  3188 037e 00000000 		.4byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 65
+
+
  3189 0382 00000000 		.4byte	0x0
  3190              	.LLST30:
  3191 0386 26020000 		.4byte	.LVL49-.Ltext0
@@ -3958,15 +3892,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3237 03fe D4020000 		.4byte	.LFE9-.Ltext0
  3238 0402 0200     		.2byte	0x2
  3239 0404 91       		.byte	0x91
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 67
-
-
  3240 0405 70       		.sleb128 -16
  3241 0406 00000000 		.4byte	0x0
  3242 040a 00000000 		.4byte	0x0
  3243              	.LLST34:
  3244 040e 26020000 		.4byte	.LVL49-.Ltext0
  3245 0412 80020000 		.4byte	.LVL61-.Ltext0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 66
+
+
  3246 0416 0200     		.2byte	0x2
  3247 0418 91       		.byte	0x91
  3248 0419 08       		.sleb128 8
@@ -4018,15 +3952,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3294 0494 0100     		.2byte	0x1
  3295 0496 5D       		.byte	0x5d
  3296 0497 D6020000 		.4byte	.LCFI10-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 68
-
-
  3297 049b D8020000 		.4byte	.LCFI11-.Ltext0
  3298 049f 0200     		.2byte	0x2
  3299 04a1 7D       		.byte	0x7d
  3300 04a2 14       		.sleb128 20
  3301 04a3 D8020000 		.4byte	.LCFI11-.Ltext0
  3302 04a7 84030000 		.4byte	.LFE8-.Ltext0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 67
+
+
  3303 04ab 0200     		.2byte	0x2
  3304 04ad 7D       		.byte	0x7d
  3305 04ae 20       		.sleb128 32
@@ -4078,15 +4012,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3351 052b E6020000 		.4byte	.LVL76-.Ltext0
  3352 052f 0100     		.2byte	0x1
  3353 0531 53       		.byte	0x53
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 69
-
-
  3354 0532 F8020000 		.4byte	.LVL79-.Ltext0
  3355 0536 84030000 		.4byte	.LFE8-.Ltext0
  3356 053a 0200     		.2byte	0x2
  3357 053c 91       		.byte	0x91
  3358 053d 7C       		.sleb128 -4
  3359 053e 00000000 		.4byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 68
+
+
  3360 0542 00000000 		.4byte	0x0
  3361              	.LLST42:
  3362 0546 D6020000 		.4byte	.LVL73-.Ltext0
@@ -4138,15 +4072,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3408 05bb 55       		.byte	0x55
  3409 05bc 5E030000 		.4byte	.LVL89-.Ltext0
  3410 05c0 68030000 		.4byte	.LVL90-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 70
-
-
  3411 05c4 0100     		.2byte	0x1
  3412 05c6 55       		.byte	0x55
  3413 05c7 68030000 		.4byte	.LVL90-.Ltext0
  3414 05cb 68030000 		.4byte	.LVL90-.Ltext0
  3415 05cf 0100     		.2byte	0x1
  3416 05d1 55       		.byte	0x55
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 69
+
+
  3417 05d2 00000000 		.4byte	0x0
  3418 05d6 00000000 		.4byte	0x0
  3419              	.LLST46:
@@ -4198,15 +4132,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3465              	.LLST50:
  3466 0654 86030000 		.4byte	.LVL95-.Ltext0
  3467 0658 90030000 		.4byte	.LVL97-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 71
-
-
  3468 065c 0100     		.2byte	0x1
  3469 065e 52       		.byte	0x52
  3470 065f 9A030000 		.4byte	.LVL99-.Ltext0
  3471 0663 E0030000 		.4byte	.LVL109-.Ltext0
  3472 0667 0100     		.2byte	0x1
  3473 0669 57       		.byte	0x57
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 70
+
+
  3474 066a 00000000 		.4byte	0x0
  3475 066e 00000000 		.4byte	0x0
  3476              	.LLST51:
@@ -4258,15 +4192,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3522 06eb 5D       		.byte	0x5d
  3523 06ec EA030000 		.4byte	.LCFI14-.Ltext0
  3524 06f0 0C040000 		.4byte	.LFE6-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 72
-
-
  3525 06f4 0200     		.2byte	0x2
  3526 06f6 7D       		.byte	0x7d
  3527 06f7 08       		.sleb128 8
  3528 06f8 00000000 		.4byte	0x0
  3529 06fc 00000000 		.4byte	0x0
  3530              	.LLST56:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 71
+
+
  3531 0700 EA030000 		.4byte	.LVL110-.Ltext0
  3532 0704 EE030000 		.4byte	.LVL111-.Ltext0
  3533 0708 0100     		.2byte	0x1
@@ -4318,15 +4252,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3579 0782 0200     		.2byte	0x2
  3580 0784 7D       		.byte	0x7d
  3581 0785 04       		.sleb128 4
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 73
-
-
  3582 0786 00000000 		.4byte	0x0
  3583 078a 00000000 		.4byte	0x0
  3584              		.section	.debug_info
  3585 0000 92050000 		.4byte	0x592
  3586 0004 0200     		.2byte	0x2
  3587 0006 00000000 		.4byte	.Ldebug_abbrev0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 72
+
+
  3588 000a 04       		.byte	0x4
  3589 000b 01       		.uleb128 0x1
  3590 000c 00000000 		.4byte	.Ldebug_line0
@@ -4378,16 +4312,16 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3636 0070 03       		.uleb128 0x3
  3637 0071 B0010000 		.4byte	.LASF7
  3638 0075 04       		.byte	0x4
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 74
-
-
  3639 0076 07       		.byte	0x7
  3640 0077 06       		.uleb128 0x6
  3641 0078 A9000000 		.4byte	0xa9
  3642 007c 01       		.byte	0x1
  3643 007d 98010000 		.4byte	.LASF9
  3644 0081 01       		.byte	0x1
- 3645 0082 B7       		.byte	0xb7
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 73
+
+
+ 3645 0082 A9       		.byte	0xa9
  3646 0083 01       		.byte	0x1
  3647 0084 00000000 		.4byte	.LFB5
  3648 0088 14000000 		.4byte	.LFE5
@@ -4396,14 +4330,14 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3651 008e 07       		.uleb128 0x7
  3652 008f 626B6700 		.ascii	"bkg\000"
  3653 0093 01       		.byte	0x1
- 3654 0094 B6       		.byte	0xb6
+ 3654 0094 A9       		.byte	0xa9
  3655 0095 25000000 		.4byte	0x25
  3656 0099 01       		.byte	0x1
  3657 009a 50       		.byte	0x50
  3658 009b 08       		.uleb128 0x8
  3659 009c 27000000 		.4byte	.LASF8
  3660 00a0 01       		.byte	0x1
- 3661 00a1 B6       		.byte	0xb6
+ 3661 00a1 A9       		.byte	0xa9
  3662 00a2 25000000 		.4byte	0x25
  3663 00a6 01       		.byte	0x1
  3664 00a7 51       		.byte	0x51
@@ -4413,7 +4347,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3668 00ae 01       		.byte	0x1
  3669 00af 7A000000 		.4byte	.LASF10
  3670 00b3 01       		.byte	0x1
- 3671 00b4 0502     		.2byte	0x205
+ 3671 00b4 C601     		.2byte	0x1c6
  3672 00b6 01       		.byte	0x1
  3673 00b7 14000000 		.4byte	.LFB18
  3674 00bb 24000000 		.4byte	.LFE18
@@ -4421,7 +4355,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3676 00c3 0A       		.uleb128 0xa
  3677 00c4 A6010000 		.4byte	.LASF11
  3678 00c8 01       		.byte	0x1
- 3679 00c9 0402     		.2byte	0x204
+ 3679 00c9 C601     		.2byte	0x1c6
  3680 00cb 25000000 		.4byte	0x25
  3681 00cf 1F000000 		.4byte	.LLST2
  3682 00d3 00       		.byte	0x0
@@ -4430,7 +4364,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3685 00d9 01       		.byte	0x1
  3686 00da DC010000 		.4byte	.LASF12
  3687 00de 01       		.byte	0x1
- 3688 00df F801     		.2byte	0x1f8
+ 3688 00df BC01     		.2byte	0x1bc
  3689 00e1 01       		.byte	0x1
  3690 00e2 24000000 		.4byte	.LFB17
  3691 00e6 34000000 		.4byte	.LFE17
@@ -4438,18 +4372,18 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3693 00ee 0A       		.uleb128 0xa
  3694 00ef A6010000 		.4byte	.LASF11
  3695 00f3 01       		.byte	0x1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 75
-
-
- 3696 00f4 F701     		.2byte	0x1f7
+ 3696 00f4 BC01     		.2byte	0x1bc
  3697 00f6 25000000 		.4byte	0x25
  3698 00fa 5C000000 		.4byte	.LLST4
  3699 00fe 00       		.byte	0x0
  3700 00ff 0B       		.uleb128 0xb
  3701 0100 55010000 		.4byte	0x155
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 74
+
+
  3702 0104 62000000 		.4byte	.LASF47
  3703 0108 01       		.byte	0x1
- 3704 0109 7901     		.2byte	0x179
+ 3704 0109 5201     		.2byte	0x152
  3705 010b 01       		.byte	0x1
  3706 010c 34000000 		.4byte	.LFB12
  3707 0110 86000000 		.4byte	.LFE12
@@ -4457,25 +4391,25 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3709 0118 0C       		.uleb128 0xc
  3710 0119 787000   		.ascii	"xp\000"
  3711 011c 01       		.byte	0x1
- 3712 011d 7801     		.2byte	0x178
+ 3712 011d 5201     		.2byte	0x152
  3713 011f 25000000 		.4byte	0x25
  3714 0123 99000000 		.4byte	.LLST6
  3715 0127 0C       		.uleb128 0xc
  3716 0128 797000   		.ascii	"yp\000"
  3717 012b 01       		.byte	0x1
- 3718 012c 7801     		.2byte	0x178
+ 3718 012c 5201     		.2byte	0x152
  3719 012e 25000000 		.4byte	0x25
  3720 0132 AC000000 		.4byte	.LLST7
  3721 0136 0C       		.uleb128 0xc
  3722 0137 786500   		.ascii	"xe\000"
  3723 013a 01       		.byte	0x1
- 3724 013b 7801     		.2byte	0x178
+ 3724 013b 5201     		.2byte	0x152
  3725 013d 25000000 		.4byte	0x25
  3726 0141 CA000000 		.4byte	.LLST8
  3727 0145 0C       		.uleb128 0xc
  3728 0146 796500   		.ascii	"ye\000"
  3729 0149 01       		.byte	0x1
- 3730 014a 7801     		.2byte	0x178
+ 3730 014a 5201     		.2byte	0x152
  3731 014c 25000000 		.4byte	0x25
  3732 0150 DD000000 		.4byte	.LLST9
  3733 0154 00       		.byte	0x0
@@ -4484,7 +4418,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3736 015a 01       		.byte	0x1
  3737 015b 97000000 		.4byte	.LASF13
  3738 015f 01       		.byte	0x1
- 3739 0160 9D01     		.2byte	0x19d
+ 3739 0160 7001     		.2byte	0x170
  3740 0162 01       		.byte	0x1
  3741 0163 88000000 		.4byte	.LFB14
  3742 0167 50010000 		.4byte	.LFE14
@@ -4492,36 +4426,36 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3744 016f 0A       		.uleb128 0xa
  3745 0170 A6010000 		.4byte	.LASF11
  3746 0174 01       		.byte	0x1
- 3747 0175 9C01     		.2byte	0x19c
+ 3747 0175 7001     		.2byte	0x170
  3748 0177 25000000 		.4byte	0x25
  3749 017b 1A010000 		.4byte	.LLST11
  3750 017f 0D       		.uleb128 0xd
  3751 0180 9A000000 		.4byte	.LBB2
  3752 0184 26010000 		.4byte	.LBE2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 76
-
-
  3753 0188 0E       		.uleb128 0xe
  3754 0189 DA000000 		.4byte	.LASF14
  3755 018d 01       		.byte	0x1
- 3756 018e A301     		.2byte	0x1a3
+ 3756 018e 7501     		.2byte	0x175
  3757 0190 3E000000 		.4byte	0x3e
  3758 0194 0F       		.uleb128 0xf
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 75
+
+
  3759 0195 6900     		.ascii	"i\000"
  3760 0197 01       		.byte	0x1
- 3761 0198 A401     		.2byte	0x1a4
+ 3761 0198 7601     		.2byte	0x176
  3762 019a 25000000 		.4byte	0x25
  3763 019e 43010000 		.4byte	.LLST12
  3764 01a2 0F       		.uleb128 0xf
  3765 01a3 6A00     		.ascii	"j\000"
  3766 01a5 01       		.byte	0x1
- 3767 01a6 A401     		.2byte	0x1a4
+ 3767 01a6 7601     		.2byte	0x176
  3768 01a8 25000000 		.4byte	0x25
  3769 01ac 56010000 		.4byte	.LLST13
  3770 01b0 10       		.uleb128 0x10
  3771 01b1 35000000 		.4byte	.LASF15
  3772 01b5 01       		.byte	0x1
- 3773 01b6 A401     		.2byte	0x1a4
+ 3773 01b6 7601     		.2byte	0x176
  3774 01b8 25000000 		.4byte	0x25
  3775 01bc 69010000 		.4byte	.LLST14
  3776 01c0 00       		.byte	0x0
@@ -4529,7 +4463,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3778 01c2 11       		.uleb128 0x11
  3779 01c3 00000000 		.4byte	.LASF48
  3780 01c7 01       		.byte	0x1
- 3781 01c8 8C01     		.2byte	0x18c
+ 3781 01c8 6201     		.2byte	0x162
  3782 01ca 01       		.byte	0x1
  3783 01cb 01       		.byte	0x1
  3784 01cc 09       		.uleb128 0x9
@@ -4537,7 +4471,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3786 01d1 01       		.byte	0x1
  3787 01d2 9F000000 		.4byte	.LASF16
  3788 01d6 01       		.byte	0x1
- 3789 01d7 CF01     		.2byte	0x1cf
+ 3789 01d7 9C01     		.2byte	0x19c
  3790 01d9 01       		.byte	0x1
  3791 01da 50010000 		.4byte	.LFB15
  3792 01de B4010000 		.4byte	.LFE15
@@ -4545,7 +4479,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3794 01e6 0A       		.uleb128 0xa
  3795 01e7 A6010000 		.4byte	.LASF11
  3796 01eb 01       		.byte	0x1
- 3797 01ec CE01     		.2byte	0x1ce
+ 3797 01ec 9C01     		.2byte	0x19c
  3798 01ee 25000000 		.4byte	0x25
  3799 01f2 9B010000 		.4byte	.LLST16
  3800 01f6 12       		.uleb128 0x12
@@ -4553,25 +4487,25 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3802 01fb 5A010000 		.4byte	.LBB5
  3803 01ff 74010000 		.4byte	.LBE5
  3804 0203 01       		.byte	0x1
- 3805 0204 D101     		.2byte	0x1d1
+ 3805 0204 9E01     		.2byte	0x19e
  3806 0206 00       		.byte	0x0
  3807 0207 09       		.uleb128 0x9
  3808 0208 30020000 		.4byte	0x230
  3809 020c 01       		.byte	0x1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 77
-
-
  3810 020d 5D010000 		.4byte	.LASF17
  3811 0211 01       		.byte	0x1
- 3812 0212 EA01     		.2byte	0x1ea
+ 3812 0212 B101     		.2byte	0x1b1
  3813 0214 01       		.byte	0x1
  3814 0215 B4010000 		.4byte	.LFB16
  3815 0219 CC010000 		.4byte	.LFE16
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 76
+
+
  3816 021d C4010000 		.4byte	.LLST17
  3817 0221 0C       		.uleb128 0xc
  3818 0222 7300     		.ascii	"s\000"
  3819 0224 01       		.byte	0x1
- 3820 0225 E901     		.2byte	0x1e9
+ 3820 0225 B101     		.2byte	0x1b1
  3821 0227 30020000 		.4byte	0x230
  3822 022b E3010000 		.4byte	.LLST18
  3823 022f 00       		.byte	0x0
@@ -4587,7 +4521,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3833 0242 01       		.byte	0x1
  3834 0243 1D000000 		.4byte	.LASF19
  3835 0247 01       		.byte	0x1
- 3836 0248 6401     		.2byte	0x164
+ 3836 0248 4001     		.2byte	0x140
  3837 024a 01       		.byte	0x1
  3838 024b CC010000 		.4byte	.LFB11
  3839 024f FC010000 		.4byte	.LFE11
@@ -4595,51 +4529,51 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3841 0257 0C       		.uleb128 0xc
  3842 0258 787000   		.ascii	"xp\000"
  3843 025b 01       		.byte	0x1
- 3844 025c 6301     		.2byte	0x163
+ 3844 025c 4001     		.2byte	0x140
  3845 025e 25000000 		.4byte	0x25
  3846 0262 20020000 		.4byte	.LLST20
  3847 0266 0C       		.uleb128 0xc
  3848 0267 797000   		.ascii	"yp\000"
  3849 026a 01       		.byte	0x1
- 3850 026b 6301     		.2byte	0x163
+ 3850 026b 4001     		.2byte	0x140
  3851 026d 25000000 		.4byte	0x25
  3852 0271 3E020000 		.4byte	.LLST21
  3853 0275 0C       		.uleb128 0xc
  3854 0276 786500   		.ascii	"xe\000"
  3855 0279 01       		.byte	0x1
- 3856 027a 6301     		.2byte	0x163
+ 3856 027a 4001     		.2byte	0x140
  3857 027c 25000000 		.4byte	0x25
  3858 0280 5C020000 		.4byte	.LLST22
  3859 0284 0C       		.uleb128 0xc
  3860 0285 796500   		.ascii	"ye\000"
  3861 0288 01       		.byte	0x1
- 3862 0289 6301     		.2byte	0x163
+ 3862 0289 4001     		.2byte	0x140
  3863 028b 25000000 		.4byte	0x25
  3864 028f 7A020000 		.4byte	.LLST23
  3865 0293 00       		.byte	0x0
  3866 0294 09       		.uleb128 0x9
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 78
-
-
  3867 0295 CB020000 		.4byte	0x2cb
  3868 0299 01       		.byte	0x1
  3869 029a E9000000 		.4byte	.LASF20
  3870 029e 01       		.byte	0x1
- 3871 029f 5301     		.2byte	0x153
+ 3871 029f 3201     		.2byte	0x132
  3872 02a1 01       		.byte	0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 77
+
+
  3873 02a2 FC010000 		.4byte	.LFB10
  3874 02a6 24020000 		.4byte	.LFE10
  3875 02aa 98020000 		.4byte	.LLST24
  3876 02ae 0C       		.uleb128 0xc
  3877 02af 7800     		.ascii	"x\000"
  3878 02b1 01       		.byte	0x1
- 3879 02b2 5201     		.2byte	0x152
+ 3879 02b2 3201     		.2byte	0x132
  3880 02b4 25000000 		.4byte	0x25
  3881 02b8 B7020000 		.4byte	.LLST25
  3882 02bc 0C       		.uleb128 0xc
  3883 02bd 7900     		.ascii	"y\000"
  3884 02bf 01       		.byte	0x1
- 3885 02c0 5201     		.2byte	0x152
+ 3885 02c0 3201     		.2byte	0x132
  3886 02c2 25000000 		.4byte	0x25
  3887 02c6 D5020000 		.4byte	.LLST26
  3888 02ca 00       		.byte	0x0
@@ -4648,7 +4582,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3891 02d0 01       		.byte	0x1
  3892 02d1 15000000 		.4byte	.LASF21
  3893 02d5 01       		.byte	0x1
- 3894 02d6 2201     		.2byte	0x122
+ 3894 02d6 0A01     		.2byte	0x10a
  3895 02d8 01       		.byte	0x1
  3896 02d9 24020000 		.4byte	.LFB9
  3897 02dd D4020000 		.4byte	.LFE9
@@ -4656,58 +4590,58 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3899 02e5 0C       		.uleb128 0xc
  3900 02e6 7800     		.ascii	"x\000"
  3901 02e8 01       		.byte	0x1
- 3902 02e9 2101     		.2byte	0x121
+ 3902 02e9 0901     		.2byte	0x109
  3903 02eb 25000000 		.4byte	0x25
  3904 02ef 1E030000 		.4byte	.LLST28
  3905 02f3 0C       		.uleb128 0xc
  3906 02f4 7900     		.ascii	"y\000"
  3907 02f6 01       		.byte	0x1
- 3908 02f7 2101     		.2byte	0x121
+ 3908 02f7 0901     		.2byte	0x109
  3909 02f9 25000000 		.4byte	0x25
  3910 02fd 52030000 		.4byte	.LLST29
  3911 0301 0A       		.uleb128 0xa
  3912 0302 D7010000 		.4byte	.LASF22
  3913 0306 01       		.byte	0x1
- 3914 0307 2101     		.2byte	0x121
+ 3914 0307 0901     		.2byte	0x109
  3915 0309 25000000 		.4byte	0x25
  3916 030d 86030000 		.4byte	.LLST30
  3917 0311 0A       		.uleb128 0xa
  3918 0312 A1010000 		.4byte	.LASF23
  3919 0316 01       		.byte	0x1
- 3920 0317 2101     		.2byte	0x121
+ 3920 0317 0901     		.2byte	0x109
  3921 0319 25000000 		.4byte	0x25
  3922 031d A5030000 		.4byte	.LLST31
  3923 0321 0A       		.uleb128 0xa
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 79
-
-
  3924 0322 72010000 		.4byte	.LASF24
  3925 0326 01       		.byte	0x1
- 3926 0327 2101     		.2byte	0x121
+ 3926 0327 0901     		.2byte	0x109
  3927 0329 25000000 		.4byte	0x25
  3928 032d CE030000 		.4byte	.LLST32
  3929 0331 0A       		.uleb128 0xa
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 78
+
+
  3930 0332 CF000000 		.4byte	.LASF25
  3931 0336 01       		.byte	0x1
- 3932 0337 2101     		.2byte	0x121
+ 3932 0337 0A01     		.2byte	0x10a
  3933 0339 25000000 		.4byte	0x25
  3934 033d EE030000 		.4byte	.LLST33
  3935 0341 0A       		.uleb128 0xa
  3936 0342 41000000 		.4byte	.LASF26
  3937 0346 01       		.byte	0x1
- 3938 0347 2101     		.2byte	0x121
+ 3938 0347 0A01     		.2byte	0x10a
  3939 0349 7D030000 		.4byte	0x37d
  3940 034d 0E040000 		.4byte	.LLST34
  3941 0351 0F       		.uleb128 0xf
  3942 0352 6900     		.ascii	"i\000"
  3943 0354 01       		.byte	0x1
- 3944 0355 2301     		.2byte	0x123
+ 3944 0355 0B01     		.2byte	0x10b
  3945 0357 3E000000 		.4byte	0x3e
  3946 035b 5B040000 		.4byte	.LLST35
  3947 035f 14       		.uleb128 0x14
  3948 0360 6A00     		.ascii	"j\000"
  3949 0362 01       		.byte	0x1
- 3950 0363 2301     		.2byte	0x123
+ 3950 0363 0B01     		.2byte	0x10b
  3951 0365 3E000000 		.4byte	0x3e
  3952 0369 02       		.byte	0x2
  3953 036a 91       		.byte	0x91
@@ -4715,7 +4649,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3955 036c 0F       		.uleb128 0xf
  3956 036d 6C656E00 		.ascii	"len\000"
  3957 0371 01       		.byte	0x1
- 3958 0372 2401     		.2byte	0x124
+ 3958 0372 0C01     		.2byte	0x10c
  3959 0374 5E000000 		.4byte	0x5e
  3960 0378 79040000 		.4byte	.LLST36
  3961 037c 00       		.byte	0x0
@@ -4729,7 +4663,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3969 038d 01       		.byte	0x1
  3970 038e AA000000 		.4byte	.LASF27
  3971 0392 01       		.byte	0x1
- 3972 0393 F7       		.byte	0xf7
+ 3972 0393 E2       		.byte	0xe2
  3973 0394 01       		.byte	0x1
  3974 0395 D4020000 		.4byte	.LFB8
  3975 0399 84030000 		.4byte	.LFE8
@@ -4737,58 +4671,58 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  3977 03a1 17       		.uleb128 0x17
  3978 03a2 7800     		.ascii	"x\000"
  3979 03a4 01       		.byte	0x1
- 3980 03a5 F6       		.byte	0xf6
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 80
-
-
+ 3980 03a5 E1       		.byte	0xe1
  3981 03a6 25000000 		.4byte	0x25
  3982 03aa B7040000 		.4byte	.LLST38
  3983 03ae 17       		.uleb128 0x17
  3984 03af 7900     		.ascii	"y\000"
  3985 03b1 01       		.byte	0x1
- 3986 03b2 F6       		.byte	0xf6
+ 3986 03b2 E1       		.byte	0xe1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 79
+
+
  3987 03b3 25000000 		.4byte	0x25
  3988 03b7 E0040000 		.4byte	.LLST39
  3989 03bb 18       		.uleb128 0x18
  3990 03bc D7010000 		.4byte	.LASF22
  3991 03c0 01       		.byte	0x1
- 3992 03c1 F6       		.byte	0xf6
+ 3992 03c1 E1       		.byte	0xe1
  3993 03c2 25000000 		.4byte	0x25
  3994 03c6 09050000 		.4byte	.LLST40
  3995 03ca 18       		.uleb128 0x18
  3996 03cb A1010000 		.4byte	.LASF23
  3997 03cf 01       		.byte	0x1
- 3998 03d0 F6       		.byte	0xf6
+ 3998 03d0 E1       		.byte	0xe1
  3999 03d1 25000000 		.4byte	0x25
  4000 03d5 27050000 		.4byte	.LLST41
  4001 03d9 18       		.uleb128 0x18
  4002 03da C2010000 		.4byte	.LASF28
  4003 03de 01       		.byte	0x1
- 4004 03df F6       		.byte	0xf6
+ 4004 03df E1       		.byte	0xe1
  4005 03e0 25000000 		.4byte	0x25
  4006 03e4 46050000 		.4byte	.LLST42
  4007 03e8 18       		.uleb128 0x18
  4008 03e9 C9010000 		.4byte	.LASF29
  4009 03ed 01       		.byte	0x1
- 4010 03ee F6       		.byte	0xf6
+ 4010 03ee E1       		.byte	0xe1
  4011 03ef 25000000 		.4byte	0x25
  4012 03f3 66050000 		.4byte	.LLST43
  4013 03f7 18       		.uleb128 0x18
  4014 03f8 D0010000 		.4byte	.LASF30
  4015 03fc 01       		.byte	0x1
- 4016 03fd F6       		.byte	0xf6
+ 4016 03fd E2       		.byte	0xe2
  4017 03fe 25000000 		.4byte	0x25
  4018 0402 86050000 		.4byte	.LLST44
  4019 0406 19       		.uleb128 0x19
  4020 0407 6900     		.ascii	"i\000"
  4021 0409 01       		.byte	0x1
- 4022 040a F8       		.byte	0xf8
+ 4022 040a E3       		.byte	0xe3
  4023 040b 3E000000 		.4byte	0x3e
  4024 040f B1050000 		.4byte	.LLST45
  4025 0413 19       		.uleb128 0x19
  4026 0414 6A00     		.ascii	"j\000"
  4027 0416 01       		.byte	0x1
- 4028 0417 F8       		.byte	0xf8
+ 4028 0417 E3       		.byte	0xe3
  4029 0418 3E000000 		.4byte	0x3e
  4030 041c DA050000 		.4byte	.LLST46
  4031 0420 00       		.byte	0x0
@@ -4797,54 +4731,54 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4034 0426 01       		.byte	0x1
  4035 0427 EB010000 		.4byte	.LASF31
  4036 042b 01       		.byte	0x1
- 4037 042c DA       		.byte	0xda
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 81
-
-
+ 4037 042c C7       		.byte	0xc7
  4038 042d 01       		.byte	0x1
  4039 042e 84030000 		.4byte	.LFB7
  4040 0432 E6030000 		.4byte	.LFE7
  4041 0436 ED050000 		.4byte	.LLST47
  4042 043a 17       		.uleb128 0x17
  4043 043b 7800     		.ascii	"x\000"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 80
+
+
  4044 043d 01       		.byte	0x1
- 4045 043e D9       		.byte	0xd9
+ 4045 043e C7       		.byte	0xc7
  4046 043f 25000000 		.4byte	0x25
  4047 0443 18060000 		.4byte	.LLST48
  4048 0447 17       		.uleb128 0x17
  4049 0448 7900     		.ascii	"y\000"
  4050 044a 01       		.byte	0x1
- 4051 044b D9       		.byte	0xd9
+ 4051 044b C7       		.byte	0xc7
  4052 044c 25000000 		.4byte	0x25
  4053 0450 36060000 		.4byte	.LLST49
  4054 0454 18       		.uleb128 0x18
  4055 0455 D7010000 		.4byte	.LASF22
  4056 0459 01       		.byte	0x1
- 4057 045a D9       		.byte	0xd9
+ 4057 045a C7       		.byte	0xc7
  4058 045b 25000000 		.4byte	0x25
  4059 045f 54060000 		.4byte	.LLST50
  4060 0463 18       		.uleb128 0x18
  4061 0464 A1010000 		.4byte	.LASF23
  4062 0468 01       		.byte	0x1
- 4063 0469 D9       		.byte	0xd9
+ 4063 0469 C7       		.byte	0xc7
  4064 046a 25000000 		.4byte	0x25
  4065 046e 72060000 		.4byte	.LLST51
  4066 0472 18       		.uleb128 0x18
  4067 0473 51000000 		.4byte	.LASF32
  4068 0477 01       		.byte	0x1
- 4069 0478 D9       		.byte	0xd9
+ 4069 0478 C7       		.byte	0xc7
  4070 0479 25000000 		.4byte	0x25
  4071 047d 9B060000 		.4byte	.LLST52
  4072 0481 19       		.uleb128 0x19
  4073 0482 6900     		.ascii	"i\000"
  4074 0484 01       		.byte	0x1
- 4075 0485 DB       		.byte	0xdb
+ 4075 0485 C8       		.byte	0xc8
  4076 0486 3E000000 		.4byte	0x3e
  4077 048a BB060000 		.4byte	.LLST53
  4078 048e 19       		.uleb128 0x19
  4079 048f 6C656E00 		.ascii	"len\000"
  4080 0493 01       		.byte	0x1
- 4081 0494 DC       		.byte	0xdc
+ 4081 0494 C9       		.byte	0xc9
  4082 0495 3E000000 		.4byte	0x3e
  4083 0499 CE060000 		.4byte	.LLST54
  4084 049d 00       		.byte	0x0
@@ -4853,27 +4787,27 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4087 04a3 01       		.byte	0x1
  4088 04a4 8B000000 		.4byte	.LASF33
  4089 04a8 01       		.byte	0x1
- 4090 04a9 C5       		.byte	0xc5
+ 4090 04a9 B5       		.byte	0xb5
  4091 04aa 01       		.byte	0x1
  4092 04ab E8030000 		.4byte	.LFB6
  4093 04af 0C040000 		.4byte	.LFE6
  4094 04b3 E1060000 		.4byte	.LLST55
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 82
-
-
  4095 04b7 18       		.uleb128 0x18
  4096 04b8 AB010000 		.4byte	.LASF34
  4097 04bc 01       		.byte	0x1
- 4098 04bd C4       		.byte	0xc4
+ 4098 04bd B4       		.byte	0xb4
  4099 04be 25000000 		.4byte	0x25
  4100 04c2 00070000 		.4byte	.LLST56
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 81
+
+
  4101 04c6 00       		.byte	0x0
  4102 04c7 16       		.uleb128 0x16
  4103 04c8 EE040000 		.4byte	0x4ee
  4104 04cc 01       		.byte	0x1
  4105 04cd 01010000 		.4byte	.LASF35
  4106 04d1 01       		.byte	0x1
- 4107 04d2 85       		.byte	0x85
+ 4107 04d2 7D       		.byte	0x7d
  4108 04d3 01       		.byte	0x1
  4109 04d4 0C040000 		.4byte	.LFB3
  4110 04d8 60040000 		.4byte	.LFE3
@@ -4881,7 +4815,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4112 04e0 19       		.uleb128 0x19
  4113 04e1 6900     		.ascii	"i\000"
  4114 04e3 01       		.byte	0x1
- 4115 04e4 86       		.byte	0x86
+ 4115 04e4 7E       		.byte	0x7e
  4116 04e5 3E000000 		.4byte	0x3e
  4117 04e9 3D070000 		.4byte	.LLST58
  4118 04ed 00       		.byte	0x0
@@ -4889,7 +4823,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4120 04ef 01       		.byte	0x1
  4121 04f0 84000000 		.4byte	.LASF36
  4122 04f4 01       		.byte	0x1
- 4123 04f5 A2       		.byte	0xa2
+ 4123 04f5 97       		.byte	0x97
  4124 04f6 01       		.byte	0x1
  4125 04f7 60040000 		.4byte	.LFB4
  4126 04fb 7C040000 		.4byte	.LFE4
@@ -4898,7 +4832,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4129 0504 01       		.byte	0x1
  4130 0505 72000000 		.4byte	.LASF37
  4131 0509 01       		.byte	0x1
- 4132 050a 46       		.byte	0x46
+ 4132 050a 41       		.byte	0x41
  4133 050b 01       		.byte	0x1
  4134 050c 7C040000 		.4byte	.LFB2
  4135 0510 70050000 		.4byte	.LFE2
@@ -4906,7 +4840,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4137 0518 1B       		.uleb128 0x1b
  4138 0519 E5010000 		.4byte	.LASF38
  4139 051d 01       		.byte	0x1
- 4140 051e 30       		.byte	0x30
+ 4140 051e 2E       		.byte	0x2e
  4141 051f 25000000 		.4byte	0x25
  4142 0523 05       		.byte	0x5
  4143 0524 03       		.byte	0x3
@@ -4914,26 +4848,26 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4145 0529 1B       		.uleb128 0x1b
  4146 052a B5000000 		.4byte	.LASF39
  4147 052e 01       		.byte	0x1
- 4148 052f 31       		.byte	0x31
+ 4148 052f 2F       		.byte	0x2f
  4149 0530 25000000 		.4byte	0x25
  4150 0534 05       		.byte	0x5
  4151 0535 03       		.byte	0x3
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 83
-
-
  4152 0536 01000000 		.4byte	lcd_y
  4153 053a 1B       		.uleb128 0x1b
  4154 053b 2C000000 		.4byte	.LASF40
  4155 053f 01       		.byte	0x1
- 4156 0540 32       		.byte	0x32
+ 4156 0540 30       		.byte	0x30
  4157 0541 25000000 		.4byte	0x25
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 82
+
+
  4158 0545 05       		.byte	0x5
  4159 0546 03       		.byte	0x3
  4160 0547 02000000 		.4byte	bkgColor
  4161 054b 1B       		.uleb128 0x1b
  4162 054c 0B000000 		.4byte	.LASF41
  4163 0550 01       		.byte	0x1
- 4164 0551 33       		.byte	0x33
+ 4164 0551 31       		.byte	0x31
  4165 0552 25000000 		.4byte	0x25
  4166 0556 05       		.byte	0x5
  4167 0557 03       		.byte	0x3
@@ -4941,7 +4875,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4169 055c 1B       		.uleb128 0x1b
  4170 055d 57000000 		.4byte	.LASF42
  4171 0561 01       		.byte	0x1
- 4172 0562 34       		.byte	0x34
+ 4172 0562 32       		.byte	0x32
  4173 0563 25000000 		.4byte	0x25
  4174 0567 05       		.byte	0x5
  4175 0568 03       		.byte	0x3
@@ -4978,15 +4912,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4206 0009 25       		.uleb128 0x25
  4207 000a 0E       		.uleb128 0xe
  4208 000b 13       		.uleb128 0x13
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 84
-
-
  4209 000c 0B       		.uleb128 0xb
  4210 000d 03       		.uleb128 0x3
  4211 000e 0E       		.uleb128 0xe
  4212 000f 1B       		.uleb128 0x1b
  4213 0010 0E       		.uleb128 0xe
  4214 0011 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 83
+
+
  4215 0012 00       		.byte	0x0
  4216 0013 02       		.uleb128 0x2
  4217 0014 16       		.uleb128 0x16
@@ -5038,15 +4972,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4263 0042 00       		.byte	0x0
  4264 0043 06       		.uleb128 0x6
  4265 0044 2E       		.uleb128 0x2e
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 85
-
-
  4266 0045 01       		.byte	0x1
  4267 0046 01       		.uleb128 0x1
  4268 0047 13       		.uleb128 0x13
  4269 0048 3F       		.uleb128 0x3f
  4270 0049 0C       		.uleb128 0xc
  4271 004a 03       		.uleb128 0x3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 84
+
+
  4272 004b 0E       		.uleb128 0xe
  4273 004c 3A       		.uleb128 0x3a
  4274 004d 0B       		.uleb128 0xb
@@ -5098,15 +5032,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4320 007b 01       		.uleb128 0x1
  4321 007c 13       		.uleb128 0x13
  4322 007d 3F       		.uleb128 0x3f
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 86
-
-
  4323 007e 0C       		.uleb128 0xc
  4324 007f 03       		.uleb128 0x3
  4325 0080 0E       		.uleb128 0xe
  4326 0081 3A       		.uleb128 0x3a
  4327 0082 0B       		.uleb128 0xb
  4328 0083 3B       		.uleb128 0x3b
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 85
+
+
  4329 0084 05       		.uleb128 0x5
  4330 0085 27       		.uleb128 0x27
  4331 0086 0C       		.uleb128 0xc
@@ -5158,15 +5092,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4377 00b4 05       		.uleb128 0x5
  4378 00b5 00       		.byte	0x0
  4379 00b6 03       		.uleb128 0x3
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 87
-
-
  4380 00b7 08       		.uleb128 0x8
  4381 00b8 3A       		.uleb128 0x3a
  4382 00b9 0B       		.uleb128 0xb
  4383 00ba 3B       		.uleb128 0x3b
  4384 00bb 05       		.uleb128 0x5
  4385 00bc 49       		.uleb128 0x49
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 86
+
+
  4386 00bd 13       		.uleb128 0x13
  4387 00be 02       		.uleb128 0x2
  4388 00bf 06       		.uleb128 0x6
@@ -5218,15 +5152,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4434 00ed 0B       		.uleb128 0xb
  4435 00ee 3B       		.uleb128 0x3b
  4436 00ef 05       		.uleb128 0x5
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 88
-
-
  4437 00f0 49       		.uleb128 0x49
  4438 00f1 13       		.uleb128 0x13
  4439 00f2 02       		.uleb128 0x2
  4440 00f3 06       		.uleb128 0x6
  4441 00f4 00       		.byte	0x0
  4442 00f5 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 87
+
+
  4443 00f6 11       		.uleb128 0x11
  4444 00f7 2E       		.uleb128 0x2e
  4445 00f8 00       		.byte	0x0
@@ -5278,15 +5212,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4491 0126 49       		.uleb128 0x49
  4492 0127 13       		.uleb128 0x13
  4493 0128 02       		.uleb128 0x2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 89
-
-
  4494 0129 0A       		.uleb128 0xa
  4495 012a 00       		.byte	0x0
  4496 012b 00       		.byte	0x0
  4497 012c 15       		.uleb128 0x15
  4498 012d 26       		.uleb128 0x26
  4499 012e 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 88
+
+
  4500 012f 49       		.uleb128 0x49
  4501 0130 13       		.uleb128 0x13
  4502 0131 00       		.byte	0x0
@@ -5338,15 +5272,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4548 015f 0B       		.uleb128 0xb
  4549 0160 3B       		.uleb128 0x3b
  4550 0161 0B       		.uleb128 0xb
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 90
-
-
  4551 0162 49       		.uleb128 0x49
  4552 0163 13       		.uleb128 0x13
  4553 0164 02       		.uleb128 0x2
  4554 0165 06       		.uleb128 0x6
  4555 0166 00       		.byte	0x0
  4556 0167 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 89
+
+
  4557 0168 19       		.uleb128 0x19
  4558 0169 34       		.uleb128 0x34
  4559 016a 00       		.byte	0x0
@@ -5398,15 +5332,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4605 0198 0A       		.uleb128 0xa
  4606 0199 00       		.byte	0x0
  4607 019a 00       		.byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 91
-
-
  4608 019b 1C       		.uleb128 0x1c
  4609 019c 01       		.uleb128 0x1
  4610 019d 01       		.byte	0x1
  4611 019e 01       		.uleb128 0x1
  4612 019f 13       		.uleb128 0x13
  4613 01a0 49       		.uleb128 0x49
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 90
+
+
  4614 01a1 13       		.uleb128 0x13
  4615 01a2 00       		.byte	0x0
  4616 01a3 00       		.byte	0x0
@@ -5458,15 +5392,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4656 003a 6C636444 		.ascii	"lcdData\000"
  4656      61746100 
  4657 0042 CC010000 		.4byte	0x1cc
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 92
-
-
  4658 0046 6C636450 		.ascii	"lcdPutchar\000"
  4658      75746368 
  4658      617200
  4659 0051 07020000 		.4byte	0x207
  4660 0055 6C636450 		.ascii	"lcdPuts\000"
  4660      75747300 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 91
+
+
  4661 005d 3D020000 		.4byte	0x23d
  4662 0061 6C636457 		.ascii	"lcdWindow\000"
  4662      696E646F 
@@ -5518,15 +5452,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4694              		.section	.debug_str,"MS",%progbits,1
  4695              	.LASF48:
  4696 0000 6C63644E 		.ascii	"lcdNewline\000"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 93
-
-
  4696      65776C69 
  4696      6E6500
  4697              	.LASF41:
  4698 000b 74657874 		.ascii	"textColor\000"
  4698      436F6C6F 
  4698      7200
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 92
+
+
  4699              	.LASF21:
  4700 0015 6C636449 		.ascii	"lcdIcon\000"
  4700      636F6E00 
@@ -5578,15 +5512,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4726      666600
  4727              	.LASF33:
  4728 008b 6C636443 		.ascii	"lcdContrast\000"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 94
-
-
  4728      6F6E7472 
  4728      61737400 
  4729              	.LASF13:
  4730 0097 6C636444 		.ascii	"lcdData\000"
  4730      61746100 
  4731              	.LASF16:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 93
+
+
  4732 009f 6C636450 		.ascii	"lcdPutchar\000"
  4732      75746368 
  4732      617200
@@ -5638,15 +5572,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4757              	.LASF46:
  4758 011d 2F637967 		.ascii	"/cygdrive/g/servers/github/SysWbud/2148/testProgram"
  4758      64726976 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 95
-
-
  4758      652F672F 
  4758      73657276 
  4758      6572732F 
  4759 0150 5F6C7063 		.ascii	"_lpc2148_edu\000"
  4759      32313438 
  4759      5F656475 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 94
+
+
  4759      00
  4760              	.LASF17:
  4761 015d 6C636450 		.ascii	"lcdPuts\000"
@@ -5698,15 +5632,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4784              	.LASF30:
  4785 01d0 636F6C6F 		.ascii	"color3\000"
  4785      723300
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 96
-
-
  4786              	.LASF22:
  4787 01d7 784C656E 		.ascii	"xLen\000"
  4787      00
  4788              	.LASF12:
  4789 01dc 6C636457 		.ascii	"lcdWrcmd\000"
  4789      72636D64 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 95
+
+
  4789      00
  4790              	.LASF38:
  4791 01e5 6C63645F 		.ascii	"lcd_x\000"
@@ -5715,45 +5649,45 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 1
  4793 01eb 6C636452 		.ascii	"lcdRect\000"
  4793      65637400 
  4794              		.ident	"GCC: (GNU) 4.1.1"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s 			page 97
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s 			page 96
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 lcd.c
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:1      .text:00000000 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:16     .text:00000000 lcdColor
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:36     .text:0000000c $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:2542   .bss:00000002 bkgColor
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:2544   .bss:00000003 textColor
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:45     .text:00000014 lcdWrdata
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:42     .text:00000014 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:70     .text:00000024 lcdWrcmd
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:94     .text:00000034 lcdWindow1
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:170    .text:00000088 lcdData
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:296    .text:0000013c $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:2538   .bss:00000000 lcd_x
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:2540   .bss:00000001 lcd_y
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:1164   .rodata:00000000 charMap
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:308    .text:00000150 lcdPutchar
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:305    .text:00000150 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:385    .text:000001a4 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:2546   .bss:00000004 setcolmark
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:396    .text:000001b4 lcdPuts
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:393    .text:000001b4 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:429    .text:000001cc lcdWindow
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:476    .text:000001fc lcdGotoxy
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:513    .text:0000021c $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:522    .text:00000224 lcdIcon
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:519    .text:00000224 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:674    .text:000002d4 lcdRectBrd
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:818    .text:00000384 lcdRect
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:903    .text:000003e8 lcdContrast
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:940    .text:0000040c lcdClrscr
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:990    .text:00000450 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:1001   .text:00000460 lcdOff
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:998    .text:00000460 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:1028   .text:0000047c lcdInit
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBcJfLp.s:1156   .text:00000568 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:16     .text:00000000 lcdColor
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:36     .text:0000000c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:2542   .bss:00000002 bkgColor
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:2544   .bss:00000003 textColor
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:45     .text:00000014 lcdWrdata
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:42     .text:00000014 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:70     .text:00000024 lcdWrcmd
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:94     .text:00000034 lcdWindow1
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:170    .text:00000088 lcdData
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:296    .text:0000013c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:2538   .bss:00000000 lcd_x
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:2540   .bss:00000001 lcd_y
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:1164   .rodata:00000000 charMap
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:308    .text:00000150 lcdPutchar
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:305    .text:00000150 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:385    .text:000001a4 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:2546   .bss:00000004 setcolmark
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:396    .text:000001b4 lcdPuts
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:393    .text:000001b4 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:429    .text:000001cc lcdWindow
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:476    .text:000001fc lcdGotoxy
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:513    .text:0000021c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:522    .text:00000224 lcdIcon
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:519    .text:00000224 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:674    .text:000002d4 lcdRectBrd
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:818    .text:00000384 lcdRect
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:903    .text:000003e8 lcdContrast
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:940    .text:0000040c lcdClrscr
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:990    .text:00000450 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:1001   .text:00000460 lcdOff
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:998    .text:00000460 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:1028   .text:0000047c lcdInit
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc7qAlwc.s:1156   .text:00000568 $d
                              .bss:00000000 $d
 
 UNDEFINED SYMBOLS

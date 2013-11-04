@@ -18,14 +18,10 @@
 #define LCD_RS        0x01000000  //P1.24
 #define LCD_BACKLIGHT 0x40000000  //P0.30
 
-/*****************************************************************************
- *
- * Description:
- *    xxx
- *
- ****************************************************************************/
-static void
-initLCD(void)
+/*
+ * TODO: Spisaæ klika s³ów o inicjalizacji.
+ */
+static void initLCD (void)
 {
 	IODIR1 |= (LCD_DATA | LCD_E | LCD_RS);
 	IOCLR1  = (LCD_DATA | LCD_E | LCD_RS);
@@ -33,214 +29,154 @@ initLCD(void)
 	IODIR0 |= LCD_RW;
 	IOCLR0  = LCD_RW;
 	
-  IODIR0 |= LCD_BACKLIGHT;
-  IOCLR0  = LCD_BACKLIGHT;
+	IODIR0 |= LCD_BACKLIGHT;
+	IOCLR0  = LCD_BACKLIGHT;
 }
 
-/*****************************************************************************
- *
- * Description:
- *    xxx
- *
- ****************************************************************************/
-static void
-delay37us(void)
+/*
+ * Wywo³anie przerwania opóŸniaj¹cego na oko³o 37 mikrosekund.
+ * nop - No Operation
+ */
+static void delay37us (void)
 {
 	volatile tU32 i;
 
-//Temp test for 140 uS delay
-	for(i=0; i<6*2500; i++)
-    asm volatile (" nop"); //delay 15 ns x 2500 = about 37 us delay
+	for (i = 0; i < 15*2500; ++i)
+	{
+		asm volatile (" nop"); //delay 15 ns x 2500 = about 37,5 us delay
+	}
 }
 
-/*****************************************************************************
- *
- * Description:
- *    xxx
- *
- ****************************************************************************/
-static void
-writeLCD(tU8 reg, tU8 data)
+/*
+ * W³¹cza (TRUE) lub wy³¹cza (FALSE) podœwielenie ekranu.
+ */
+static void PodswietlEkran (tU8 onOff)
+{
+	if (onOff == TRUE)
+	{
+		IOSET0 = LCD_BACKLIGHT;
+	}
+	else
+	{
+		IOCLR0 = LCD_BACKLIGHT;
+	}
+}
+
+/*
+ * TODO: Spisaæ kilka s³ów o wypisywaniu na ekran.
+ */
+static void WypiszZnakNaEkran(tU8 reg, tU8 data)
 {
 	volatile tU8 i;
 
 	if (reg == 0)
-	  IOCLR1 = LCD_RS;
+	{
+		IOCLR1 = LCD_RS;
+	}
 	else
-	  IOSET1 = LCD_RS;
-	  
+	{
+		IOSET1 = LCD_RS;
+	}
+
 	IOCLR0 = LCD_RW;
 	IOCLR1 = LCD_DATA;
 	IOSET1 = ((tU32)data << 16) & LCD_DATA;
-//printf("\nwrite: %x", data);
-	
 	IOSET1 = LCD_E;
-//	osSleep(1);
-	// NOP - No Operation
-	for(i=0; i<16; i++)
-		asm volatile (" nop"); //delay 15 ns x 16 = about 250 ns delay
 
+	for(i = 0; i < 16; ++i)
+	{
+		asm volatile (" nop"); //delay 15 ns x 16 = about 250 ns delay
+	}
 	IOCLR1 = LCD_E;
-//	osSleep(1);
 
-	for(i=0; i<16; i++)
+	for(i = 0; i < 16; ++i)
+	{
 		asm volatile (" nop"); //delay 15 ns x 16 = about 250 ns delay
+	}
 }
 
-/*****************************************************************************
- *
- * Description:
- *    xxx
- *
- ****************************************************************************/
-static void
-lcdBacklight(tU8 onOff)
+/*
+ * Wypisuje ci¹g znaków w linii na ekranie.
+ */
+void WypiszCiag (tU8* tekst)
 {
-	if (onOff == TRUE)
-	  IOSET0 = LCD_BACKLIGHT;
-	else
-	  IOCLR0 = LCD_BACKLIGHT;
+	while (*tekst != '\0')
+	{
+		WypiszZnakNaEkran(1, *tekst);
+		delay37us();
+
+		tekst++;
+	}
 }
 
-/*****************************************************************************
- *
- * Description:
- *    A process entry function 
- *
- ****************************************************************************/
-void
-testLcd(void)
+/*
+ * Wyœwietlenie na ekranie LCD napisów.
+ */
+void WyswietlTekstNaLcd(void)
 {
-  initLCD();
-	lcdBacklight(FALSE);
-  osSleep(10);
-  
-  for(;;)
-  {
- 		lcdBacklight(TRUE);
-    osSleep(50);
+	initLCD();
+	PodswietlEkran(FALSE);
+	osSleep(10);
 
-    //function set
-    writeLCD(0, 0x30);
-    osSleep(1);
-    writeLCD(0, 0x30);
-    delay37us();
-    writeLCD(0, 0x30);
-    delay37us();
+	while (1)
+	{
+		PodswietlEkran(TRUE);
+		osSleep(50);
 
-    //function set
-    writeLCD(0, 0x38);
-    delay37us();
+		//TODO: Dowiedzieæ siê co to za znaki (a¿ do funkcji WypiszCiag) i co siê dzieje bez ich udzia³u.
+		//function set
+		WypiszZnakNaEkran(0, 0x30);
+		osSleep(1);
+		WypiszZnakNaEkran(0, 0x30);
+		delay37us();
+		WypiszZnakNaEkran(0, 0x30);
+		delay37us();
+		WypiszZnakNaEkran(0, 0x38);
+		delay37us();
 
-    //display off
-    writeLCD(0, 0x08);
-    delay37us();
+		//display off
+		WypiszZnakNaEkran(0, 0x08);
+		delay37us();
 
-    //display clear
-    writeLCD(0, 0x01);
-    osSleep(1); //actually only 1.52 mS needed
-      
-    //display control set
-    writeLCD(0, 0x06);
-    osSleep(1);
+		//display clear
+		WypiszZnakNaEkran(0, 0x01);
+		osSleep(1); //actually only 1.52 mS needed
 
-    //display control set
-    writeLCD(0, 0x0c);
-    delay37us();
+		//display control set
+		WypiszZnakNaEkran(0, 0x06);
+		osSleep(1);
 
-    //cursor home
-    writeLCD(0, 0x02);
-osSleep(1);
+		//display control set
+		WypiszZnakNaEkran(0, 0x0c);
+		delay37us();
 
-    writeLCD(1, 'A');
-    delay37us();
-    writeLCD(1, 'A');
-    delay37us();
-    writeLCD(1, 'A');
-    delay37us();
-    writeLCD(1, 'e');
-    delay37us();
-    writeLCD(1, 'd');
-    delay37us();
-    writeLCD(1, 'd');
-    delay37us();
-    writeLCD(1, 'e');
-    delay37us();
-    writeLCD(1, 'd');
-    delay37us();
-    writeLCD(1, ' ');
-    delay37us();
-    writeLCD(1, 'A');
-    delay37us();
-    writeLCD(1, 'r');
-    delay37us();
-    writeLCD(1, 't');
-    delay37us();
-    writeLCD(1, 'i');
-    delay37us();
-    writeLCD(1, 's');
-    delay37us();
-    writeLCD(1, 't');
-    delay37us();
-    writeLCD(1, 's');
-    delay37us();
+		//cursor home
+		WypiszZnakNaEkran(0, 0x02);
+		osSleep(1);
 
-    //move curstor to second row
-    writeLCD(0, 0x80 | 0x40);
-    delay37us();
+		WypiszCiag ("M. Kolodziejczyk");
 
-    osSleep(20);
-    writeLCD(1, 'L');
-    osSleep(20);
-    writeLCD(1, 'P');
-    osSleep(20);
-    writeLCD(1, 'C');
-    osSleep(20);
-    writeLCD(1, '2');
-    osSleep(20);
-    writeLCD(1, '1');
-    osSleep(20);
-    writeLCD(1, '4');
-    osSleep(20);
-    writeLCD(1, '8');
-    osSleep(20);
-    writeLCD(1, ' ');
-    osSleep(20);
-    writeLCD(1, 'E');
-    osSleep(20);
-    writeLCD(1, 'd');
-    osSleep(20);
-    writeLCD(1, 'u');
-    osSleep(20);
-    writeLCD(1, 'B');
-    osSleep(20);
-    writeLCD(1, 'o');
-    osSleep(20);
-    writeLCD(1, 'a');
-    osSleep(20);
-    writeLCD(1, 'r');
-    osSleep(20);
-    writeLCD(1, 'd');
-    osSleep(50);
+		//move curstor to second row
+		WypiszZnakNaEkran(0, 0x80 | 0x40);
+		delay37us();
 
-		lcdBacklight(FALSE);
-    osSleep(50);
-		lcdBacklight(TRUE);
-    osSleep(50);
-		lcdBacklight(FALSE);
-    osSleep(50);
-		lcdBacklight(TRUE);
-    osSleep(50);
-		lcdBacklight(FALSE);
-    osSleep(50);
-		lcdBacklight(TRUE);
-    osSleep(50);
-		lcdBacklight(FALSE);
-    osSleep(50);
+		WypiszCiag ("P. Zielinski");
 
-    //display clear
-    writeLCD(0, 0x01);
-    osSleep(1); //actually only 1.52 mS needed
-  }
-	lcdBacklight(FALSE);
+		//OpóŸnienie przed znikniêciem.
+		osSleep(500);
+		//Wy³¹czenie podœwietlenia monitora przed wyczyszczeniem.
+		PodswietlEkran(FALSE);
+		osSleep(50);
+
+		//TODO: Dowiedzieæ siê jak ten znak czyœci ekran.
+		//display clear
+		WypiszZnakNaEkran(0, 0x01);
+		osSleep(1); //actually only 1.52 mS needed
+
+		//W³¹czenie podœwietlenia monitora po wyczyszczeniu.
+		PodswietlEkran(TRUE);
+		osSleep(50);
+	}
+
+	PodswietlEkran(FALSE);
 }

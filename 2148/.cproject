@@ -21,15 +21,15 @@
 <targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.Cygwin_PE" id="cdt.managedbuild.target.gnu.platform.cygwin.base.275182064" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.cygwin.base"/>
 <builder buildPath="${workspace_loc:/2148/testProgram_lpc2148_edu}" id="cdt.managedbuild.target.gnu.builder.cygwin.base.1343819221" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.cygwin.base"/>
 <tool id="cdt.managedbuild.tool.gnu.assembler.cygwin.base.1697720918" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.base">
-<inputType id="cdt.managedbuild.tool.gnu.assembler.input.494704151" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1608165338" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.archiver.cygwin.base.1545584929" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.cygwin.base"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.base.2115880255" name="Cygwin C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.base"/>
 <tool id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.base.1567034771" name="Cygwin C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.base">
-<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.cygwin.333074263" superClass="cdt.managedbuild.tool.gnu.c.compiler.input.cygwin"/>
+<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.cygwin.707698444" superClass="cdt.managedbuild.tool.gnu.c.compiler.input.cygwin"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.cygwin.base.1014609608" name="Cygwin C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.cygwin.base">
-<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1651264644" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
+<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.950802397" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>
 </inputType>
@@ -124,6 +124,8 @@
 </storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 <storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">

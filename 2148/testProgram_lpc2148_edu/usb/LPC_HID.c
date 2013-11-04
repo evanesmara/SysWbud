@@ -503,8 +503,7 @@ USB_CTRL = (USB_CTRL & 0x02) | 0x01;
   case USB_SET_FEATURE_INTERFACE:
   case USB_CLEAR_FEATURE_INTERFACE:
   case USB_HID_SET_IDLE:
-//printf("\nUSB xxx\n");
-    HID_SendZeroLengthByCtrlEP();
+	  HID_SendZeroLengthByCtrlEP();
     break;
   case USB_GET_HID_DESCRIPTOR:
 //printf("\nUSB get hid descriptor\n");

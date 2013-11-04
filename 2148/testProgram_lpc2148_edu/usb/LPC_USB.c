@@ -251,7 +251,7 @@ PCONP |= 0x80000000;                      /* Turn On USB PCLK */
   // Enable USB inerrupt
 //EA  USBINTS_bit.EN_USB_INTS = 1;
   USB_INTS = 0x80000000;
-//EA TODO
+//EA
 
   return (USB_OK);
 }
