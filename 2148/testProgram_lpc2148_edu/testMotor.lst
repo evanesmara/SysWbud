@@ -1,4 +1,4 @@
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 1
 
 
    1              		.code	16
@@ -58,7 +58,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 1
   23 0002 1E4A     		ldr	r2, .L15
   24 0004 1E49     		ldr	r1, .L15+4
   25 0006 1368     		ldr	r3, [r2]
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 2
 
 
   26 0008 0B43     		orr	r3, r3, r1
@@ -118,7 +118,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 1
   44:testMotor.c   ****     //update to new step (backwards)
   45:testMotor.c   ****     if (stepmotorIndex == 0)
   65              		.loc 1 45 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 3
 
 
   66 0040 114A     		ldr	r2, .L15+12
@@ -178,7 +178,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 1
  109              	.L15:
  110 007c 088002E0 		.word	-536707064
  111 0080 00102000 		.word	2101248
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 4
 
 
  112 0084 0C8002E0 		.word	-536707060
@@ -238,7 +238,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 1
  166              	.LLST0:
  167 0000 00000000 		.4byte	.LFB2-.Ltext0
  168 0004 02000000 		.4byte	.LCFI0-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 5
 
 
  169 0008 0100     		.2byte	0x1
@@ -298,7 +298,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 1
  223 0056 06       		.byte	0x6
  224 0057 03       		.uleb128 0x3
  225 0058 BB000000 		.4byte	.LASF5
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 6
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 6
 
 
  226 005c 02       		.byte	0x2
@@ -358,7 +358,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 1
  280 0000 01       		.uleb128 0x1
  281 0001 11       		.uleb128 0x11
  282 0002 01       		.byte	0x1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 7
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 7
 
 
  283 0003 10       		.uleb128 0x10
@@ -418,7 +418,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 1
  337 0039 24       		.uleb128 0x24
  338 003a 00       		.byte	0x0
  339 003b 03       		.uleb128 0x3
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 8
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 8
 
 
  340 003c 08       		.uleb128 0x8
@@ -478,7 +478,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 1
  394 0072 49       		.uleb128 0x49
  395 0073 13       		.uleb128 0x13
  396 0074 02       		.uleb128 0x2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 9
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 9
 
 
  397 0075 0A       		.uleb128 0xa
@@ -538,7 +538,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 1
  448      64726976 
  448      652F672F 
  448      73657276 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 10
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 10
 
 
  448      6572732F 
@@ -598,24 +598,24 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 1
  471      4D6F746F 
  471      7200
  472              	.LASF4:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 11
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 11
 
 
  473 00cf 7369676E 		.ascii	"signed char\000"
  473      65642063 
  473      68617200 
  474              		.ident	"GCC: (GNU) 4.1.1"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s 			page 12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s 			page 12
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 testMotor.c
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s:1      .text:00000000 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s:16     .text:00000000 testMotor
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s:110    .text:0000007c $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s:119    .bss:00000000 stepmotorIndex.1401
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s:125    .rodata:00000000 stepmotorSteps.1400
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cce9X7ah.s:126    .rodata:00000000 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s:16     .text:00000000 testMotor
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s:110    .text:0000007c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s:119    .bss:00000000 stepmotorIndex.1401
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s:125    .rodata:00000000 stepmotorSteps.1400
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccfB9MUF.s:126    .rodata:00000000 $d
 
 UNDEFINED SYMBOLS
 osSleep
