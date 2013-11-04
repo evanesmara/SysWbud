@@ -72,7 +72,7 @@ void testAdc(void);
 tU8  testXBee(void);
 
 tU8 xbeePresent;
-volatile tU32 msClock = 0;
+extern volatile tU32 msClock = 0;
 extern char startupSound[];
 
 static tU8 contrast = 46;
@@ -182,6 +182,7 @@ proc1(void* arg)
     HID_Init();
 
 
+
     //
     //Test XBee module (if present)
     //
@@ -232,6 +233,7 @@ proc1(void* arg)
     //osStartProcess(pid2, &error);
     osCreateProcess(proc3, proc3Stack, PROC3_STACK_SIZE, &pid3, 3, NULL, &error);
     osStartProcess(pid3, &error);
+    //i2cInit();  //initialize I2C - przyciski od diod
     osCreateProcess(proc66, proc66Stack, PROC66_STACK_SIZE, &pid66, 3, NULL, &error);
     osStartProcess(pid66, &error);
     //osCreateProcess(proc4, proc4Stack, PROC4_STACK_SIZE, &pid4, 3, NULL, &error);
@@ -309,7 +311,7 @@ proc3(void* arg)
 static void
 proc66(void* arg)
 {
-  static tU8 i = 0;
+  //static tU8 i = 0;
 
   printf("\n\n\n\n\n*******************************************************\n");
   printf("*                                                     *\n");
@@ -328,47 +330,47 @@ proc66(void* arg)
   initKeyProc();
   drawMenu();
   lcdContrast(contrast);
-  while(1)
-  {
-    tU8 anyKey;
-
-    anyKey = checkKey();
-    if (anyKey != KEY_NOTHING)
-    {
-      //select specific function
-      if (anyKey == KEY_CENTER)
-      {
-        playSnake();
-        drawMenu();
-      }
-
-      //adjust contrast
-      else if (anyKey == KEY_RIGHT)
-      {
-        contrast++;
-        if (contrast > 127)
-          contrast = 127;
-        lcdContrast(contrast);
-      }
-      else if (anyKey == KEY_LEFT)
-      {
-        if (contrast > 0)
-          contrast--;
-        lcdContrast(contrast);
-      }
-    }
-
-    switch(i)
-    {
-      case 0: lcdIcon(15, 88, 100, 40, _fire_0_100x40c[2], _fire_0_100x40c[3], &_fire_0_100x40c[4]); i++; break;
-      case 1: lcdIcon(15, 88, 100, 40, _fire_1_100x40c[2], _fire_1_100x40c[3], &_fire_1_100x40c[4]); i++; break;
-      case 2: lcdIcon(15, 88, 100, 40, _fire_2_100x40c[2], _fire_2_100x40c[3], &_fire_2_100x40c[4]); i++; break;
-      case 3: lcdIcon(15, 88, 100, 40, _fire_3_100x40c[2], _fire_3_100x40c[3], &_fire_3_100x40c[4]); i++; break;
-      case 4: lcdIcon(15, 88, 100, 40, _fire_4_100x40c[2], _fire_4_100x40c[3], &_fire_4_100x40c[4]); i=0; break;
-      default: i = 0; break;
-    }
-    osSleep(20);
-  }
+//  while(1)
+//  {
+//    tU8 anyKey;
+//
+//    anyKey = checkKey();
+//    if (anyKey != KEY_NOTHING)
+//    {
+//      //select specific function
+//      if (anyKey == KEY_CENTER)
+//      {
+//        //playSnake();
+//        drawMenu();
+//      }
+//
+//      //adjust contrast
+//      else if (anyKey == KEY_RIGHT)
+//      {
+//        contrast++;
+//        if (contrast > 127)
+//          contrast = 127;
+//        lcdContrast(contrast);
+//      }
+//      else if (anyKey == KEY_LEFT)
+//      {
+//        if (contrast > 0)
+//          contrast--;
+//        lcdContrast(contrast);
+//      }
+//    }
+//
+//    switch(i)
+//    {
+//      case 0: lcdIcon(15, 88, 100, 40, _fire_0_100x40c[2], _fire_0_100x40c[3], &_fire_0_100x40c[4]); i++; break;
+//      case 1: lcdIcon(15, 88, 100, 40, _fire_1_100x40c[2], _fire_1_100x40c[3], &_fire_1_100x40c[4]); i++; break;
+//      case 2: lcdIcon(15, 88, 100, 40, _fire_2_100x40c[2], _fire_2_100x40c[3], &_fire_2_100x40c[4]); i++; break;
+//      case 3: lcdIcon(15, 88, 100, 40, _fire_3_100x40c[2], _fire_3_100x40c[3], &_fire_3_100x40c[4]); i++; break;
+//      case 4: lcdIcon(15, 88, 100, 40, _fire_4_100x40c[2], _fire_4_100x40c[3], &_fire_4_100x40c[4]); i=0; break;
+//      default: i = 0; break;
+//    }
+//    osSleep(20);
+//  }
 }
 
 /*****************************************************************************
