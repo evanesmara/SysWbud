@@ -53,7 +53,6 @@
  *
  *****************************************************************************/
 
-
 /******************************************************************************
  * Includes
  *****************************************************************************/
@@ -69,18 +68,16 @@
 
 #include "stack_usage.h"
 
-
-
 /******************************************************************************
  * Public variables
  *****************************************************************************/
 
-tOSPCB *pRunProc = NULL;        /* currently running process */
-tOSPCB *pNxtToRun = NULL;       /* next process to run during context switch */
-tU8 isrNesting = 0;             /* increased for every ISR enter and
-                                   decreased for every ISR leave */
-tU8 osLockNesting = 0;          /* This variable is used to lock the
-                                   scheduler */
+tOSPCB *pRunProc = NULL; /* currently running process */
+tOSPCB *pNxtToRun = NULL; /* next process to run during context switch */
+tU8 isrNesting = 0; /* increased for every ISR enter and
+ decreased for every ISR leave */
+tU8 osLockNesting = 0; /* This variable is used to lock the
+ scheduler */
 tOSPCB processControlBlocks[MAX_NUM_PROC];
 
 /******************************************************************************
@@ -91,7 +88,6 @@ static tPrioQueue rdyQueue;
 static tOSPCB *pTimeList = NULL;
 static tBool osRunning = FALSE;
 
-
 /******************************************************************************
  * Local functions
  *****************************************************************************/
@@ -99,7 +95,6 @@ static tBool osRunning = FALSE;
 /******************************************************************************
  * Implementation of public functions
  *****************************************************************************/
-
 
 /*****************************************************************************
  *
@@ -119,28 +114,26 @@ static tBool osRunning = FALSE;
  *                   routine. 
  *
  ****************************************************************************/
-tU8
-osPid(tU8* pError)
+tU8 osPid (tU8* pError)
 {
-  volatile tSR localSR;  /* declare temporary local space for status word */
+	volatile tSR localSR; /* declare temporary local space for status word */
 
-  tU8 pid;
-  m_os_dis_int();
+	tU8 pid;
+	m_os_dis_int();
 
-  *pError = OS_OK;
-  if(isrNesting > 0)
-  {
-    m_os_ena_int();
-    *pError = OS_ERROR_ISR;
+	*pError = OS_OK;
+	if (isrNesting > 0)
+	{
+		m_os_ena_int();
+		*pError = OS_ERROR_ISR;
 
-    return 0;
-  }
+		return 0;
+	}
 
-  pid = pRunProc->pid;  
-  m_os_ena_int();
-  return pid;
+	pid = pRunProc->pid;
+	m_os_ena_int();
+	return pid;
 }
-
 
 /*
  * Usypia proces na okreœlony czas.
@@ -148,19 +141,18 @@ osPid(tU8* pError)
  */
 void osSleep (tU32 iloscMiliSekund)
 {
-  volatile tSR localSR;  /* declare temporary local space for status word */
+	volatile tSR localSR; /* declare temporary local space for status word */
 
-  if (iloscMiliSekund > 0)
-  {
-    m_os_dis_int();
-    pRunProc->sleep = iloscMiliSekund;
-    rmvFromRdyList();
-    addToTimeList();
-    m_os_ena_int();
-    schedule();
-  }
+	if (iloscMiliSekund > 0)
+	{
+		m_os_dis_int();
+		pRunProc->sleep = iloscMiliSekund;
+		rmvFromRdyList ();
+		addToTimeList ();
+		m_os_ena_int();
+		schedule ();
+	}
 }
-
 
 /*****************************************************************************
  *
@@ -169,17 +161,15 @@ void osSleep (tU32 iloscMiliSekund)
  *    system. 
  *
  ****************************************************************************/
-void
-osInit(void)
+void osInit (void)
 {
-  tU16 i;
-  for(i=0; i<MAX_NUM_PROC; i++)
-  {
-     processControlBlocks[i].flag = 0;
-  }
-  initPrioQueue(&rdyQueue, processControlBlocks);
+	tU16 i;
+	for (i = 0; i < MAX_NUM_PROC; i++)
+	{
+		processControlBlocks[i].flag = 0;
+	}
+	initPrioQueue (&rdyQueue, processControlBlocks);
 }
-
 
 /*****************************************************************************
  *
@@ -198,19 +188,16 @@ osInit(void)
  *    semaphores, queues, etc. 
  *
  ****************************************************************************/
-void
-osStart(void)
+void osStart (void)
 {
-  volatile tSR localSR = 0;  /* declare temporary local space for status word */
+	volatile tSR localSR = 0; /* declare temporary local space for status word */
 
-
-  m_os_dis_int();
-  osRunning = TRUE;
-  m_os_init_hal();
-  osGetHighPrioProc();
-  m_os_start_high_proc();
+	m_os_dis_int();
+	osRunning = TRUE;
+	m_os_init_hal();
+	osGetHighPrioProc ();
+	m_os_start_high_proc();
 }
-
 
 /*****************************************************************************
  *
@@ -223,16 +210,14 @@ osStart(void)
  *    notify the operating system about the ISR exit. 
  *
  ****************************************************************************/
-void
-osISREnter(void)
+void osISREnter (void)
 {
-  if (osRunning == TRUE)
-  {
-    if (isrNesting < 255)
-      isrNesting++;
-  }
+	if (osRunning == TRUE)
+	{
+		if (isrNesting < 255)
+			isrNesting++;
+	}
 }
-
 
 /*****************************************************************************
  *
@@ -246,30 +231,28 @@ osISREnter(void)
  *    executed from an ISR or not). 
  *
  ****************************************************************************/
-void
-osISRExit(void)
+void osISRExit (void)
 {
-  volatile tSR localSR;  /* declare temporary local space for status word */
+	volatile tSR localSR; /* declare temporary local space for status word */
 
-  if (osRunning == TRUE)
-  {
-    m_os_dis_int();
-    
-    if (isrNesting > 0)
-      isrNesting--;
+	if (osRunning == TRUE)
+	{
+		m_os_dis_int();
 
-    if ((osLockNesting == 0) && (isrNesting == 0))
-    {
-      osGetHighPrioProc();
-      if ((pRunProc != pNxtToRun) && (pNxtToRun != NULL))
-      {
-        m_os_isr_ctx_switch();
-      }
-    }
-    m_os_ena_int();
-  }
+		if (isrNesting > 0)
+			isrNesting--;
+
+		if ((osLockNesting == 0) && (isrNesting == 0))
+		{
+			osGetHighPrioProc ();
+			if ((pRunProc != pNxtToRun) && (pNxtToRun != NULL))
+			{
+				m_os_isr_ctx_switch();
+			}
+		}
+		m_os_ena_int();
+	}
 }
-
 
 /*****************************************************************************
  *
@@ -279,19 +262,16 @@ osISRExit(void)
  *    new processes. 
  *
  ****************************************************************************/
-void
-osDeleteProcess(void)
+void osDeleteProcess (void)
 {
-  volatile tSR localSR;  /* declare temporary local space for status word */
+	volatile tSR localSR; /* declare temporary local space for status word */
 
-  m_os_dis_int();
-  rmvFromRdyList();
-  pRunProc->flag = 0;
-  m_os_ena_int();
-  schedule();
+	m_os_dis_int();
+	rmvFromRdyList ();
+	pRunProc->flag = 0;
+	m_os_ena_int();
+	schedule ();
 }
-
-
 
 /*****************************************************************************
  *
@@ -337,69 +317,56 @@ osDeleteProcess(void)
  *                        system configuration (maximum number of processes). 
  *
  ****************************************************************************/
-void
-osCreateProcess(void  (*pProc) (void* arg),
-                tU8*  pStk,
-                tU16  stkSize,
-                tU8*  pPid,
-                tU8   prio,
-                void* pParam,
-                tU8*  pError)
+void osCreateProcess (void(*pProc) (void* arg), tU8* pStk, tU16 stkSize, tU8* pPid, tU8 prio, void* pParam, tU8* pError)
 {
-  tOSPCB *pPCB;
-  tU8 pid;
+	tOSPCB *pPCB;
+	tU8 pid;
 
-  *pError = OS_OK;
-  if(prio >= NUM_PRIO)
-  {
-    *pError = OS_ERROR_PRIO;
+	*pError = OS_OK;
+	if (prio >= NUM_PRIO)
+	{
+		*pError = OS_ERROR_PRIO;
 
-      return;
-  }
-  for(pid = 0; 
-      pid < MAX_NUM_PROC; 
-      pid++)
-  {
-    if(processControlBlocks[pid].flag == 0)
-      break;
-  }
-  if(pid == MAX_NUM_PROC)
-  {
-    *pError = OS_ERROR_ALLOCATE;
+		return;
+	}
+	for (pid = 0; pid < MAX_NUM_PROC; pid++)
+	{
+		if (processControlBlocks[pid].flag == 0)
+			break;
+	}
+	if (pid == MAX_NUM_PROC)
+	{
+		*pError = OS_ERROR_ALLOCATE;
 
-    return;
-  }
+		return;
+	}
 
-  pPCB  = &processControlBlocks[pid];
+	pPCB = &processControlBlocks[pid];
 
+	pPCB->pStkOrg = pStk;
+	pPCB->stackSize = stkSize;
+	createStackPattern (pStk, stkSize);
 
-  pPCB->pStkOrg = pStk;
-  pPCB->stackSize = stkSize;
-  createStackPattern(pStk, stkSize);
+	pStk = pStk + stkSize; /* stack grows from high to low memory */
+	pStk = (tU8*) ((tU32) pStk & 0xFFFFFFFC); /* 4 byte alignment */
 
+	pPCB->pStk = m_os_stk_frame_init(pProc,
+			pStk,
+			pParam,
+			NULL);
 
-  pStk = pStk + stkSize;                        /* stack grows from high to low memory */
-  pStk = (tU8*)((tU32)pStk & 0xFFFFFFFC);       /* 4 byte alignment */
+	pPCB->pid = pid;
+	*pPid = pid;
+	pPCB->sleep = 0;
+	pPCB->flag = (tU8) PROC_ENDED;
+	pPCB->pNextPrioQueueReady = NULL;
+	pPCB->pPrevPrioQueueReady = NULL;
+	pPCB->pNextPrioQueueEvent = NULL;
+	pPCB->pPrevPrioQueueEvent = NULL;
 
-
-  pPCB->pStk = m_os_stk_frame_init(pProc, 
-                                pStk, 
-                                pParam, 
-                                NULL);
-
-  pPCB->pid = pid;
-  *pPid = pid;
-  pPCB->sleep = 0;
-  pPCB->flag = (tU8)PROC_ENDED;
-  pPCB->pNextPrioQueueReady = NULL;
-  pPCB->pPrevPrioQueueReady = NULL;
-  pPCB->pNextPrioQueueEvent = NULL;
-  pPCB->pPrevPrioQueueEvent = NULL;
-
-  pPCB->pNextTimeQueue = NULL;
-  pPCB->prio = prio;
+	pPCB->pNextTimeQueue = NULL;
+	pPCB->prio = prio;
 }
-
 
 /*****************************************************************************
  *
@@ -417,41 +384,38 @@ osCreateProcess(void  (*pProc) (void* arg),
  *    OS_ERROR_PID - The supplied pid is not correct. 
  *
  ****************************************************************************/
-void
-osStartProcess(tU8  pid,
-               tU8* pError)
+void osStartProcess (tU8 pid, tU8* pError)
 {
-  volatile tSR localSR = 0;  /* declare temporary local space for status word */
+	volatile tSR localSR = 0; /* declare temporary local space for status word */
 
-  *pError = OS_OK;
-  if(pid >= MAX_NUM_PROC)
-  {
-    *pError = OS_ERROR_PID;
+	*pError = OS_OK;
+	if (pid >= MAX_NUM_PROC)
+	{
+		*pError = OS_ERROR_PID;
 
-    return;
-  }
-  if(processControlBlocks[pid].flag != PROC_ENDED)
-  {
-    *pError = OS_ERROR_PID;
+		return;
+	}
+	if (processControlBlocks[pid].flag != PROC_ENDED)
+	{
+		*pError = OS_ERROR_PID;
 
-    return;
-  }
+		return;
+	}
 
-  if(osRunning == TRUE)
-  {
-    m_os_dis_int();
-  }
+	if (osRunning == TRUE)
+	{
+		m_os_dis_int();
+	}
 
-  processControlBlocks[pid].flag = (tU8)PROC_ACTIVE;
-  addToRdyList(&processControlBlocks[pid]);
+	processControlBlocks[pid].flag = (tU8) PROC_ACTIVE;
+	addToRdyList (&processControlBlocks[pid]);
 
-  if(osRunning == TRUE)
-  {
-    m_os_ena_int();
-    schedule();
-  }
+	if (osRunning == TRUE)
+	{
+		m_os_ena_int();
+		schedule ();
+	}
 }
-
 
 /*****************************************************************************
  *
@@ -463,31 +427,29 @@ osStartProcess(tU8  pid,
  *    system ticks. 
  *
  ****************************************************************************/
-void
-osTick(void)
+void osTick (void)
 {
-  volatile tSR localSR;  /* declare temporary local space for status word */
-  tOSPCB *pMove;
-  m_os_dis_int();
-  if(pTimeList != NULL)
-  {
-    pTimeList->sleep--;
-    while(pTimeList->sleep == 0)
-    {
-      pMove = pTimeList;
-      pTimeList = pMove->pNextTimeQueue;
-      pMove->flag &= ~(tU8)PROC_SLEEP;
-      addToRdyList(pMove);
-      if(pTimeList == NULL)
-        break;
-    }
-  }
-  m_os_ena_int();
-  timerTick();
+	volatile tSR localSR; /* declare temporary local space for status word */
+	tOSPCB *pMove;
+	m_os_dis_int();
+	if (pTimeList != NULL)
+	{
+		pTimeList->sleep--;
+		while (pTimeList->sleep == 0)
+		{
+			pMove = pTimeList;
+			pTimeList = pMove->pNextTimeQueue;
+			pMove->flag &= ~(tU8) PROC_SLEEP;
+			addToRdyList (pMove);
+			if (pTimeList == NULL)
+				break;
+		}
+	}
+	m_os_ena_int();
+	timerTick ();
 
-  m_os_user_tick();
+	m_os_user_tick();
 }
-
 
 /*****************************************************************************
  *
@@ -496,18 +458,16 @@ osTick(void)
  *    can resume it by a call to osResume. 
  *
  ****************************************************************************/
-void
-osSuspend(void)
+void osSuspend (void)
 {
-  volatile tSR localSR;  /* declare temporary local space for status word */
+	volatile tSR localSR; /* declare temporary local space for status word */
 
-  m_os_dis_int();
-  pRunProc->flag |= (tU8)PROC_SUSPENDED;
-  rmvFromRdyList();
-  m_os_ena_int();
-  schedule();
+	m_os_dis_int();
+	pRunProc->flag |= (tU8) PROC_SUSPENDED;
+	rmvFromRdyList ();
+	m_os_ena_int();
+	schedule ();
 }
-
 
 /*****************************************************************************
  *
@@ -524,38 +484,34 @@ osSuspend(void)
  *    OS_ERROR_PID - The supplied pid is not correct. 
  *
  ****************************************************************************/
-void
-osResume(tU8  pid,
-         tU8* pError)
+void osResume (tU8 pid, tU8* pError)
 {
-  volatile tSR localSR;  /* declare temporary local space for status word */
+	volatile tSR localSR; /* declare temporary local space for status word */
 
-  *pError = OS_OK;
-  if(pid >= MAX_NUM_PROC)
-  {
-    *pError = OS_ERROR_PID;
+	*pError = OS_OK;
+	if (pid >= MAX_NUM_PROC)
+	{
+		*pError = OS_ERROR_PID;
 
-    return;
-  }
+		return;
+	}
 
-  m_os_dis_int();
-  if(((processControlBlocks[pid].flag) & PROC_SUSPENDED) == 0)
-  {
-    m_os_ena_int();
-    return;
-  }
+	m_os_dis_int();
+	if (((processControlBlocks[pid].flag) & PROC_SUSPENDED) == 0)
+	{
+		m_os_ena_int();
+		return;
+	}
 
-  processControlBlocks[pid].flag &= ~(tU8)PROC_SUSPENDED;
-  addToRdyList(&processControlBlocks[pid]);
-  if(isrNesting == 0)
-  {
-    m_os_ena_int();
-    schedule();
-  }
-  else
-    m_os_ena_int();
+	processControlBlocks[pid].flag &= ~(tU8) PROC_SUSPENDED;
+	addToRdyList (&processControlBlocks[pid]);
+	if (isrNesting == 0)
+	{
+		m_os_ena_int();
+		schedule ();
+	} else
+	m_os_ena_int();
 }
-
 
 /*****************************************************************************
  *
@@ -564,33 +520,30 @@ osResume(tU8  pid,
  *    or equal priority to the one already running. 
  *
  ****************************************************************************/
-void
-schedule(void)
+void schedule (void)
 {
-  volatile tSR localSR;  /* declare temporary local space for status word */
+	volatile tSR localSR; /* declare temporary local space for status word */
 
-  m_os_dis_int();
-  if(osLockNesting == 0)
-  {
-    wakefromidle:
-    osGetHighPrioProc();
-    if(pNxtToRun == NULL)
-    {
-      osLockNesting++;
-      m_os_ena_int();
-      m_os_idle();
-      m_os_dis_int();
-      osLockNesting--;
-      goto wakefromidle;
-    }
-    if(pNxtToRun != pRunProc)
-    {
-      m_os_ctx_switch();
-    }
-  }
-  m_os_ena_int();
+	m_os_dis_int();
+	if (osLockNesting == 0)
+	{
+		wakefromidle: osGetHighPrioProc ();
+		if (pNxtToRun == NULL)
+		{
+			osLockNesting++;
+			m_os_ena_int();
+			m_os_idle();
+			m_os_dis_int();
+			osLockNesting--;
+			goto wakefromidle;
+		}
+		if (pNxtToRun != pRunProc)
+		{
+			m_os_ctx_switch();
+		}
+	}
+	m_os_ena_int();
 }
-
 
 /*****************************************************************************
  *
@@ -603,12 +556,10 @@ schedule(void)
  *    fashion. 
  *
  ****************************************************************************/
-void
-osGetHighPrioProc(void)
+void osGetHighPrioProc (void)
 {
-  pNxtToRun = getHighPrioQueue(&rdyQueue, READY_QUEUE);
+	pNxtToRun = getHighPrioQueue (&rdyQueue, READY_QUEUE);
 }
-
 
 /*****************************************************************************
  *
@@ -619,46 +570,41 @@ osGetHighPrioProc(void)
  *    running process. 
  *
  ****************************************************************************/
-void
-addToTimeList(void)
+void addToTimeList (void)
 {
-  tOSPCB * pPCB = NULL;
-  tOSPCB * pPrev = NULL;
+	tOSPCB * pPCB = NULL;
+	tOSPCB * pPrev = NULL;
 
-  pRunProc->flag |= (tU8)PROC_SLEEP;
+	pRunProc->flag |= (tU8) PROC_SLEEP;
 
-  if(pTimeList == NULL)
-  {
-    pTimeList = pRunProc;
-    pRunProc->pNextTimeQueue = NULL;    
-  }
-  else
-  {
-    for(pPCB = pTimeList;
-        pPCB != NULL;
-        pPCB = pPCB->pNextTimeQueue)
-    {
-      if(pRunProc->sleep <= pPCB->sleep)
-      {
-        break;
-      }
-      pRunProc->sleep -= pPCB->sleep;
-      pPrev = pPCB;
-    }
-    /* insert pRunProc between pPrev and pPCB */
+	if (pTimeList == NULL)
+	{
+		pTimeList = pRunProc;
+		pRunProc->pNextTimeQueue = NULL;
+	} else
+	{
+		for (pPCB = pTimeList; pPCB != NULL; pPCB = pPCB->pNextTimeQueue)
+		{
+			if (pRunProc->sleep <= pPCB->sleep)
+			{
+				break;
+			}
+			pRunProc->sleep -= pPCB->sleep;
+			pPrev = pPCB;
+		}
+		/* insert pRunProc between pPrev and pPCB */
 
-    pRunProc->pNextTimeQueue = pPCB;
-    
-    if(pPrev != NULL)
-      pPrev->pNextTimeQueue = pRunProc;
-    else
-      pTimeList = pRunProc;
-    
-    if(pPCB != NULL)
-      pPCB->sleep -= pRunProc->sleep; /* update relative sleep time */
-  }  
+		pRunProc->pNextTimeQueue = pPCB;
+
+		if (pPrev != NULL)
+			pPrev->pNextTimeQueue = pRunProc;
+		else
+			pTimeList = pRunProc;
+
+		if (pPCB != NULL)
+			pPCB->sleep -= pRunProc->sleep; /* update relative sleep time */
+	}
 }
-
 
 /*****************************************************************************
  *
@@ -670,38 +616,33 @@ addToTimeList(void)
  *                remove. 
  *
  ****************************************************************************/
-void
-rmvFromTimeList(tOSPCB* pPCB)
+void rmvFromTimeList (tOSPCB* pPCB)
 {
-  tOSPCB * pTimePCB = NULL;
-  tOSPCB * pPrev = NULL;
+	tOSPCB * pTimePCB = NULL;
+	tOSPCB * pPrev = NULL;
 
-  pPCB->flag &= ~(tU8)PROC_SLEEP;
-  
-  for(pTimePCB = pTimeList;
-      pTimePCB != NULL;
-      pTimePCB = pTimePCB->pNextTimeQueue)
-  {
-    if(pTimePCB == pPCB)
-    {
-      if(pPrev == NULL)
-      {
-        pTimeList = pTimePCB->pNextTimeQueue;
-      }
-      else
-      {
-        pPrev->pNextTimeQueue = pTimePCB->pNextTimeQueue;
-      }
-      if(pTimePCB->pNextTimeQueue != NULL)
-      {
-        pTimePCB->pNextTimeQueue->sleep += pTimePCB->sleep; /* update relative time */
-      }
-      break;
-    }
-    pPrev = pTimePCB;
-  }
+	pPCB->flag &= ~(tU8) PROC_SLEEP;
+
+	for (pTimePCB = pTimeList; pTimePCB != NULL; pTimePCB = pTimePCB->pNextTimeQueue)
+	{
+		if (pTimePCB == pPCB)
+		{
+			if (pPrev == NULL)
+			{
+				pTimeList = pTimePCB->pNextTimeQueue;
+			} else
+			{
+				pPrev->pNextTimeQueue = pTimePCB->pNextTimeQueue;
+			}
+			if (pTimePCB->pNextTimeQueue != NULL)
+			{
+				pTimePCB->pNextTimeQueue->sleep += pTimePCB->sleep; /* update relative time */
+			}
+			break;
+		}
+		pPrev = pTimePCB;
+	}
 }
-
 
 /*****************************************************************************
  *
@@ -712,12 +653,10 @@ rmvFromTimeList(tOSPCB* pPCB)
  *    [in] pMove - A pointer to the process control block to add. 
  *
  ****************************************************************************/
-void
-addToRdyList(tOSPCB* pMove)
+void addToRdyList (tOSPCB* pMove)
 {
-  addToPrioQueue(&rdyQueue, pMove, READY_QUEUE);
+	addToPrioQueue (&rdyQueue, pMove, READY_QUEUE);
 }
-
 
 /*****************************************************************************
  *
@@ -725,10 +664,9 @@ addToRdyList(tOSPCB* pMove)
  *    This function removes the currently running process from the ready-list. 
  *
  ****************************************************************************/
-void
-rmvFromRdyList(void)
+void rmvFromRdyList (void)
 {
-  rmvFromPrioQueue(&rdyQueue, pRunProc, READY_QUEUE);
+	rmvFromPrioQueue (&rdyQueue, pRunProc, READY_QUEUE);
 }
 
 /******************************************************************************

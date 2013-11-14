@@ -288,7 +288,7 @@ int
 main(void)
 {
   /* initialize console */
-  eaInit();
+  InicjalizacjaKonsoli();
 
   /* initialize I2C */
   i2cInit();

@@ -1,4 +1,4 @@
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 1
 
 
    1              		.code	16
@@ -9,7 +9,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
    6              	.Ldebug_info0:
    7              		.section	.debug_line,"",%progbits
    8              	.Ldebug_line0:
-   9 0000 D1000000 		.text
+   9 0000 D0000000 		.text
    9      02004A00 
    9      00000201 
    9      FB0E0D00 
@@ -29,88 +29,84 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
    5:testAdc.c     ****  *
    6:testAdc.c     ****  *****************************************************************************/
    7:testAdc.c     **** 
-   8:testAdc.c     **** 
-   9:testAdc.c     **** #include "../pre_emptive_os/api/osapi.h"
-  10:testAdc.c     **** #include "../pre_emptive_os/api/general.h"
-  11:testAdc.c     **** #include <printf_P.h>
-  12:testAdc.c     **** #include <lpc2xxx.h>
-  13:testAdc.c     **** #include <consol.h>
-  14:testAdc.c     **** #include "../startup/config.h"
-  15:testAdc.c     **** 
-  16:testAdc.c     **** 
-  17:testAdc.c     **** /******************************************************************************
-  18:testAdc.c     ****  * Defines and typedefs
-  19:testAdc.c     ****  *****************************************************************************/
-  20:testAdc.c     **** #define CRYSTAL_FREQUENCY FOSC
-  21:testAdc.c     **** #define PLL_FACTOR        PLL_MUL
-  22:testAdc.c     **** #define VPBDIV_FACTOR     PBSD
-  23:testAdc.c     **** 
-  24:testAdc.c     **** #define AIN0 0
-  25:testAdc.c     **** #define AIN1 1
-  26:testAdc.c     **** #define AIN2 2
-  27:testAdc.c     **** #define AIN3 3
-  28:testAdc.c     **** #define AIN4 4
-  29:testAdc.c     **** #define AIN5 5
-  30:testAdc.c     **** #define AIN6 6
-  31:testAdc.c     **** #define AIN7 7
+   8:testAdc.c     **** #include "../pre_emptive_os/api/osapi.h"
+   9:testAdc.c     **** #include "../pre_emptive_os/api/general.h"
+  10:testAdc.c     **** #include <printf_P.h>
+  11:testAdc.c     **** #include <lpc2xxx.h>
+  12:testAdc.c     **** #include <consol.h>
+  13:testAdc.c     **** #include "../startup/config.h"
+  14:testAdc.c     **** 
+  15:testAdc.c     **** /******************************************************************************
+  16:testAdc.c     ****  * Defines and typedefs
+  17:testAdc.c     ****  *****************************************************************************/
+  18:testAdc.c     **** #define CRYSTAL_FREQUENCY FOSC
+  19:testAdc.c     **** #define PLL_FACTOR        PLL_MUL
+  20:testAdc.c     **** #define VPBDIV_FACTOR     PBSD
+  21:testAdc.c     **** 
+  22:testAdc.c     **** #define AIN0 0
+  23:testAdc.c     **** #define AIN1 1
+  24:testAdc.c     **** #define AIN2 2
+  25:testAdc.c     **** #define AIN3 3
+  26:testAdc.c     **** #define AIN4 4
+  27:testAdc.c     **** #define AIN5 5
+  28:testAdc.c     **** #define AIN6 6
+  29:testAdc.c     **** #define AIN7 7
+  30:testAdc.c     **** 
+  31:testAdc.c     **** #define VREF_IN_MV 2475
   32:testAdc.c     **** 
-  33:testAdc.c     **** #define VREF_IN_MV 2475
-  34:testAdc.c     **** 
-  35:testAdc.c     **** 
-  36:testAdc.c     **** /*****************************************************************************
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 2
+  33:testAdc.c     **** /*****************************************************************************
+  34:testAdc.c     ****  *
+  35:testAdc.c     ****  * Description:
+  36:testAdc.c     ****  *    xxx
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 2
 
 
   37:testAdc.c     ****  *
-  38:testAdc.c     ****  * Description:
-  39:testAdc.c     ****  *    xxx
-  40:testAdc.c     ****  *
-  41:testAdc.c     ****  ****************************************************************************/
-  42:testAdc.c     **** static void
-  43:testAdc.c     **** delay37us(void)
-  44:testAdc.c     **** {
-  45:testAdc.c     **** 	volatile tU32 i;
-  46:testAdc.c     **** 
-  47:testAdc.c     **** 	for(i=0; i<2500; i++)
-  48:testAdc.c     ****     asm volatile (" nop"); //delay 15 ns x 2500 = about 37 us delay
-  49:testAdc.c     **** }
-  50:testAdc.c     **** 
-  51:testAdc.c     **** /*****************************************************************************
-  52:testAdc.c     ****  *
-  53:testAdc.c     ****  * Description:
-  54:testAdc.c     ****  *    Start a conversion of one selected analogue input and return
-  55:testAdc.c     ****  *    10-bit result.
+  38:testAdc.c     ****  ****************************************************************************/
+  39:testAdc.c     **** static void delay37us (void)
+  40:testAdc.c     **** {
+  41:testAdc.c     **** 	volatile tU32 i;
+  42:testAdc.c     **** 
+  43:testAdc.c     **** 	for (i = 0; i < 2500; i++)
+  44:testAdc.c     **** 		asm volatile (" nop");
+  45:testAdc.c     **** 	//delay 15 ns x 2500 = about 37 us delay
+  46:testAdc.c     **** }
+  47:testAdc.c     **** 
+  48:testAdc.c     **** /*****************************************************************************
+  49:testAdc.c     ****  *
+  50:testAdc.c     ****  * Description:
+  51:testAdc.c     ****  *    Start a conversion of one selected analogue input and return
+  52:testAdc.c     ****  *    10-bit result.
+  53:testAdc.c     ****  *
+  54:testAdc.c     ****  * Params:
+  55:testAdc.c     ****  *    [in] channel - analogue input channel to convert.
   56:testAdc.c     ****  *
-  57:testAdc.c     ****  * Params:
-  58:testAdc.c     ****  *    [in] channel - analogue input channel to convert.
+  57:testAdc.c     ****  * Return:
+  58:testAdc.c     ****  *    10-bit conversion result
   59:testAdc.c     ****  *
-  60:testAdc.c     ****  * Return:
-  61:testAdc.c     ****  *    10-bit conversion result
-  62:testAdc.c     ****  *
-  63:testAdc.c     ****  ****************************************************************************/
-  64:testAdc.c     **** static tU16
-  65:testAdc.c     **** getAnalogueInput(tU8 channel)
-  66:testAdc.c     **** {
-  18              		.loc 1 66 0
+  60:testAdc.c     ****  ****************************************************************************/
+  61:testAdc.c     **** static tU16 getAnalogueInput (tU8 channel)
+  62:testAdc.c     **** {
+  18              		.loc 1 62 0
   19 0000 10B5     		push	{r4, lr}
   20              	.LCFI0:
   21              	.LVL0:
-  67:testAdc.c     **** 	//start conversion now (for selected channel)
-  68:testAdc.c     **** 	ADCR = (ADCR & 0xFFFFFF00) | (1 << channel) | (1 << 24);
-  22              		.loc 1 68 0
+  63:testAdc.c     **** 	//start conversion now (for selected channel)
+  64:testAdc.c     **** 	ADCR = (ADCR & 0xFFFFFF00) | (1 << channel) | (1 << 24);
+  22              		.loc 1 64 0
   23 0002 0B4C     		ldr	r4, .L7
   24 0004 2268     		ldr	r2, [r4]
   25 0006 FF23     		mov	r3, #255
   26 0008 9A43     		bic	r2, r2, r3
-  27              		.loc 1 66 0
+  27              		.loc 1 62 0
   28 000a 0006     		lsl	r0, r0, #24
   29              	.LVL1:
-  30              		.loc 1 68 0
+  30              		.loc 1 64 0
   31 000c 8023     		mov	r3, #128
-  32              		.loc 1 66 0
+  32              		.loc 1 62 0
   33 000e 000E     		lsr	r0, r0, #24
   34              	.LVL2:
-  35              		.loc 1 68 0
+  35              		.loc 1 64 0
   36 0010 0121     		mov	r1, #1
   37 0012 5B04     		lsl	r3, r3, #17
   38 0014 8140     		lsl	r1, r1, r0
@@ -118,28 +114,28 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
   40 0018 1143     		orr	r1, r1, r2
   41 001a 2160     		str	r1, [r4]
   42              	.L2:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 3
+  65:testAdc.c     **** 
+  66:testAdc.c     **** 	//wait til done
+  67:testAdc.c     **** 	while ((ADDR & 0x80000000) == 0)
+  43              		.loc 1 67 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 3
 
 
-  69:testAdc.c     **** 	
-  70:testAdc.c     **** 	//wait til done
-  71:testAdc.c     **** 	while((ADDR & 0x80000000) == 0)
-  43              		.loc 1 71 0
   44 001c 0548     		ldr	r0, .L7+4
   45              	.LVL3:
   46 001e 0368     		ldr	r3, [r0]
   47 0020 002B     		cmp	r3, #0
   48 0022 FBDA     		bge	.L2
-  72:testAdc.c     **** 	  ;
-  73:testAdc.c     **** 
-  74:testAdc.c     **** 	//get result and adjust to 10-bit integer
-  75:testAdc.c     **** 	return (ADDR>>6) & 0x3FF;
-  49              		.loc 1 75 0
+  68:testAdc.c     **** 		;
+  69:testAdc.c     **** 
+  70:testAdc.c     **** 	//get result and adjust to 10-bit integer
+  71:testAdc.c     **** 	return (ADDR >> 6) & 0x3FF;
+  49              		.loc 1 71 0
   50 0024 0068     		ldr	r0, [r0]
   51 0026 0004     		lsl	r0, r0, #16
   52 0028 800D     		lsr	r0, r0, #22
-  76:testAdc.c     **** }
-  53              		.loc 1 76 0
+  72:testAdc.c     **** }
+  53              		.loc 1 72 0
   54              		@ sp needed for prologue
   55 002a 10BC     		pop	{r4}
   56 002c 02BC     		pop	{r1}
@@ -178,13 +174,13 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
   76      65204144 
   76      43207769 
   76      6C6C2072 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 4
-
-
   76      65616420 
   77 00ab 2020202A 		.ascii	"   *\012\000"
   77      0A00
   78 00b1 000000   		.align	2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 4
+
+
   79              	.LC6:
   80 00b4 2A2A2A2A 		.ascii	"***************************************************"
   80      2A2A2A2A 
@@ -238,103 +234,99 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  116              	.LC30:
  117 013c 5D00     		.ascii	"]\000"
  118 013e 0000     		.text
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 5
-
-
  119              		.align	2
  120              		.global	testAdc
  121              		.code 16
  122              		.thumb_func
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 5
+
+
  123              		.type	testAdc, %function
  124              	testAdc:
  125              	.LFB4:
-  77:testAdc.c     **** 
-  78:testAdc.c     **** 
-  79:testAdc.c     **** /*****************************************************************************
-  80:testAdc.c     ****  *
-  81:testAdc.c     ****  * Description:
-  82:testAdc.c     ****  *    A process entry function 
-  83:testAdc.c     ****  *
-  84:testAdc.c     ****  ****************************************************************************/
-  85:testAdc.c     **** void
-  86:testAdc.c     **** testAdc(void)
-  87:testAdc.c     **** {
- 126              		.loc 1 87 0
+  73:testAdc.c     **** 
+  74:testAdc.c     **** /*****************************************************************************
+  75:testAdc.c     ****  *
+  76:testAdc.c     ****  * Description:
+  77:testAdc.c     ****  *    A process entry function 
+  78:testAdc.c     ****  *
+  79:testAdc.c     ****  ****************************************************************************/
+  80:testAdc.c     **** void testAdc (void)
+  81:testAdc.c     **** {
+ 126              		.loc 1 81 0
  127 0038 F0B5     		push	{r4, r5, r6, r7, lr}
  128              	.LCFI1:
  129 003a 84B0     		sub	sp, sp, #16
  130              	.LCFI2:
-  88:testAdc.c     **** 	tU32 integerResult;
-  89:testAdc.c     **** 	tU32 mvResult;
-  90:testAdc.c     **** 	tU16 dacValue = 0;
-  91:testAdc.c     **** 
-  92:testAdc.c     ****   printf("\n\n*******************************************************\n");
- 131              		.loc 1 92 0
+  82:testAdc.c     **** 	tU32 integerResult;
+  83:testAdc.c     **** 	tU32 mvResult;
+  84:testAdc.c     **** 	tU16 dacValue = 0;
+  85:testAdc.c     **** 
+  86:testAdc.c     **** 	printf("\n\n*******************************************************\n");
+ 131              		.loc 1 86 0
  132 003c 8148     		ldr	r0, .L19
  133 003e FFF7FEFF 		bl	simplePrintf
-  93:testAdc.c     ****   printf("*                                                     *\n");
- 134              		.loc 1 93 0
+  87:testAdc.c     **** 	printf("*                                                     *\n");
+ 134              		.loc 1 87 0
  135 0042 814C     		ldr	r4, .L19+4
  136 0044 201C     		mov	r0, r4
  137 0046 FFF7FEFF 		bl	simplePrintf
-  94:testAdc.c     ****   printf("* The ADC will read the analogue inputs...            *\n");
- 138              		.loc 1 94 0
+  88:testAdc.c     **** 	printf("* The ADC will read the analogue inputs...            *\n");
+ 138              		.loc 1 88 0
  139 004a 8048     		ldr	r0, .L19+8
  140 004c FFF7FEFF 		bl	simplePrintf
-  95:testAdc.c     ****   printf("*                                                     *\n");
- 141              		.loc 1 95 0
+  89:testAdc.c     **** 	printf("*                                                     *\n");
+ 141              		.loc 1 89 0
  142 0050 201C     		mov	r0, r4
  143 0052 FFF7FEFF 		bl	simplePrintf
-  96:testAdc.c     ****   printf("*******************************************************\n\n");
- 144              		.loc 1 96 0
+  90:testAdc.c     **** 	printf("*******************************************************\n\n");
+ 144              		.loc 1 90 0
  145 0056 7E48     		ldr	r0, .L19+12
  146 0058 FFF7FEFF 		bl	simplePrintf
-  97:testAdc.c     **** 
-  98:testAdc.c     ****   //set AIN1 = P0.28, AIN2 = P0.29, and AIN3 = P0.30
-  99:testAdc.c     **** //  PINSEL1 &= ~0x3f0c0000;
- 100:testAdc.c     **** //  PINSEL1 |=  0x15080000;
- 101:testAdc.c     ****   PINSEL1 &= ~0x0f0c0000;
- 147              		.loc 1 101 0
+  91:testAdc.c     **** 
+  92:testAdc.c     **** 	//set AIN1 = P0.28, AIN2 = P0.29, and AIN3 = P0.30
+  93:testAdc.c     **** 	//  PINSEL1 &= ~0x3f0c0000;
+  94:testAdc.c     **** 	//  PINSEL1 |=  0x15080000;
+  95:testAdc.c     **** 	PINSEL1 &= ~0x0f0c0000;
+ 147              		.loc 1 95 0
  148 005c 7D49     		ldr	r1, .L19+16
  149 005e 7E4A     		ldr	r2, .L19+20
  150 0060 0B68     		ldr	r3, [r1]
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 6
-
-
  151 0062 1340     		and	r3, r3, r2
  152 0064 0B60     		str	r3, [r1]
- 102:testAdc.c     ****   PINSEL1 |=  0x05080000;
- 153              		.loc 1 102 0
+  96:testAdc.c     **** 	PINSEL1 |= 0x05080000;
+ 153              		.loc 1 96 0
  154 0066 A123     		mov	r3, #161
  155 0068 0A68     		ldr	r2, [r1]
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 6
+
+
  156 006a DB04     		lsl	r3, r3, #19
  157 006c 1A43     		orr	r2, r2, r3
  158 006e 0A60     		str	r2, [r1]
- 103:testAdc.c     ****   
- 104:testAdc.c     ****   //initialize ADC
- 105:testAdc.c     ****   ADCR = (1 << 0)                             |  //SEL = 1, dummy channel #1
- 159              		.loc 1 105 0
+  97:testAdc.c     **** 
+  98:testAdc.c     **** 	//initialize ADC
+  99:testAdc.c     **** 	ADCR = (1 << 0) | //SEL = 1, dummy channel #1
+ 159              		.loc 1 99 0
  160 0070 7A4B     		ldr	r3, .L19+24
  161 0072 7B4A     		ldr	r2, .L19+28
- 106:testAdc.c     ****          ((CRYSTAL_FREQUENCY *
- 107:testAdc.c     ****            PLL_FACTOR /
- 108:testAdc.c     ****            VPBDIV_FACTOR) / 4500000 - 1) << 8 |  //set clock division factor, so ADC clock is 4.5MH
- 109:testAdc.c     ****          (0 << 16)                            |  //BURST = 0, conversions are SW controlled
- 110:testAdc.c     ****          (0 << 17)                            |  //CLKS  = 0, 11 clocks = 10-bit result
- 111:testAdc.c     ****          (1 << 21)                            |  //PDN   = 1, ADC is active
- 112:testAdc.c     ****          (1 << 24)                            |  //START = 1, start a conversion now
- 113:testAdc.c     ****          (0 << 27);							                 //EDGE  = 0, not relevant when start=1
- 114:testAdc.c     **** 
- 115:testAdc.c     ****   //short delay and dummy read
- 116:testAdc.c     ****   osSleep(1);
- 162              		.loc 1 116 0
+ 100:testAdc.c     **** 			((CRYSTAL_FREQUENCY * PLL_FACTOR / VPBDIV_FACTOR) / 4500000 - 1) << 8 | //set clock division fac
+ 101:testAdc.c     **** 			(0 << 16) | //BURST = 0, conversions are SW controlled
+ 102:testAdc.c     **** 			(0 << 17) | //CLKS  = 0, 11 clocks = 10-bit result
+ 103:testAdc.c     **** 			(1 << 21) | //PDN   = 1, ADC is active
+ 104:testAdc.c     **** 			(1 << 24) | //START = 1, start a conversion now
+ 105:testAdc.c     **** 			(0 << 27); //EDGE  = 0, not relevant when start=1
+ 106:testAdc.c     **** 
+ 107:testAdc.c     **** 	//short delay and dummy read
+ 108:testAdc.c     **** 	osSleep (1);
+ 162              		.loc 1 108 0
  163 0074 0120     		mov	r0, #1
- 164              		.loc 1 105 0
+ 164              		.loc 1 99 0
  165 0076 1A60     		str	r2, [r3]
- 166              		.loc 1 116 0
+ 166              		.loc 1 108 0
  167 0078 FFF7FEFF 		bl	osSleep
- 117:testAdc.c     ****   integerResult = ADDR;
- 168              		.loc 1 117 0
+ 109:testAdc.c     **** 	integerResult = ADDR;
+ 168              		.loc 1 109 0
  169 007c 794B     		ldr	r3, .L19+32
  170 007e 1B68     		ldr	r3, [r3]
  171              	.LVL4:
@@ -344,55 +336,55 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  175              	.LVL6:
  176              	.LVL7:
  177              	.L10:
- 118:testAdc.c     ****   
- 119:testAdc.c     ****   for(;;)
- 120:testAdc.c     ****   {
- 121:testAdc.c     ****   	//get AIN1 (P0.28)
- 122:testAdc.c     ****   	integerResult = getAnalogueInput(AIN1);
- 178              		.loc 1 122 0
+ 110:testAdc.c     **** 
+ 111:testAdc.c     **** 	for (;;)
+ 112:testAdc.c     **** 	{
+ 113:testAdc.c     **** 		//get AIN1 (P0.28)
+ 114:testAdc.c     **** 		integerResult = getAnalogueInput (AIN1);
+ 178              		.loc 1 114 0
  179 0084 0120     		mov	r0, #1
  180 0086 FFF7BBFF 		bl	getAnalogueInput
- 123:testAdc.c     ****   	
- 124:testAdc.c     ****  	  //calculate result in mV
- 125:testAdc.c     ****  	  mvResult  = integerResult * VREF_IN_MV;
- 181              		.loc 1 125 0
+ 115:testAdc.c     **** 
+ 116:testAdc.c     **** 		//calculate result in mV
+ 117:testAdc.c     **** 		mvResult = integerResult * VREF_IN_MV;
+ 181              		.loc 1 117 0
  182 008a 8300     		lsl	r3, r0, #2
  183 008c 1B18     		add	r3, r3, r0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 7
-
-
  184 008e 1C01     		lsl	r4, r3, #4
  185 0090 E41A     		sub	r4, r4, r3
- 186              		.loc 1 122 0
+ 186              		.loc 1 114 0
  187 0092 051C     		mov	r5, r0
- 188              		.loc 1 125 0
+ 188              		.loc 1 117 0
  189 0094 6301     		lsl	r3, r4, #5
- 126:testAdc.c     ****     mvResult /= 1024;
- 127:testAdc.c     ****   	
- 128:testAdc.c     **** //    printf("\rAIN1: %d = %d mV", integerResult, mvResult);
- 129:testAdc.c     **** 
- 130:testAdc.c     ****     printf("\rAIN1: ");
- 190              		.loc 1 130 0
+ 118:testAdc.c     **** 		mvResult /= 1024;
+ 119:testAdc.c     **** 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 7
+
+
+ 120:testAdc.c     **** 		//    printf("\rAIN1: %d = %d mV", integerResult, mvResult);
+ 121:testAdc.c     **** 
+ 122:testAdc.c     **** 		printf("\rAIN1: ");
+ 190              		.loc 1 122 0
  191 0096 7448     		ldr	r0, .L19+36
- 192              		.loc 1 125 0
+ 192              		.loc 1 117 0
  193 0098 E418     		add	r4, r4, r3
- 194              		.loc 1 130 0
+ 194              		.loc 1 122 0
  195 009a FFF7FEFF 		bl	simplePrintf
- 131:testAdc.c     ****     consolSendNumber(10,4,FALSE,' ', integerResult);    
- 196              		.loc 1 131 0
+ 123:testAdc.c     **** 		consolSendNumber (10, 4, FALSE, ' ', integerResult);
+ 196              		.loc 1 123 0
  197 009e 0421     		mov	r1, #4
  198 00a0 0022     		mov	r2, #0
  199 00a2 2023     		mov	r3, #32
  200 00a4 0A20     		mov	r0, #10
  201 00a6 0095     		str	r5, [sp]
  202 00a8 FFF7FEFF 		bl	consolSendNumber
- 132:testAdc.c     ****     printf("=");
- 203              		.loc 1 132 0
+ 124:testAdc.c     **** 		printf("=");
+ 203              		.loc 1 124 0
  204 00ac 6F4F     		ldr	r7, .L19+40
  205 00ae 381C     		mov	r0, r7
  206 00b0 FFF7FEFF 		bl	simplePrintf
- 133:testAdc.c     ****     consolSendNumber(10,4,FALSE,' ', mvResult);    
- 207              		.loc 1 133 0
+ 125:testAdc.c     **** 		consolSendNumber (10, 4, FALSE, ' ', mvResult);
+ 207              		.loc 1 125 0
  208 00b4 A40A     		lsr	r4, r4, #10
  209 00b6 0421     		mov	r1, #4
  210 00b8 0022     		mov	r2, #0
@@ -400,55 +392,55 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  212 00bc 0A20     		mov	r0, #10
  213 00be 0094     		str	r4, [sp]
  214 00c0 FFF7FEFF 		bl	consolSendNumber
- 134:testAdc.c     ****     printf(" mV");
- 215              		.loc 1 134 0
+ 126:testAdc.c     **** 		printf(" mV");
+ 215              		.loc 1 126 0
  216 00c4 6A4E     		ldr	r6, .L19+44
  217 00c6 301C     		mov	r0, r6
  218 00c8 FFF7FEFF 		bl	simplePrintf
- 135:testAdc.c     **** 
- 136:testAdc.c     ****  	  //get AIN2 (P0.29)
- 137:testAdc.c     ****  	  integerResult = getAnalogueInput(AIN2);
- 219              		.loc 1 137 0
+ 127:testAdc.c     **** 
+ 128:testAdc.c     **** 		//get AIN2 (P0.29)
+ 129:testAdc.c     **** 		integerResult = getAnalogueInput (AIN2);
+ 219              		.loc 1 129 0
  220 00cc 0220     		mov	r0, #2
  221 00ce FFF797FF 		bl	getAnalogueInput
- 138:testAdc.c     ****   	
- 139:testAdc.c     ****  	  //calculate result in mV
- 140:testAdc.c     ****  	  mvResult  = integerResult * VREF_IN_MV;
- 222              		.loc 1 140 0
+ 130:testAdc.c     **** 
+ 131:testAdc.c     **** 		//calculate result in mV
+ 132:testAdc.c     **** 		mvResult = integerResult * VREF_IN_MV;
+ 222              		.loc 1 132 0
  223 00d2 8300     		lsl	r3, r0, #2
  224 00d4 1B18     		add	r3, r3, r0
  225 00d6 1C01     		lsl	r4, r3, #4
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 8
-
-
  226 00d8 E41A     		sub	r4, r4, r3
  227 00da 6301     		lsl	r3, r4, #5
- 228              		.loc 1 137 0
+ 228              		.loc 1 129 0
  229 00dc 051C     		mov	r5, r0
- 141:testAdc.c     ****     mvResult /= 1024;
- 142:testAdc.c     ****   	
- 143:testAdc.c     **** //    printf(", AIN2: %d = %d mV", integerResult, mvResult);
- 144:testAdc.c     ****     printf(", AIN2: ");
- 230              		.loc 1 144 0
+ 133:testAdc.c     **** 		mvResult /= 1024;
+ 134:testAdc.c     **** 
+ 135:testAdc.c     **** 		//    printf(", AIN2: %d = %d mV", integerResult, mvResult);
+ 136:testAdc.c     **** 		printf(", AIN2: ");
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 8
+
+
+ 230              		.loc 1 136 0
  231 00de 6548     		ldr	r0, .L19+48
- 232              		.loc 1 140 0
+ 232              		.loc 1 132 0
  233 00e0 E418     		add	r4, r4, r3
- 234              		.loc 1 144 0
+ 234              		.loc 1 136 0
  235 00e2 FFF7FEFF 		bl	simplePrintf
- 145:testAdc.c     ****     consolSendNumber(10,4,FALSE,' ', integerResult);    
- 236              		.loc 1 145 0
+ 137:testAdc.c     **** 		consolSendNumber (10, 4, FALSE, ' ', integerResult);
+ 236              		.loc 1 137 0
  237 00e6 0421     		mov	r1, #4
  238 00e8 0022     		mov	r2, #0
  239 00ea 2023     		mov	r3, #32
  240 00ec 0A20     		mov	r0, #10
  241 00ee 0095     		str	r5, [sp]
  242 00f0 FFF7FEFF 		bl	consolSendNumber
- 146:testAdc.c     ****     printf("=");
- 243              		.loc 1 146 0
+ 138:testAdc.c     **** 		printf("=");
+ 243              		.loc 1 138 0
  244 00f4 381C     		mov	r0, r7
  245 00f6 FFF7FEFF 		bl	simplePrintf
- 147:testAdc.c     ****     consolSendNumber(10,4,FALSE,' ', mvResult);    
- 246              		.loc 1 147 0
+ 139:testAdc.c     **** 		consolSendNumber (10, 4, FALSE, ' ', mvResult);
+ 246              		.loc 1 139 0
  247 00fa A40A     		lsr	r4, r4, #10
  248 00fc 0421     		mov	r1, #4
  249 00fe 0022     		mov	r2, #0
@@ -456,14 +448,14 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  251 0102 0A20     		mov	r0, #10
  252 0104 0094     		str	r4, [sp]
  253 0106 FFF7FEFF 		bl	consolSendNumber
- 148:testAdc.c     ****     printf(" mV");
- 254              		.loc 1 148 0
+ 140:testAdc.c     **** 		printf(" mV");
+ 254              		.loc 1 140 0
  255 010a 301C     		mov	r0, r6
  256 010c FFF7FEFF 		bl	simplePrintf
- 149:testAdc.c     ****     
- 150:testAdc.c     ****     //set analogue output
- 151:testAdc.c     ****     DACR = (dacValue << 6) |  //actual value to output
- 257              		.loc 1 151 0
+ 141:testAdc.c     **** 
+ 142:testAdc.c     **** 		//set analogue output
+ 143:testAdc.c     **** 		DACR = (dacValue << 6) | //actual value to output
+ 257              		.loc 1 143 0
  258 0110 019B     		ldr	r3, [sp, #4]
  259 0112 9A01     		lsl	r2, r3, #6
  260 0114 8023     		mov	r3, #128
@@ -471,32 +463,32 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  262 0118 1A43     		orr	r2, r2, r3
  263 011a 574B     		ldr	r3, .L19+52
  264 011c 1A60     		str	r2, [r3]
- 152:testAdc.c     ****            (1 << 16);         //BIAS = 1, 2.5uS settling time
- 153:testAdc.c     ****     dacValue++;
- 265              		.loc 1 153 0
+ 144:testAdc.c     **** 				(1 << 16); //BIAS = 1, 2.5uS settling time
+ 145:testAdc.c     **** 		dacValue++;
+ 265              		.loc 1 145 0
  266 011e 019A     		ldr	r2, [sp, #4]
  267              	.LVL8:
- 154:testAdc.c     ****     dacValue &= 0x03ff;
- 268              		.loc 1 154 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 9
-
-
+ 146:testAdc.c     **** 		dacValue &= 0x03ff;
+ 268              		.loc 1 146 0
  269 0120 564B     		ldr	r3, .L19+56
- 270              		.loc 1 153 0
+ 270              		.loc 1 145 0
  271 0122 0132     		add	r2, r2, #1
- 272              		.loc 1 154 0
+ 272              		.loc 1 146 0
  273 0124 1A40     		and	r2, r2, r3
- 155:testAdc.c     **** //    printf(", DAC = %d", dacValue);
- 156:testAdc.c     ****     printf(", DAC=");
- 274              		.loc 1 156 0
+ 147:testAdc.c     **** 		//    printf(", DAC = %d", dacValue);
+ 148:testAdc.c     **** 		printf(", DAC=");
+ 274              		.loc 1 148 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 9
+
+
  275 0126 5648     		ldr	r0, .L19+60
- 276              		.loc 1 154 0
+ 276              		.loc 1 146 0
  277 0128 0192     		str	r2, [sp, #4]
- 278              		.loc 1 156 0
+ 278              		.loc 1 148 0
  279 012a FFF7FEFF 		bl	simplePrintf
  280              	.LVL9:
- 157:testAdc.c     ****     consolSendNumber(10,4,FALSE,' ', dacValue);    
- 281              		.loc 1 157 0
+ 149:testAdc.c     **** 		consolSendNumber (10, 4, FALSE, ' ', dacValue);
+ 281              		.loc 1 149 0
  282 012e 019B     		ldr	r3, [sp, #4]
  283 0130 0421     		mov	r1, #4
  284 0132 0022     		mov	r2, #0
@@ -504,104 +496,101 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  286 0136 0A20     		mov	r0, #10
  287 0138 2023     		mov	r3, #32
  288 013a FFF7FEFF 		bl	consolSendNumber
- 158:testAdc.c     ****       
- 159:testAdc.c     ****     //wait for DAC value to settle
- 160:testAdc.c     ****     osSleep(1);
- 289              		.loc 1 160 0
+ 150:testAdc.c     **** 
+ 151:testAdc.c     **** 		//wait for DAC value to settle
+ 152:testAdc.c     **** 		osSleep (1);
+ 289              		.loc 1 152 0
  290 013e 0120     		mov	r0, #1
  291 0140 FFF7FEFF 		bl	osSleep
- 161:testAdc.c     **** 
- 162:testAdc.c     **** 	  //get AIN3 (P0.30)
- 163:testAdc.c     ****     PINSEL1 &= ~0x30000000;
- 292              		.loc 1 163 0
+ 153:testAdc.c     **** 
+ 154:testAdc.c     **** 		//get AIN3 (P0.30)
+ 155:testAdc.c     **** 		PINSEL1 &= ~0x30000000;
+ 292              		.loc 1 155 0
  293 0144 4349     		ldr	r1, .L19+16
  294 0146 4F4A     		ldr	r2, .L19+64
  295 0148 0B68     		ldr	r3, [r1]
  296 014a 1340     		and	r3, r3, r2
  297 014c 0B60     		str	r3, [r1]
- 164:testAdc.c     ****     PINSEL1 |=  0x10000000; //set P0.30 = AIN3
- 298              		.loc 1 164 0
+ 156:testAdc.c     **** 		PINSEL1 |= 0x10000000; //set P0.30 = AIN3
+ 298              		.loc 1 156 0
  299 014e 8023     		mov	r3, #128
  300 0150 0A68     		ldr	r2, [r1]
  301 0152 5B05     		lsl	r3, r3, #21
  302 0154 1A43     		orr	r2, r2, r3
  303              	.LBB6:
  304              	.LBB7:
- 305              		.loc 1 47 0
+ 305              		.loc 1 43 0
  306 0156 0023     		mov	r3, #0
  307              	.LBE7:
  308              	.LBE6:
- 309              		.loc 1 164 0
+ 309              		.loc 1 156 0
  310 0158 0A60     		str	r2, [r1]
  311 015a 02E0     		b	.L18
  312              	.L12:
  313              	.LBB8:
  314              	.LBB9:
- 315              		.loc 1 48 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 10
-
-
+ 315              		.loc 1 44 0
  316 015c C046     		 nop
- 317              		.loc 1 47 0
+ 317              		.loc 1 43 0
  318              		.code	16
  319 015e 029B     		ldr	r3, [sp, #8]
  320 0160 0133     		add	r3, r3, #1
  321              	.L18:
  322 0162 0293     		str	r3, [sp, #8]
  323 0164 029A     		ldr	r2, [sp, #8]
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 10
+
+
  324 0166 484B     		ldr	r3, .L19+68
  325 0168 9A42     		cmp	r2, r3
  326 016a F7D9     		bls	.L12
  327              	.LBE9:
  328              	.LBE8:
- 165:testAdc.c     ****     delay37us();
- 166:testAdc.c     **** 	  integerResult = getAnalogueInput(AIN3);
- 329              		.loc 1 166 0
+ 157:testAdc.c     **** 		delay37us ();
+ 158:testAdc.c     **** 		integerResult = getAnalogueInput (AIN3);
+ 329              		.loc 1 158 0
  330 016c 0320     		mov	r0, #3
  331 016e FFF747FF 		bl	getAnalogueInput
- 167:testAdc.c     ****     PINSEL1 &= ~0x30000000; //set P0.30 back to GPIO
- 332              		.loc 1 167 0
+ 159:testAdc.c     **** 		PINSEL1 &= ~0x30000000; //set P0.30 back to GPIO
+ 332              		.loc 1 159 0
  333 0172 3849     		ldr	r1, .L19+16
  334 0174 434A     		ldr	r2, .L19+64
  335 0176 0B68     		ldr	r3, [r1]
  336 0178 1340     		and	r3, r3, r2
  337 017a 0B60     		str	r3, [r1]
- 338              		.loc 1 166 0
+ 338              		.loc 1 158 0
  339 017c 041C     		mov	r4, r0
  340              	.LBB10:
- 168:testAdc.c     **** 
- 169:testAdc.c     **** 	  //calculate result in mV
- 170:testAdc.c     **** 	  mvResult  = integerResult * VREF_IN_MV;
- 171:testAdc.c     ****     mvResult /= 1024;
- 172:testAdc.c     ****   	
- 173:testAdc.c     **** //    printf(", AIN3: %d = %d mV", integerResult, mvResult);
- 174:testAdc.c     ****     printf(", AIN3:");
- 175:testAdc.c     ****     consolSendNumber(10,4,FALSE,' ', integerResult);    
- 176:testAdc.c     **** #if 0
- 177:testAdc.c     ****     printf("=");
- 178:testAdc.c     ****     consolSendNumber(10,4,FALSE,' ', mvResult);    
- 179:testAdc.c     ****     printf(" mV");
- 180:testAdc.c     **** #endif
- 181:testAdc.c     **** 
- 182:testAdc.c     ****     {
- 183:testAdc.c     ****  	    tU8 data[3];
- 184:testAdc.c     **** 
- 185:testAdc.c     ****       //test LM75
- 186:testAdc.c     ****       if (1 == lm75Read(0x90, &data[0], 3))
- 341              		.loc 1 186 0
+ 160:testAdc.c     **** 
+ 161:testAdc.c     **** 		//calculate result in mV
+ 162:testAdc.c     **** 		mvResult = integerResult * VREF_IN_MV;
+ 163:testAdc.c     **** 		mvResult /= 1024;
+ 164:testAdc.c     **** 
+ 165:testAdc.c     **** 		//    printf(", AIN3: %d = %d mV", integerResult, mvResult);
+ 166:testAdc.c     **** 		printf(", AIN3:");
+ 167:testAdc.c     **** 		consolSendNumber (10, 4, FALSE, ' ', integerResult);
+ 168:testAdc.c     **** #if 0
+ 169:testAdc.c     **** 		printf("=");
+ 170:testAdc.c     **** 		consolSendNumber(10,4,FALSE,' ', mvResult);
+ 171:testAdc.c     **** 		printf(" mV");
+ 172:testAdc.c     **** #endif
+ 173:testAdc.c     **** 
+ 174:testAdc.c     **** 		{
+ 175:testAdc.c     **** 			tU8 data[3];
+ 176:testAdc.c     **** 
+ 177:testAdc.c     **** 			//test LM75
+ 178:testAdc.c     **** 			if (1 == lm75Read (0x90, &data[0], 3))
+ 341              		.loc 1 178 0
  342 017e 6D46     		mov	r5, sp
  343              	.LBE10:
- 344              		.loc 1 174 0
+ 344              		.loc 1 166 0
  345 0180 4248     		ldr	r0, .L19+72
  346 0182 FFF7FEFF 		bl	simplePrintf
  347              	.LBB11:
- 348              		.loc 1 186 0
+ 348              		.loc 1 178 0
  349 0186 0D35     		add	r5, r5, #13
  350              	.LBE11:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 11
-
-
- 351              		.loc 1 175 0
+ 351              		.loc 1 167 0
  352 0188 0A20     		mov	r0, #10
  353 018a 0421     		mov	r1, #4
  354 018c 0022     		mov	r2, #0
@@ -609,7 +598,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  356 0190 0094     		str	r4, [sp]
  357 0192 FFF7FEFF 		bl	consolSendNumber
  358              	.LBB12:
- 359              		.loc 1 186 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 11
+
+
+ 359              		.loc 1 178 0
  360 0196 9020     		mov	r0, #144
  361 0198 291C     		mov	r1, r5
  362 019a 0322     		mov	r2, #3
@@ -618,49 +610,46 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  365 01a2 0128     		cmp	r0, #1
  366 01a4 1FD1     		bne	.L14
  367              	.LBB13:
- 187:testAdc.c     ****       {
- 188:testAdc.c     ****         tU16 temp;
- 189:testAdc.c     ****         temp = (((tU16)data[0]<<8) + (tU16)data[1]) >> 7;
- 368              		.loc 1 189 0
+ 179:testAdc.c     **** 			{
+ 180:testAdc.c     **** 				tU16 temp;
+ 181:testAdc.c     **** 				temp = (((tU16) data[0] << 8) + (tU16) data[1]) >> 7;
+ 368              		.loc 1 181 0
  369 01a6 2C78     		ldrb	r4, [r5]
  370 01a8 6B78     		ldrb	r3, [r5, #1]
  371 01aa 2402     		lsl	r4, r4, #8
  372 01ac E418     		add	r4, r4, r3
  373 01ae E411     		asr	r4, r4, #7
  374 01b0 2404     		lsl	r4, r4, #16
- 190:testAdc.c     ****         printf(", t=");
- 375              		.loc 1 190 0
+ 182:testAdc.c     **** 				printf(", t=");
+ 375              		.loc 1 182 0
  376 01b2 3748     		ldr	r0, .L19+76
  377 01b4 FFF7FEFF 		bl	simplePrintf
- 378              		.loc 1 189 0
+ 378              		.loc 1 181 0
  379 01b8 250C     		lsr	r5, r4, #16
  380              	.LVL10:
- 191:testAdc.c     ****         consolSendNumber(10,2,FALSE,' ', temp / 2);
- 381              		.loc 1 191 0
+ 183:testAdc.c     **** 				consolSendNumber (10, 2, FALSE, ' ', temp / 2);
+ 381              		.loc 1 183 0
  382 01ba 0221     		mov	r1, #2
  383 01bc 0022     		mov	r2, #0
  384 01be 2023     		mov	r3, #32
  385 01c0 640C     		lsr	r4, r4, #17
  386 01c2 0A20     		mov	r0, #10
- 192:testAdc.c     ****         printf(".");
- 193:testAdc.c     ****         consolSendNumber(10,1,FALSE,' ', (temp&1) * 5);
- 387              		.loc 1 193 0
+ 184:testAdc.c     **** 				printf(".");
+ 185:testAdc.c     **** 				consolSendNumber (10, 1, FALSE, ' ', (temp & 1) * 5);
+ 387              		.loc 1 185 0
  388 01c4 3540     		and	r5, r5, r6
  389              	.LVL11:
- 390              		.loc 1 191 0
+ 390              		.loc 1 183 0
  391 01c6 0094     		str	r4, [sp]
  392 01c8 FFF7FEFF 		bl	consolSendNumber
- 393              		.loc 1 192 0
+ 393              		.loc 1 184 0
  394 01cc 3148     		ldr	r0, .L19+80
  395 01ce FFF7FEFF 		bl	simplePrintf
- 396              		.loc 1 193 0
+ 396              		.loc 1 185 0
  397 01d2 AB00     		lsl	r3, r5, #2
  398 01d4 5B19     		add	r3, r3, r5
  399 01d6 0093     		str	r3, [sp]
  400 01d8 0A20     		mov	r0, #10
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 12
-
-
  401 01da 0121     		mov	r1, #1
  402 01dc 0022     		mov	r2, #0
  403 01de 2023     		mov	r3, #32
@@ -668,22 +657,24 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  405 01e4 02E0     		b	.L16
  406              	.L14:
  407              	.LBE13:
- 194:testAdc.c     ****       }
- 195:testAdc.c     ****       else
- 196:testAdc.c     ****         printf(", t=??? ");
- 408              		.loc 1 196 0
+ 186:testAdc.c     **** 			} else
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 12
+
+
+ 187:testAdc.c     **** 				printf(", t=??? ");
+ 408              		.loc 1 187 0
  409 01e6 2C48     		ldr	r0, .L19+84
  410 01e8 FFF7FEFF 		bl	simplePrintf
  411              	.L16:
  412              	.LBE12:
- 197:testAdc.c     ****     }
- 198:testAdc.c     **** 
- 199:testAdc.c     ****     printf(", [");
- 413              		.loc 1 199 0
+ 188:testAdc.c     **** 		}
+ 189:testAdc.c     **** 
+ 190:testAdc.c     **** 		printf(", [");
+ 413              		.loc 1 190 0
  414 01ec 2B48     		ldr	r0, .L19+88
  415 01ee FFF7FEFF 		bl	simplePrintf
- 200:testAdc.c     ****     consolSendNumber(10,2,FALSE,' ', HOUR);    
- 416              		.loc 1 200 0
+ 191:testAdc.c     **** 		consolSendNumber (10, 2, FALSE, ' ', HOUR);
+ 416              		.loc 1 191 0
  417 01f2 2B4B     		ldr	r3, .L19+92
  418 01f4 1B68     		ldr	r3, [r3]
  419 01f6 0221     		mov	r1, #2
@@ -692,13 +683,13 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  422 01fc 2023     		mov	r3, #32
  423 01fe 0A20     		mov	r0, #10
  424 0200 FFF7FEFF 		bl	consolSendNumber
- 201:testAdc.c     ****     printf(":");
- 425              		.loc 1 201 0
+ 192:testAdc.c     **** 		printf(":");
+ 425              		.loc 1 192 0
  426 0204 274C     		ldr	r4, .L19+96
  427 0206 201C     		mov	r0, r4
  428 0208 FFF7FEFF 		bl	simplePrintf
- 202:testAdc.c     ****     consolSendNumber(10,2,FALSE,' ', MINx);    
- 429              		.loc 1 202 0
+ 193:testAdc.c     **** 		consolSendNumber (10, 2, FALSE, ' ', MINx);
+ 429              		.loc 1 193 0
  430 020c 264B     		ldr	r3, .L19+100
  431 020e 1B68     		ldr	r3, [r3]
  432 0210 0221     		mov	r1, #2
@@ -707,31 +698,31 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  435 0216 2023     		mov	r3, #32
  436 0218 0A20     		mov	r0, #10
  437 021a FFF7FEFF 		bl	consolSendNumber
- 203:testAdc.c     ****     printf(":");
- 438              		.loc 1 203 0
+ 194:testAdc.c     **** 		printf(":");
+ 438              		.loc 1 194 0
  439 021e 201C     		mov	r0, r4
  440 0220 FFF7FEFF 		bl	simplePrintf
- 204:testAdc.c     ****     consolSendNumber(10,2,FALSE,' ', SEC);    
- 441              		.loc 1 204 0
+ 195:testAdc.c     **** 		consolSendNumber (10, 2, FALSE, ' ', SEC);
+ 441              		.loc 1 195 0
  442 0224 214B     		ldr	r3, .L19+104
  443 0226 1B68     		ldr	r3, [r3]
  444 0228 0221     		mov	r1, #2
  445 022a 0093     		str	r3, [sp]
  446 022c 0022     		mov	r2, #0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 13
-
-
  447 022e 2023     		mov	r3, #32
  448 0230 0A20     		mov	r0, #10
  449 0232 FFF7FEFF 		bl	consolSendNumber
- 205:testAdc.c     ****     printf("]");
- 450              		.loc 1 205 0
+ 196:testAdc.c     **** 		printf("]");
+ 450              		.loc 1 196 0
  451 0236 1E48     		ldr	r0, .L19+108
  452 0238 FFF7FEFF 		bl	simplePrintf
- 206:testAdc.c     **** 
- 207:testAdc.c     ****     //wait 250 ms
- 208:testAdc.c     ****     osSleep(100);
- 453              		.loc 1 208 0
+ 197:testAdc.c     **** 
+ 198:testAdc.c     **** 		//wait 250 ms
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 13
+
+
+ 199:testAdc.c     **** 		osSleep (100);
+ 453              		.loc 1 199 0
  454 023c 6420     		mov	r0, #100
  455 023e FFF7FEFF 		bl	osSleep
  456 0242 1FE7     		b	.L10
@@ -778,9 +769,6 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  497 000a 01       		.uleb128 0x1
  498 000b 7C       		.sleb128 -4
  499 000c 0E       		.byte	0xe
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 14
-
-
  500 000d 0C       		.byte	0xc
  501 000e 0D       		.uleb128 0xd
  502 000f 00       		.uleb128 0x0
@@ -790,6 +778,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  506 0010 14000000 		.4byte	.LEFDE0-.LASFDE0
  507              	.LASFDE0:
  508 0014 00000000 		.4byte	.Lframe0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 14
+
+
  509 0018 00000000 		.4byte	.LFB3
  510 001c 38000000 		.4byte	.LFE3-.LFB3
  511 0020 42       		.byte	0x4
@@ -838,9 +829,6 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  554 0004 02000000 		.4byte	.LCFI0-.Ltext0
  555 0008 0100     		.2byte	0x1
  556 000a 5D       		.byte	0x5d
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 15
-
-
  557 000b 02000000 		.4byte	.LCFI0-.Ltext0
  558 000f 38000000 		.4byte	.LFE3-.Ltext0
  559 0013 0200     		.2byte	0x2
@@ -850,6 +838,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  563 001b 00000000 		.4byte	0x0
  564              	.LLST1:
  565 001f 02000000 		.4byte	.LVL0-.Ltext0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 15
+
+
  566 0023 0C000000 		.4byte	.LVL1-.Ltext0
  567 0027 0100     		.2byte	0x1
  568 0029 50       		.byte	0x50
@@ -898,9 +889,6 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  611              	.LLST5:
  612 009a BA010000 		.4byte	.LVL10-.Ltext0
  613 009e C6010000 		.4byte	.LVL11-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 16
-
-
  614 00a2 0100     		.2byte	0x1
  615 00a4 55       		.byte	0x55
  616 00a5 00000000 		.4byte	0x0
@@ -910,47 +898,50 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  620 0004 0200     		.2byte	0x2
  621 0006 00000000 		.4byte	.Ldebug_abbrev0
  622 000a 04       		.byte	0x4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 16
+
+
  623 000b 01       		.uleb128 0x1
  624 000c 00000000 		.4byte	.Ldebug_line0
  625 0010 B4020000 		.4byte	.Letext0
  626 0014 00000000 		.4byte	.Ltext0
- 627 0018 C5000000 		.4byte	.LASF15
+ 627 0018 B6000000 		.4byte	.LASF15
  628 001c 01       		.byte	0x1
  629 001d 08000000 		.4byte	.LASF16
- 630 0021 12000000 		.4byte	.LASF17
+ 630 0021 85000000 		.4byte	.LASF17
  631 0025 02       		.uleb128 0x2
  632 0026 74553800 		.ascii	"tU8\000"
  633 002a 02       		.byte	0x2
  634 002b 47       		.byte	0x47
  635 002c 30000000 		.4byte	0x30
  636 0030 03       		.uleb128 0x3
- 637 0031 60000000 		.4byte	.LASF1
+ 637 0031 20000000 		.4byte	.LASF1
  638 0035 01       		.byte	0x1
  639 0036 08       		.byte	0x8
  640 0037 04       		.uleb128 0x4
- 641 0038 D1000000 		.4byte	.LASF0
+ 641 0038 C2000000 		.4byte	.LASF0
  642 003c 02       		.byte	0x2
  643 003d 48       		.byte	0x48
  644 003e 42000000 		.4byte	0x42
  645 0042 03       		.uleb128 0x3
- 646 0043 93000000 		.4byte	.LASF2
+ 646 0043 53000000 		.4byte	.LASF2
  647 0047 02       		.byte	0x2
  648 0048 07       		.byte	0x7
  649 0049 04       		.uleb128 0x4
- 650 004a D6000000 		.4byte	.LASF3
+ 650 004a C7000000 		.4byte	.LASF3
  651 004e 02       		.byte	0x2
  652 004f 49       		.byte	0x49
  653 0050 54000000 		.4byte	0x54
  654 0054 03       		.uleb128 0x3
- 655 0055 AE000000 		.4byte	.LASF4
+ 655 0055 6E000000 		.4byte	.LASF4
  656 0059 04       		.byte	0x4
  657 005a 07       		.byte	0x7
  658 005b 03       		.uleb128 0x3
- 659 005c EE000000 		.4byte	.LASF5
+ 659 005c DF000000 		.4byte	.LASF5
  660 0060 01       		.byte	0x1
  661 0061 06       		.byte	0x6
  662 0062 03       		.uleb128 0x3
- 663 0063 DB000000 		.4byte	.LASF6
+ 663 0063 CC000000 		.4byte	.LASF6
  664 0067 02       		.byte	0x2
  665 0068 05       		.byte	0x5
  666 0069 05       		.uleb128 0x5
@@ -958,18 +949,18 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  668 006e 04       		.byte	0x4
  669 006f 05       		.byte	0x5
  670 0070 03       		.uleb128 0x3
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 17
-
-
- 671 0071 7C000000 		.4byte	.LASF7
+ 671 0071 3C000000 		.4byte	.LASF7
  672 0075 04       		.byte	0x4
  673 0076 07       		.byte	0x7
  674 0077 06       		.uleb128 0x6
  675 0078 A3000000 		.4byte	0xa3
- 676 007c FA000000 		.4byte	.LASF8
+ 676 007c EB000000 		.4byte	.LASF8
  677 0080 01       		.byte	0x1
- 678 0081 42       		.byte	0x42
+ 678 0081 3E       		.byte	0x3e
  679 0082 01       		.byte	0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 17
+
+
  680 0083 37000000 		.4byte	0x37
  681 0087 00000000 		.4byte	.LFB3
  682 008b 38000000 		.4byte	.LFE3
@@ -977,21 +968,21 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  684 0093 07       		.uleb128 0x7
  685 0094 00000000 		.4byte	.LASF18
  686 0098 01       		.byte	0x1
- 687 0099 41       		.byte	0x41
+ 687 0099 3D       		.byte	0x3d
  688 009a 25000000 		.4byte	0x25
  689 009e 1F000000 		.4byte	.LLST1
  690 00a2 00       		.byte	0x0
  691 00a3 08       		.uleb128 0x8
  692 00a4 BA000000 		.4byte	0xba
- 693 00a8 BB000000 		.4byte	.LASF9
+ 693 00a8 7B000000 		.4byte	.LASF9
  694 00ac 01       		.byte	0x1
- 695 00ad 2C       		.byte	0x2c
+ 695 00ad 28       		.byte	0x28
  696 00ae 01       		.byte	0x1
  697 00af 01       		.byte	0x1
  698 00b0 09       		.uleb128 0x9
  699 00b1 6900     		.ascii	"i\000"
  700 00b3 01       		.byte	0x1
- 701 00b4 2D       		.byte	0x2d
+ 701 00b4 29       		.byte	0x29
  702 00b5 BA000000 		.4byte	0xba
  703 00b9 00       		.byte	0x0
  704 00ba 0A       		.uleb128 0xa
@@ -999,39 +990,39 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  706 00bf 0B       		.uleb128 0xb
  707 00c0 51010000 		.4byte	0x151
  708 00c4 01       		.byte	0x1
- 709 00c5 A6000000 		.4byte	.LASF19
+ 709 00c5 66000000 		.4byte	.LASF19
  710 00c9 01       		.byte	0x1
- 711 00ca 57       		.byte	0x57
+ 711 00ca 51       		.byte	0x51
  712 00cb 01       		.byte	0x1
  713 00cc 38000000 		.4byte	.LFB4
  714 00d0 B4020000 		.4byte	.LFE4
  715 00d4 3D000000 		.4byte	.LLST2
  716 00d8 0C       		.uleb128 0xc
- 717 00d9 6E000000 		.4byte	.LASF10
+ 717 00d9 2E000000 		.4byte	.LASF10
  718 00dd 01       		.byte	0x1
- 719 00de 58       		.byte	0x58
+ 719 00de 52       		.byte	0x52
  720 00df 49000000 		.4byte	0x49
  721 00e3 68000000 		.4byte	.LLST3
  722 00e7 0D       		.uleb128 0xd
- 723 00e8 57000000 		.4byte	.LASF11
+ 723 00e8 17000000 		.4byte	.LASF11
  724 00ec 01       		.byte	0x1
- 725 00ed 59       		.byte	0x59
+ 725 00ed 53       		.byte	0x53
  726 00ee 49000000 		.4byte	0x49
  727 00f2 0C       		.uleb128 0xc
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 18
-
-
- 728 00f3 E5000000 		.4byte	.LASF12
+ 728 00f3 D6000000 		.4byte	.LASF12
  729 00f7 01       		.byte	0x1
- 730 00f8 5A       		.byte	0x5a
+ 730 00f8 54       		.byte	0x54
  731 00f9 37000000 		.4byte	0x37
  732 00fd 7B000000 		.4byte	.LLST4
  733 0101 0E       		.uleb128 0xe
  734 0102 1F010000 		.4byte	0x11f
  735 0106 A3000000 		.4byte	0xa3
  736 010a 00000000 		.4byte	.Ldebug_ranges0+0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 18
+
+
  737 010e 01       		.byte	0x1
- 738 010f A5       		.byte	0xa5
+ 738 010f 9D       		.byte	0x9d
  739 0110 0F       		.uleb128 0xf
  740 0111 18000000 		.4byte	.Ldebug_ranges0+0x18
  741 0115 10       		.uleb128 0x10
@@ -1045,9 +1036,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  749 0120 37010000 		.4byte	0x137
  750 0124 30000000 		.4byte	.Ldebug_ranges0+0x30
  751 0128 12       		.uleb128 0x12
- 752 0129 52000000 		.4byte	.LASF13
+ 752 0129 12000000 		.4byte	.LASF13
  753 012d 01       		.byte	0x1
- 754 012e B7       		.byte	0xb7
+ 754 012e AF       		.byte	0xaf
  755 012f 51010000 		.4byte	0x151
  756 0133 02       		.byte	0x2
  757 0134 91       		.byte	0x91
@@ -1057,9 +1048,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  761 0138 A6010000 		.4byte	.LBB13
  762 013c E6010000 		.4byte	.LBE13
  763 0140 0C       		.uleb128 0xc
- 764 0141 8E000000 		.4byte	.LASF14
+ 764 0141 4E000000 		.4byte	.LASF14
  765 0145 01       		.byte	0x1
- 766 0146 BC       		.byte	0xbc
+ 766 0146 B4       		.byte	0xb4
  767 0147 37000000 		.4byte	0x37
  768 014b 9A000000 		.4byte	.LLST5
  769 014f 00       		.byte	0x0
@@ -1078,9 +1069,6 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  782 0003 10       		.uleb128 0x10
  783 0004 06       		.uleb128 0x6
  784 0005 12       		.uleb128 0x12
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 19
-
-
  785 0006 01       		.uleb128 0x1
  786 0007 11       		.uleb128 0x11
  787 0008 01       		.uleb128 0x1
@@ -1090,6 +1078,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  791 000c 0B       		.uleb128 0xb
  792 000d 03       		.uleb128 0x3
  793 000e 0E       		.uleb128 0xe
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 19
+
+
  794 000f 1B       		.uleb128 0x1b
  795 0010 0E       		.uleb128 0xe
  796 0011 00       		.byte	0x0
@@ -1138,9 +1129,6 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  839 003c 08       		.uleb128 0x8
  840 003d 0B       		.uleb128 0xb
  841 003e 0B       		.uleb128 0xb
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 20
-
-
  842 003f 3E       		.uleb128 0x3e
  843 0040 0B       		.uleb128 0xb
  844 0041 00       		.byte	0x0
@@ -1150,6 +1138,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  848 0045 01       		.byte	0x1
  849 0046 01       		.uleb128 0x1
  850 0047 13       		.uleb128 0x13
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 20
+
+
  851 0048 03       		.uleb128 0x3
  852 0049 0E       		.uleb128 0xe
  853 004a 3A       		.uleb128 0x3a
@@ -1198,9 +1189,6 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  896 0075 0C       		.uleb128 0xc
  897 0076 20       		.uleb128 0x20
  898 0077 0B       		.uleb128 0xb
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 21
-
-
  899 0078 00       		.byte	0x0
  900 0079 00       		.byte	0x0
  901 007a 09       		.uleb128 0x9
@@ -1210,6 +1198,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  905 007e 08       		.uleb128 0x8
  906 007f 3A       		.uleb128 0x3a
  907 0080 0B       		.uleb128 0xb
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 21
+
+
  908 0081 3B       		.uleb128 0x3b
  909 0082 0B       		.uleb128 0xb
  910 0083 49       		.uleb128 0x49
@@ -1258,9 +1249,6 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  953 00ae 49       		.uleb128 0x49
  954 00af 13       		.uleb128 0x13
  955 00b0 02       		.uleb128 0x2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 22
-
-
  956 00b1 06       		.uleb128 0x6
  957 00b2 00       		.byte	0x0
  958 00b3 00       		.byte	0x0
@@ -1270,6 +1258,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  962 00b7 03       		.uleb128 0x3
  963 00b8 0E       		.uleb128 0xe
  964 00b9 3A       		.uleb128 0x3a
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 22
+
+
  965 00ba 0B       		.uleb128 0xb
  966 00bb 3B       		.uleb128 0x3b
  967 00bc 0B       		.uleb128 0xb
@@ -1318,9 +1309,6 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  1010 00e7 00       		.byte	0x0
  1011 00e8 00       		.byte	0x0
  1012 00e9 12       		.uleb128 0x12
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 23
-
-
  1013 00ea 34       		.uleb128 0x34
  1014 00eb 00       		.byte	0x0
  1015 00ec 03       		.uleb128 0x3
@@ -1330,6 +1318,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  1019 00f0 3B       		.uleb128 0x3b
  1020 00f1 0B       		.uleb128 0xb
  1021 00f2 49       		.uleb128 0x49
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 23
+
+
  1022 00f3 13       		.uleb128 0x13
  1023 00f4 02       		.uleb128 0x2
  1024 00f5 0A       		.uleb128 0xa
@@ -1378,9 +1369,6 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  1066 000b 00       		.byte	0x0
  1067 000c 0000     		.2byte	0x0
  1068 000e 0000     		.2byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 24
-
-
  1069 0010 00000000 		.4byte	.Ltext0
  1070 0014 B4020000 		.4byte	.Letext0-.Ltext0
  1071 0018 00000000 		.4byte	0x0
@@ -1390,6 +1378,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  1075 0000 56010000 		.4byte	.LBB6-.Ltext0
  1076 0004 58010000 		.4byte	.LBE6-.Ltext0
  1077 0008 5C010000 		.4byte	.LBB8-.Ltext0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 24
+
+
  1078 000c 6C010000 		.4byte	.LBE8-.Ltext0
  1079 0010 00000000 		.4byte	0x0
  1080 0014 00000000 		.4byte	0x0
@@ -1415,106 +1406,99 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 1
  1099 0008 74657374 		.ascii	"testAdc.c\000"
  1099      4164632E 
  1099      6300
- 1100              	.LASF17:
- 1101 0012 2F637967 		.ascii	"/cygdrive/g/servers/github/SysWbud/2148/testProgram"
- 1101      64726976 
- 1101      652F672F 
- 1101      73657276 
- 1101      6572732F 
- 1102 0045 5F6C7063 		.ascii	"_lpc2148_edu\000"
- 1102      32313438 
- 1102      5F656475 
- 1102      00
- 1103              	.LASF13:
- 1104 0052 64617461 		.ascii	"data\000"
- 1104      00
- 1105              	.LASF11:
- 1106 0057 6D765265 		.ascii	"mvResult\000"
- 1106      73756C74 
- 1106      00
- 1107              	.LASF1:
- 1108 0060 756E7369 		.ascii	"unsigned char\000"
- 1108      676E6564 
- 1108      20636861 
- 1108      7200
- 1109              	.LASF10:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 25
+ 1100              	.LASF13:
+ 1101 0012 64617461 		.ascii	"data\000"
+ 1101      00
+ 1102              	.LASF11:
+ 1103 0017 6D765265 		.ascii	"mvResult\000"
+ 1103      73756C74 
+ 1103      00
+ 1104              	.LASF1:
+ 1105 0020 756E7369 		.ascii	"unsigned char\000"
+ 1105      676E6564 
+ 1105      20636861 
+ 1105      7200
+ 1106              	.LASF10:
+ 1107 002e 696E7465 		.ascii	"integerResult\000"
+ 1107      67657252 
+ 1107      6573756C 
+ 1107      7400
+ 1108              	.LASF7:
+ 1109 003c 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1109      20756E73 
+ 1109      69676E65 
+ 1109      6420696E 
+ 1109      7400
+ 1110              	.LASF14:
+ 1111 004e 74656D70 		.ascii	"temp\000"
+ 1111      00
+ 1112              	.LASF2:
+ 1113 0053 73686F72 		.ascii	"short unsigned int\000"
+ 1113      7420756E 
+ 1113      7369676E 
+ 1113      65642069 
+ 1113      6E7400
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 25
 
 
- 1110 006e 696E7465 		.ascii	"integerResult\000"
- 1110      67657252 
- 1110      6573756C 
- 1110      7400
- 1111              	.LASF7:
- 1112 007c 6C6F6E67 		.ascii	"long unsigned int\000"
- 1112      20756E73 
- 1112      69676E65 
- 1112      6420696E 
- 1112      7400
- 1113              	.LASF14:
- 1114 008e 74656D70 		.ascii	"temp\000"
- 1114      00
- 1115              	.LASF2:
- 1116 0093 73686F72 		.ascii	"short unsigned int\000"
- 1116      7420756E 
- 1116      7369676E 
- 1116      65642069 
- 1116      6E7400
- 1117              	.LASF19:
- 1118 00a6 74657374 		.ascii	"testAdc\000"
- 1118      41646300 
- 1119              	.LASF4:
- 1120 00ae 756E7369 		.ascii	"unsigned int\000"
- 1120      676E6564 
- 1120      20696E74 
- 1120      00
- 1121              	.LASF9:
- 1122 00bb 64656C61 		.ascii	"delay37us\000"
- 1122      79333775 
- 1122      7300
- 1123              	.LASF15:
- 1124 00c5 474E5520 		.ascii	"GNU C 4.1.1\000"
- 1124      4320342E 
- 1124      312E3100 
- 1125              	.LASF0:
- 1126 00d1 74553136 		.ascii	"tU16\000"
- 1126      00
- 1127              	.LASF3:
- 1128 00d6 74553332 		.ascii	"tU32\000"
- 1128      00
- 1129              	.LASF6:
- 1130 00db 73686F72 		.ascii	"short int\000"
- 1130      7420696E 
- 1130      7400
- 1131              	.LASF12:
- 1132 00e5 64616356 		.ascii	"dacValue\000"
- 1132      616C7565 
- 1132      00
- 1133              	.LASF5:
- 1134 00ee 7369676E 		.ascii	"signed char\000"
- 1134      65642063 
- 1134      68617200 
- 1135              	.LASF8:
- 1136 00fa 67657441 		.ascii	"getAnalogueInput\000"
- 1136      6E616C6F 
- 1136      67756549 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 26
-
-
- 1136      6E707574 
- 1136      00
- 1137              		.ident	"GCC: (GNU) 4.1.1"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s 			page 27
+ 1114              	.LASF19:
+ 1115 0066 74657374 		.ascii	"testAdc\000"
+ 1115      41646300 
+ 1116              	.LASF4:
+ 1117 006e 756E7369 		.ascii	"unsigned int\000"
+ 1117      676E6564 
+ 1117      20696E74 
+ 1117      00
+ 1118              	.LASF9:
+ 1119 007b 64656C61 		.ascii	"delay37us\000"
+ 1119      79333775 
+ 1119      7300
+ 1120              	.LASF17:
+ 1121 0085 2F637967 		.ascii	"/cygdrive/e/SysWbud/2148/testProgram_lpc2148_edu\000"
+ 1121      64726976 
+ 1121      652F652F 
+ 1121      53797357 
+ 1121      6275642F 
+ 1122              	.LASF15:
+ 1123 00b6 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 1123      4320342E 
+ 1123      312E3100 
+ 1124              	.LASF0:
+ 1125 00c2 74553136 		.ascii	"tU16\000"
+ 1125      00
+ 1126              	.LASF3:
+ 1127 00c7 74553332 		.ascii	"tU32\000"
+ 1127      00
+ 1128              	.LASF6:
+ 1129 00cc 73686F72 		.ascii	"short int\000"
+ 1129      7420696E 
+ 1129      7400
+ 1130              	.LASF12:
+ 1131 00d6 64616356 		.ascii	"dacValue\000"
+ 1131      616C7565 
+ 1131      00
+ 1132              	.LASF5:
+ 1133 00df 7369676E 		.ascii	"signed char\000"
+ 1133      65642063 
+ 1133      68617200 
+ 1134              	.LASF8:
+ 1135 00eb 67657441 		.ascii	"getAnalogueInput\000"
+ 1135      6E616C6F 
+ 1135      67756549 
+ 1135      6E707574 
+ 1135      00
+ 1136              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s 			page 26
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 testAdc.c
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s:1      .text:00000000 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s:15     .text:00000000 getAnalogueInput
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s:61     .text:00000030 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s:124    .text:00000038 testAdc
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s:121    .text:00000038 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccX8IVbi.s:460    .text:00000244 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s:15     .text:00000000 getAnalogueInput
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s:61     .text:00000030 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s:124    .text:00000038 testAdc
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s:121    .text:00000038 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccH7N2Yx.s:460    .text:00000244 $d
 
 UNDEFINED SYMBOLS
 simplePrintf

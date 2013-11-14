@@ -51,30 +51,32 @@ EFLAGS  = -mthumb-interwork
 CODE    = THUMB
 
 # List C source files here.
-CSRCS   = main.c          \
-          eeprom.c        \
-          i2c.c           \
-          uart.c          \
-          testLcd.c       \
-          testI2C.c       \
-          testAdc.c       \
-          lcd.c       	  \
-          lcd_hw.c       \
+CSRCS   = main.c		\
+          eeprom.c		\
+          i2c.c			\
+          uart.c		\
+          testAdc.c		\
+          testLcd.c		\
+          testRGB.c		\
+          lcd.c			\
+          lcd_hw.c		\
           key.c       
 
 # List assembler source files here
 ASRCS   = 
 
 # List subdirectories to recursively invoke make in 
-SUBDIRS = ../startup \
-          usb \
-          irq
+SUBDIRS = ../startup	\
+          usb			\
+          irq			\
+          pff2		
 
 # List additional libraries to link with
-LIBS    = irq/irq_code.a \
-          ../startup/libea_startup_thumb.a \
-          ../pre_emptive_os/pre_emptive_os.a \
-          usb/libusb.a
+LIBS    = irq/irq_code.a						\
+          ../startup/libea_startup_thumb.a		\
+          ../pre_emptive_os/pre_emptive_os.a	\
+          usb/libusb.a							\
+          pff2/pff2_sd.a
 
 # Add include search paths
 INC     = -I ./../startup

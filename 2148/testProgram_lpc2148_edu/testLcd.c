@@ -5,7 +5,6 @@
  *
  *****************************************************************************/
 
-
 #include "../pre_emptive_os/api/osapi.h"
 #include "../pre_emptive_os/api/general.h"
 #include <printf_P.h>
@@ -17,20 +16,19 @@
 #define LCD_RW        0x00400000  //P0.22
 #define LCD_RS        0x01000000  //P1.24
 #define LCD_BACKLIGHT 0x40000000  //P0.30
-
 /*
  * TODO: Spisaæ klika s³ów o inicjalizacji.
  */
 static void initLCD (void)
 {
 	IODIR1 |= (LCD_DATA | LCD_E | LCD_RS);
-	IOCLR1  = (LCD_DATA | LCD_E | LCD_RS);
+	IOCLR1 = (LCD_DATA | LCD_E | LCD_RS);
 
 	IODIR0 |= LCD_RW;
-	IOCLR0  = LCD_RW;
-	
+	IOCLR0 = LCD_RW;
+
 	IODIR0 |= LCD_BACKLIGHT;
-	IOCLR0  = LCD_BACKLIGHT;
+	IOCLR0 = LCD_BACKLIGHT;
 }
 
 /*
@@ -41,9 +39,10 @@ static void delay37us (void)
 {
 	volatile tU32 i;
 
-	for (i = 0; i < 15*2500; ++i)
+	for (i = 0; i < 15 * 2500; ++i)
 	{
-		asm volatile (" nop"); //delay 15 ns x 2500 = about 37,5 us delay
+		asm volatile (" nop");
+		//delay 15 ns x 2500 = about 37,5 us delay
 	}
 }
 
@@ -55,8 +54,7 @@ static void PodswietlEkran (tU8 onOff)
 	if (onOff == TRUE)
 	{
 		IOSET0 = LCD_BACKLIGHT;
-	}
-	else
+	} else
 	{
 		IOCLR0 = LCD_BACKLIGHT;
 	}
@@ -65,118 +63,139 @@ static void PodswietlEkran (tU8 onOff)
 /*
  * TODO: Spisaæ kilka s³ów o wypisywaniu na ekran.
  */
-static void WypiszZnakNaEkran(tU8 reg, tU8 data)
+static void WypiszZnakNaEkran (tU8 reg, tU8 data)
 {
 	volatile tU8 i;
 
 	if (reg == 0)
 	{
 		IOCLR1 = LCD_RS;
-	}
-	else
+	} else
 	{
 		IOSET1 = LCD_RS;
 	}
 
 	IOCLR0 = LCD_RW;
 	IOCLR1 = LCD_DATA;
-	IOSET1 = ((tU32)data << 16) & LCD_DATA;
+	IOSET1 = ((tU32) data << 16) & LCD_DATA;
 	IOSET1 = LCD_E;
 
-	for(i = 0; i < 16; ++i)
+	for (i = 0; i < 16; ++i)
 	{
-		asm volatile (" nop"); //delay 15 ns x 16 = about 250 ns delay
+		asm volatile (" nop");
+		//delay 15 ns x 16 = about 240 ns delay
 	}
 	IOCLR1 = LCD_E;
 
-	for(i = 0; i < 16; ++i)
+	for (i = 0; i < 16; ++i)
 	{
-		asm volatile (" nop"); //delay 15 ns x 16 = about 250 ns delay
+		asm volatile (" nop");
+		//delay 15 ns x 16 = about 240 ns delay
 	}
 }
 
 /*
  * Wypisuje ci¹g znaków w linii na ekranie.
  */
-void WypiszCiag (tU8* tekst)
+void WypiszCiag (const char* tekst)
 {
 	while (*tekst != '\0')
 	{
-		WypiszZnakNaEkran(1, *tekst);
-		delay37us();
+		WypiszZnakNaEkran (1, *tekst);
+		delay37us ();
 
 		tekst++;
 	}
 }
 
 /*
+ * Funkcja czyszcz¹ca ekran wyœwietlacza.
+ */
+void WyczyscEkran ()
+{
+	WypiszZnakNaEkran (0, 0x01);
+	osSleep (50);
+}
+
+void PoczekajIWyczyscEkran (int ileCzekac)
+{
+	//OpóŸnienie przed znikniêciem.
+	osSleep (ileCzekac);
+	//Wy³¹czenie podœwietlenia monitora przed wyczyszczeniem.
+	PodswietlEkran (FALSE);
+
+	WyczyscEkran();
+
+	PodswietlEkran (TRUE);
+}
+
+/*
+ * Przenosi kursor wyœwietlacza do nastêpnej linii.
+ */
+void PrzejdzDoNastepnejLinii ()
+{
+	WypiszZnakNaEkran (0, 0xC0);
+	delay37us ();
+}
+
+/*
  * Wyœwietlenie na ekranie LCD napisów.
  */
-void WyswietlTekstNaLcd(void)
+void WyswietlTekstNaLcd (void)
 {
-	initLCD();
-	PodswietlEkran(FALSE);
-	osSleep(10);
+	initLCD ();
+	PodswietlEkran (FALSE);
+	osSleep (10);
 
 	while (1)
 	{
-		PodswietlEkran(TRUE);
-		osSleep(50);
+		PodswietlEkran (TRUE);
 
 		//TODO: Dowiedzieæ siê co to za znaki (a¿ do funkcji WypiszCiag) i co siê dzieje bez ich udzia³u.
 		//function set
-		WypiszZnakNaEkran(0, 0x30);
-		osSleep(1);
-		WypiszZnakNaEkran(0, 0x30);
-		delay37us();
-		WypiszZnakNaEkran(0, 0x30);
-		delay37us();
-		WypiszZnakNaEkran(0, 0x38);
-		delay37us();
+		WypiszZnakNaEkran (0, 0x30);
+		osSleep (1);
+		WypiszZnakNaEkran (0, 0x30);
+		delay37us ();
+		WypiszZnakNaEkran (0, 0x30);
+		delay37us ();
+		WypiszZnakNaEkran (0, 0x38);
+		delay37us ();
 
 		//display off
-		WypiszZnakNaEkran(0, 0x08);
-		delay37us();
+		WypiszZnakNaEkran (0, 0x08);
+		delay37us ();
 
-		//display clear
-		WypiszZnakNaEkran(0, 0x01);
-		osSleep(1); //actually only 1.52 mS needed
+		WyczyscEkran ();
 
 		//display control set
-		WypiszZnakNaEkran(0, 0x06);
-		osSleep(1);
+		WypiszZnakNaEkran (0, 0x06);
+		osSleep (1);
 
 		//display control set
-		WypiszZnakNaEkran(0, 0x0c);
-		delay37us();
+		WypiszZnakNaEkran (0, 0x0c);
+		delay37us ();
 
 		//cursor home
-		WypiszZnakNaEkran(0, 0x02);
-		osSleep(1);
+		WypiszZnakNaEkran (0, 0x02);
+		osSleep (1);
 
-		WypiszCiag ("Odtwarzacz");
+		WypiszCiag ("M. Kolodziejczyk");
 
-		//move curstor to second row
-		WypiszZnakNaEkran(0, 0x80 | 0x40);
-		delay37us();
+		PrzejdzDoNastepnejLinii ();
 
-		WypiszCiag ("MP3");
+		WypiszCiag ("P. Zielinski");
 
-		//OpóŸnienie przed znikniêciem.
-		osSleep(500);
-		//Wy³¹czenie podœwietlenia monitora przed wyczyszczeniem.
-		PodswietlEkran(FALSE);
-		osSleep(50);
+		PoczekajIWyczyscEkran (500);
 
-		//TODO: Dowiedzieæ siê jak ten znak czyœci ekran.
-		//display clear
-		WypiszZnakNaEkran(0, 0x01);
-		osSleep(1); //actually only 1.52 mS needed
+		WypiszCiag ("   Odtwarzacz");
 
-		//W³¹czenie podœwietlenia monitora po wyczyszczeniu.
-		PodswietlEkran(TRUE);
-		osSleep(50);
+		PrzejdzDoNastepnejLinii ();
+
+		WypiszCiag ("       MP3");
+
+		PoczekajIWyczyscEkran (500);
 	}
 
-	PodswietlEkran(FALSE);
+	PodswietlEkran (FALSE);
 }
