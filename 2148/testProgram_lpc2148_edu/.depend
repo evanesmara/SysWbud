@@ -2,19 +2,24 @@ main.o: main.c ../pre_emptive_os/api/osapi.h \
   ../pre_emptive_os/api/../api/general.h ../pre_emptive_os/api/general.h \
   ../startup/printf_P.h ../startup/config.h ../startup/consol.h \
   ../startup/ea_init.h ../startup/lpc2xxx.h ../startup/consol.h i2c.h \
-  key.h usb/lpc_usb.h usb/lpc_hid.h usb/lpc_usb.h
+  key.h usb/lpc_usb.h usb/lpc_hid.h usb/lpc_usb.h pff2/src/diskio.h \
+  pff2/src/integer.h
 eeprom.o: eeprom.c ../pre_emptive_os/api/general.h i2c.h
 i2c.o: i2c.c ../pre_emptive_os/api/general.h i2c.h ../startup/lpc2xxx.h
 uart.o: uart.c ../pre_emptive_os/api/general.h ../startup/lpc2xxx.h \
   uart.h irq/irqUart.h
-testLcd.o: testLcd.c ../pre_emptive_os/api/osapi.h \
-  ../pre_emptive_os/api/../api/general.h ../pre_emptive_os/api/general.h \
-  ../startup/printf_P.h ../startup/config.h ../startup/consol.h \
-  ../startup/lpc2xxx.h ../startup/consol.h
 testAdc.o: testAdc.c ../pre_emptive_os/api/osapi.h \
   ../pre_emptive_os/api/../api/general.h ../pre_emptive_os/api/general.h \
   ../startup/printf_P.h ../startup/config.h ../startup/consol.h \
   ../startup/lpc2xxx.h ../startup/consol.h ../startup/config.h
+testLcd.o: testLcd.c ../pre_emptive_os/api/osapi.h \
+  ../pre_emptive_os/api/../api/general.h ../pre_emptive_os/api/general.h \
+  ../startup/printf_P.h ../startup/config.h ../startup/consol.h \
+  ../startup/lpc2xxx.h ../startup/consol.h
+testRGB.o: testRGB.c ../pre_emptive_os/api/osapi.h \
+  ../pre_emptive_os/api/../api/general.h ../pre_emptive_os/api/general.h \
+  ../startup/printf_P.h ../startup/config.h ../startup/consol.h \
+  ../startup/lpc2xxx.h
 lcd.o: lcd.c ../pre_emptive_os/api/general.h \
   ../pre_emptive_os/api/osapi.h ../pre_emptive_os/api/../api/general.h \
   lcd.h ascii.h lcd_hw.h ../startup/lpc2xxx.h
