@@ -24,12 +24,13 @@
  * 0x10 - niebieska
  * 0x40 - zielona
  */
-void ZaplajDiode (int kolor)
-{
+void ZaplajDiode(int kolor) {
+
 	tU8 continueTest;
 	//Zmienne s³u¿¹ce do sterowania moc¹ diody.
 	//Powolne zapalanie i gaszenie.
 	tU32 counter = 0;
+
 	int direction = 0;
 	int led = 0;
 
@@ -49,33 +50,27 @@ void ZaplajDiode (int kolor)
 	//************************************************************************
 
 	continueTest = TRUE;
-	while (1)
-	{
-		if (direction == 0)
-		{
+	while (1) {
+
+		if (direction == 0) {
 			if (counter < 0x0080)
 				counter += 0x0005;
 			else
 				counter += 0x000f;
 
-			if (counter > 0x0300)
-			{
+			if (counter > 0x0300) {
 				direction = 1;
 			}
-		} else
-		{
-			if (counter == 0x0000)
-			{
+		} else {
+			if (counter == 0x0000) {
 				direction = 0;
 				led++;
-				osSleep (40);
-				if (led > 2)
-				{
+				osSleep(40);
+				if (led > 2) {
 					led = 0;
 					continueTest = FALSE;
 				}
-			} else
-			{
+			} else {
 				if (counter < 0x0080)
 					counter -= 0x0005;
 				else
@@ -83,8 +78,7 @@ void ZaplajDiode (int kolor)
 			}
 		}
 
-		switch (kolor)
-		{
+		switch (kolor) {
 		case 1: //czerwony
 			PWM_MR2 = counter;
 			PWM_LER = 0x10;
@@ -100,6 +94,6 @@ void ZaplajDiode (int kolor)
 			PWM_LER = 0x10;
 		}
 
-		osSleep (1);
+		osSleep(1);
 	}
 }

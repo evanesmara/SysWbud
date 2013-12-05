@@ -13,7 +13,7 @@ void initSpi (void)
 	// set Chip-Select high - unselect card
 	UNSELECT_CARD();
 
-	// reset Pin-Functions	
+	// reset Pin-Functions
 	SPI_PINSEL &= ~((3 << SPI_SCK_FUNCBIT) | (3 << SPI_MISO_FUNCBIT) | (3 << SPI_MOSI_FUNCBIT) | (3 << SPI_SS_FUNCBIT));
 
 	SPI_PINSEL |= ((1 << SPI_SCK_FUNCBIT) | (1 << SPI_MISO_FUNCBIT) | (1 << SPI_MOSI_FUNCBIT));
@@ -60,8 +60,8 @@ BYTE incoming;
 BYTE spiSend (BYTE toSend)
 {
 	S0SPDR = toSend;
-	while (!(S0SPSR & (1 << SPIF)))
-		;
+		while (!(S0SPSR & (1 << SPIF)))
+			;
 
 	incoming = S0SPDR;
 

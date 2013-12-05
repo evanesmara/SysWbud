@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 1
 
 
    1              	# 1 "startup.S"
    2              	# 1 "/cygdrive/g/servers/github/SysWbud/2148/startup//"
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5JpE3h.s 			page 1
+
+
+   1              	# 1 "startup.S"
+   2              	# 1 "/cygdrive/e/SysWbud/2148/startup//"
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
    1              	#
    1              	...
    0              	
@@ -58,7 +66,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 1
   44              	        .equ    PLLCON_PLLC,    (1<<1)      /* PLL Connect */
   45              	        .equ    PLLSTAT_PLOCK,  (1<<10)     /* PLL Lock Status */
   46              	
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 2
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5JpE3h.s 			page 2
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
   47              	#define HANDLER(HandlerLabel,HandleLabel) \
@@ -118,7 +130,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 1
  101              	#else
  102              	                LDR PC,[PC,#resetHandlerAddress - . - 8]    /* handle reset                      */
  103              	                LDR PC,[PC,#undefHandlerAddress - . - 8]    /* handlerUndef                      */
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 3
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5JpE3h.s 			page 3
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  104              	                LDR PC,[PC,#swiHandlerAddress - . - 8]      /* SWI interrupt handler             */
@@ -178,7 +194,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 1
  158:startup.S     ****                 STR     R1, [R0, #PLLFEED_OFS]
  159:startup.S     ****                 STR     R2, [R0, #PLLFEED_OFS]
  160              	
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 4
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5JpE3h.s 			page 4
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  161              	# Wait until PLL Locked
@@ -238,7 +258,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 1
  215              	                STMIA   R8!, {R0-R7}
  216              	#               Move addresses belonging to exception vectors (7 addresses)
  217              	                LDMIA   R9!, {R0-R6}
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 5
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5JpE3h.s 			page 5
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  218              	                STMIA   R8!, {R0-R6}
@@ -290,7 +314,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 1
  262      2C000040 
  262      30000040 
  262      34000040 
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 6
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5JpE3h.s 			page 6
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
 DEFINED SYMBOLS
@@ -350,7 +378,11 @@ DEFINED SYMBOLS
 UNDEFINED SYMBOLS
 lowLevelInit
 _etext
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccWOlcj6.s 			page 7
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5JpE3h.s 			page 7
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
 _data

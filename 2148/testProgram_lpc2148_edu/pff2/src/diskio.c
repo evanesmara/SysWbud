@@ -21,17 +21,17 @@ DSTATUS disk_initialize (void)
 
 	if (sdInit () < 0)
 	{
-#ifdef DEBUG
-		printf("Card failed to init, breaking up...\n");
-#endif
+//#ifdef DEBUG
+//		printf("Card failed to init, breaking up...\n");
+//#endif
 		return STA_NOINIT;
 	}
 
 	if (sdState () < 0)
 	{
-#ifdef DEBUG
-		printf("Card didn't return the ready state, breaking up...\n");
-#endif
+//#ifdef DEBUG
+//		printf("Card didn't return the ready state, breaking up...\n");
+//#endif
 		return STA_NOREADY;
 	}
 

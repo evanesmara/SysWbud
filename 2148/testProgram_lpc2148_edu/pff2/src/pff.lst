@@ -1,4 +1,4 @@
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 1
 
 
    1              		.file	"pff.c"
@@ -58,7 +58,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
   37:src/pff.c     **** 
   38:src/pff.c     **** /* Fill memory */
   39:src/pff.c     **** static void mem_set (void* dst, int val, int cnt)
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 2
 
 
   40:src/pff.c     **** {
@@ -118,7 +118,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
   94:src/pff.c     **** 			break;
   95:src/pff.c     **** 		return LD_WORD(buf);
   96:src/pff.c     **** #if _FS_FAT32
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 3
 
 
   97:src/pff.c     **** 	case FS_FAT32:
@@ -178,7 +178,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
   44              		@ lr needed for prologue
   45              		.loc 1 121 0
   46 002c 1EFF2FE1 		bx	lr
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 4
 
 
   47              	.L7:
@@ -238,7 +238,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  138:src/pff.c     **** 	if (!clst && fs->fs_type == FS_FAT32) /* Replace cluster# 0 with root cluster# if in FAT32 */
   85              		.loc 1 138 0
   86 0064 000050E3 		cmp	r0, #0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 5
 
 
  139:src/pff.c     **** 		clst = fs->dirbase;
@@ -298,7 +298,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  134              		.type	check_fs, %function
  135              	check_fs:
  136              	.LFB13:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 6
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 6
 
 
  146:src/pff.c     **** 
@@ -358,7 +358,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  200:src/pff.c     **** 
  201:src/pff.c     **** 	res = dir_rewind (dj); /* Rewind directory object */
  202:src/pff.c     **** 	if (res != FR_OK)
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 7
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 7
 
 
  203:src/pff.c     **** 		return res;
@@ -418,7 +418,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  257:src/pff.c     **** 
  258:src/pff.c     **** 	if (res != FR_OK)
  259:src/pff.c     **** 		dj->sect = 0;
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 8
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 8
 
 
  260:src/pff.c     **** 
@@ -478,7 +478,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  314:src/pff.c     **** 	}
  315:src/pff.c     **** 	*path = &p[si]; /* Rerurn pointer to the next segment */
  316:src/pff.c     **** 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 9
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 9
 
 
  317:src/pff.c     **** 	sfn[11] = (c <= ' ') ? 1 : 0; /* Set last segment flag if end of path */
@@ -538,7 +538,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  371:src/pff.c     **** 
  372:src/pff.c     **** static FRESULT follow_path ( /* FR_OK(0): successful, !=0: error code */
  373:src/pff.c     **** DIR *dj, /* Directory object to return last directory and found object */
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 10
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 10
 
 
  374:src/pff.c     **** const char *path /* Full-path string to find a file or directory */
@@ -598,7 +598,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  428:src/pff.c     **** static BYTE check_fs ( /* 0:The FAT boot record, 1:Valid boot record but not an FAT, 2:Not a boot r
  429:src/pff.c     **** BYTE *buf, /* Working buffer */
  430:src/pff.c     **** DWORD sect /* Sector# (lba) to check if it is an FAT boot record or not */
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 11
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 11
 
 
  431:src/pff.c     **** )
@@ -658,7 +658,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  180              		.loc 1 441 0
  181 0134 0510A0E1 		mov	r1, r5
  182 0138 0400A0E1 		mov	r0, r4
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 12
 
 
  183 013c 5220A0E3 		mov	r2, #82
@@ -718,7 +718,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  233 019c 0C3095E5 		ldr	r3, [r5, #12]
  234 01a0 030050E1 		cmp	r0, r3
  235 01a4 4E00002A 		bcs	.L38
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 13
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 13
 
 
  236              	.LVL17:
@@ -778,7 +778,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  290 0230 0730A0E1 		mov	r3, r7
  291              	.LVL24:
  292              	.L54:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 14
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 14
 
 
  293 0234 FEFFFFEB 		bl	disk_readp
@@ -838,7 +838,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  347 02d0 0120DDE5 		ldrb	r2, [sp, #1]	@ zero_extendqisi2
  348 02d4 013083E1 		orr	r3, r3, r1
  349 02d8 023483E1 		orr	r3, r3, r2, asl #8
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 15
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 15
 
 
  350 02dc 0F02C3E3 		bic	r0, r3, #-268435456
@@ -898,7 +898,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  476:src/pff.c     **** 		if (disk_readp (buf, bsect, MBR_Table, 16))
  477:src/pff.c     **** 		{ /* 1st partition entry */
  478:src/pff.c     **** 			fmt = 3;
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 16
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 16
 
 
  479:src/pff.c     **** 		} else
@@ -958,7 +958,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  533:src/pff.c     **** 
  534:src/pff.c     **** 	return FR_OK;
  535:src/pff.c     **** }
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 17
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 17
 
 
  536:src/pff.c     **** 
@@ -1018,7 +1018,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  590:src/pff.c     **** 	//DRESULT dr;
  591:src/pff.c     **** 	//CLUST clst;
  592:src/pff.c     **** 	//DWORD sect, remain;
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 18
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 18
 
 
  593:src/pff.c     **** 	rbuff = buff;
@@ -1078,7 +1078,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  647:src/pff.c     **** #if _USE_WRITE
  648:src/pff.c     **** 
  649:src/pff.c     **** FRESULT pf_write (
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 19
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 19
 
 
  650:src/pff.c     **** 		const void* buff, /* Pointer to the data to be written */
@@ -1138,7 +1138,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  704:src/pff.c     **** 			if (disk_writep(0, 0)) goto fw_abort; /* Finalize the currtent secter write operation */
  705:src/pff.c     **** 			fs->flag &= ~FA__WIP;
  706:src/pff.c     **** 		}
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 20
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 20
 
 
  707:src/pff.c     **** 	}
@@ -1198,7 +1198,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  732:src/pff.c     **** 		return FR_NOT_OPENED;
  733:src/pff.c     **** 
  734:src/pff.c     **** 	if (ofs > fs->fsize)
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 21
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 21
 
 
  735:src/pff.c     **** 		ofs = fs->fsize; /* Clip offset with the file size */
@@ -1258,7 +1258,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  748:src/pff.c     **** 			clst = fs->org_clust; /* start from the first cluster */
  444              		.loc 1 748 0
  445 0390 242095E5 		ldr	r2, [r5, #36]
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 22
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 22
 
 
  446              	.LVL43:
@@ -1318,7 +1318,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  760:src/pff.c     **** 		fs->fptr += ofs;
  489              		.loc 1 760 0
  490 03d8 1C3095E5 		ldr	r3, [r5, #28]
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 23
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 23
 
 
  491 03dc 063083E0 		add	r3, r3, r6
@@ -1378,7 +1378,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  532              		.loc 1 773 0
  533 0438 F041BDE8 		ldmfd	sp!, {r4, r5, r6, r7, r8, lr}
  534 043c 1EFF2FE1 		bx	lr
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 24
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 24
 
 
  535              	.L81:
@@ -1438,7 +1438,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  589              		.loc 1 603 0
  590 0494 20308EE2 		add	r3, lr, #32
  591 0498 0C0013E8 		ldmda	r3, {r2, r3}
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 25
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 25
 
 
  592 049c 022043E0 		sub	r2, r3, r2
@@ -1498,7 +1498,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  646              		.loc 1 621 0
  647 0530 000050E3 		cmp	r0, #0
  648              		.loc 1 620 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 26
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 26
 
 
  649 0534 000083E5 		str	r0, [r3, #0]
@@ -1558,7 +1558,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  703 05cc 1C209EE5 		ldr	r2, [lr, #28]
  704              		.loc 1 634 0
  705 05d0 B000D7E1 		ldrh	r0, [r7, #0]
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 27
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 27
 
 
  706              		.loc 1 633 0
@@ -1618,7 +1618,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  760              		@ Function supports interworking.
  761              		@ args = 0, pretend = 0, frame = 0
  762              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 28
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 28
 
 
  763              	.LVL65:
@@ -1678,7 +1678,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  817 06b4 010050E3 		cmp	r0, #1
  818              	.LVL72:
  819              		.loc 1 175 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 29
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 29
 
 
  820 06b8 0020A0E1 		mov	r2, r0
@@ -1738,7 +1738,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  788:src/pff.c     **** 
  789:src/pff.c     **** 	if (!fs)
  790:src/pff.c     **** 	{ /* Check file system */
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 30
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 30
 
 
  791:src/pff.c     **** 		res = FR_NOT_ENABLED;
@@ -1798,7 +1798,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  834:src/pff.c     **** 
  835:src/pff.c     **** 	if (!fs)
  871              		.loc 1 835 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 31
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 31
 
 
  872 0704 000052E3 		cmp	r2, #0
@@ -1858,7 +1858,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  917              	.LVL86:
  918              	.LBB9:
  919 0754 00C050E2 		subs	ip, r0, #0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 32
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 32
 
 
  920 0758 01C0A013 		movne	ip, #1
@@ -1918,7 +1918,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  974              	.LVL96:
  975              	.L136:
  976              		.loc 1 259 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 33
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 33
 
 
  977 07b4 0030A0E3 		mov	r3, #0
@@ -1978,7 +1978,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1022              		.loc 1 344 0
  1023 07fc 050053E3 		cmp	r3, #5
  1024 0800 E530A003 		moveq	r3, #229
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 34
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 34
 
 
  1025              		.loc 1 346 0
@@ -2038,7 +2038,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1079              		.loc 1 361 0
  1080 0884 1920D0E5 		ldrb	r2, [r0, #25]	@ zero_extendqisi2
  1081 0888 1830D0E5 		ldrb	r3, [r0, #24]	@ zero_extendqisi2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 35
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 35
 
 
  1082 088c 023483E1 		orr	r3, r3, r2, asl #8
@@ -2098,7 +2098,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  861:src/pff.c     **** 				}
  862:src/pff.c     **** 			}
  863:src/pff.c     **** 		}
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 36
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 36
 
 
  864:src/pff.c     **** 	}
@@ -2158,7 +2158,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1179              		.loc 1 389 0
  1180 0930 B8319FE5 		ldr	r3, .L212
  1181 0934 003093E5 		ldr	r3, [r3, #0]
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 37
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 37
 
 
  1182 0938 083093E5 		ldr	r3, [r3, #8]
@@ -2218,7 +2218,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1236 099c 08005E03 		cmpeq	lr, #8
  1237              	.LBB32:
  1238              	.LBB33:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 38
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 38
 
 
  1239              	.LBB34:
@@ -2278,7 +2278,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1293 0a0c FEFFFFEB 		bl	disk_readp
  1294              	.LBB38:
  1295 0a10 000050E2 		subs	r0, r0, #0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 39
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 39
 
 
  1296 0a14 0100A013 		movne	r0, #1
@@ -2338,7 +2338,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1350              	.LVL133:
  1351 0a80 DBFFFF0A 		beq	.L186
  1352              	.L184:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 40
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 40
 
 
  1353              	.LBE44:
@@ -2398,7 +2398,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1407              	.LFE12:
  1408              		.size	follow_path, .-follow_path
  1409              		.align	2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 41
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 41
 
 
  1410              		.global	pf_opendir
@@ -2458,7 +2458,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1464 0b44 0B00000A 		beq	.L222
  1465              		.loc 1 803 0
  1466 0b48 15C0DDE5 		ldrb	ip, [sp, #21]	@ zero_extendqisi2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 42
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 42
 
 
  1467 0b4c 1420DDE5 		ldrb	r2, [sp, #20]	@ zero_extendqisi2
@@ -2518,7 +2518,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1521              		.loc 1 543 0
  1522 0ba4 0010A0E1 		mov	r1, r0
  1523              		.loc 1 549 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 43
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 43
 
 
  1524 0ba8 06C0A0E3 		mov	ip, #6
@@ -2578,7 +2578,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1578 0c3c 000000EA 		b	.L230
  1579              	.L232:
  1580              		.loc 1 570 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 44
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 44
 
 
  1581 0c40 03C0A0E3 		mov	ip, #3
@@ -2638,7 +2638,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1635 0c98 0D60A0E1 		mov	r6, sp
  1636              		.loc 1 473 0
  1637 0c9c 1400001A 		bne	.L246
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 45
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 45
 
 
  1638              		.loc 1 476 0
@@ -2698,7 +2698,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1692 0d3c 023C8301 		orreq	r3, r3, r2, asl #24
  1693 0d40 1820DD05 		ldreqb	r2, [sp, #24]	@ zero_extendqisi2
  1694 0d44 01308301 		orreq	r3, r3, r1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 46
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 46
 
 
  1695 0d48 02C48301 		orreq	ip, r3, r2, asl #8
@@ -2758,7 +2758,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1749              	.LVL171:
  1750              		.loc 1 513 0
  1751 0dd4 AC309FE5 		ldr	r3, .L268+8
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 47
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 47
 
 
  1752              		.loc 1 508 0
@@ -2818,7 +2818,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1806 0e40 0700A0E3 		mov	r0, #7
  1807              	.LVL179:
  1808 0e44 0A0000EA 		b	.L241
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 48
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 48
 
 
  1809              	.LVL180:
@@ -2878,7 +2878,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1863 000f 00       		.uleb128 0x0
  1864              		.align	2
  1865              	.LECIE0:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 49
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 49
 
 
  1866              	.LSFDE0:
@@ -2938,7 +2938,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1920 0067 4C       		.byte	0x4
  1921              		.4byte	.LCFI3-.LCFI2
  1922 0068 0E       		.byte	0xe
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 50
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 50
 
 
  1923 0069 1C       		.uleb128 0x1c
@@ -2998,7 +2998,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  1977 00b0 03       		.uleb128 0x3
  1978 00b1 86       		.byte	0x86
  1979 00b2 04       		.uleb128 0x4
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 51
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 51
 
 
  1980 00b3 85       		.byte	0x85
@@ -3058,7 +3058,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2034 00fc EC080000 		.4byte	.LFB12
  2035 0100 08020000 		.4byte	.LFE12-.LFB12
  2036 0104 44       		.byte	0x4
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 52
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 52
 
 
  2037              		.4byte	.LCFI9-.LFB12
@@ -3118,7 +3118,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2091              	.LEFDE20:
  2092              	.LSFDE22:
  2093 014c 1C000000 		.4byte	.LEFDE22-.LASFDE22
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 53
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 53
 
 
  2094              	.LASFDE22:
@@ -3178,7 +3178,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2148 0041 44000000 		.4byte	.LVL5-.Ltext0
  2149 0045 0100     		.2byte	0x1
  2150 0047 50       		.byte	0x50
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 54
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 54
 
 
  2151 0048 44000000 		.4byte	.LVL5-.Ltext0
@@ -3238,7 +3238,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2205 00db 00000000 		.4byte	0x0
  2206              	.LLST8:
  2207 00df BC000000 		.4byte	.LVL12-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 55
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 55
 
 
  2208 00e3 D4000000 		.4byte	.LVL13-.Ltext0
@@ -3298,7 +3298,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2262 0174 50       		.byte	0x50
  2263 0175 68020000 		.4byte	.LVL28-.Ltext0
  2264 0179 98020000 		.4byte	.LVL29-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 56
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 56
 
 
  2265 017d 0100     		.2byte	0x1
@@ -3358,7 +3358,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2319 020e 18       		.sleb128 24
  2320 020f 00000000 		.4byte	0x0
  2321 0213 00000000 		.4byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 57
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 57
 
 
  2322              	.LLST15:
@@ -3418,7 +3418,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2376 02ab 0100     		.2byte	0x1
  2377 02ad 52       		.byte	0x52
  2378 02ae 00000000 		.4byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 58
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 58
 
 
  2379 02b2 00000000 		.4byte	0x0
@@ -3478,7 +3478,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2433              	.LLST21:
  2434 0345 44040000 		.4byte	.LVL59-.Ltext0
  2435 0349 A0040000 		.4byte	.LVL63-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 59
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 59
 
 
  2436 034d 0100     		.2byte	0x1
@@ -3538,7 +3538,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2490              	.LLST25:
  2491 03df F8060000 		.4byte	.LFB19-.Ltext0
  2492 03e3 FC060000 		.4byte	.LCFI7-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 60
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 60
 
 
  2493 03e7 0100     		.2byte	0x1
@@ -3598,7 +3598,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2547 0477 55       		.byte	0x55
  2548 0478 00000000 		.4byte	0x0
  2549 047c 00000000 		.4byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 61
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 61
 
 
  2550              	.LLST27:
@@ -3658,7 +3658,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2604 0513 52       		.byte	0x52
  2605 0514 98070000 		.4byte	.LVL93-.Ltext0
  2606 0518 9C070000 		.4byte	.LVL94-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 62
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 62
 
 
  2607 051c 0100     		.2byte	0x1
@@ -3718,7 +3718,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2661 05b0 0100     		.2byte	0x1
  2662 05b2 50       		.byte	0x50
  2663 05b3 D8080000 		.4byte	.LVL118-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 63
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 63
 
 
  2664 05b7 EC080000 		.4byte	.LFE19-.Ltext0
@@ -3778,7 +3778,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2718 0649 50       		.byte	0x50
  2719 064a FC080000 		.4byte	.LVL120-.Ltext0
  2720 064e F40A0000 		.4byte	.LFE12-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 64
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 64
 
 
  2721 0652 0100     		.2byte	0x1
@@ -3838,7 +3838,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2775 06e4 E0090000 		.4byte	.LVL127-.Ltext0
  2776 06e8 0100     		.2byte	0x1
  2777 06ea 5E       		.byte	0x5e
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 65
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 65
 
 
  2778 06eb 00000000 		.4byte	0x0
@@ -3898,7 +3898,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2832 077c 3C0B0000 		.4byte	.LVL147-.Ltext0
  2833 0780 0100     		.2byte	0x1
  2834 0782 54       		.byte	0x54
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 66
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 66
 
 
  2835 0783 3C0B0000 		.4byte	.LVL147-.Ltext0
@@ -3958,7 +3958,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2889 0819 0200     		.2byte	0x2
  2890 081b 7D       		.byte	0x7d
  2891 081c 08       		.sleb128 8
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 67
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 67
 
 
  2892 081d A00B0000 		.4byte	.LCFI13-.Ltext0
@@ -4018,7 +4018,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  2946 08ae 50       		.byte	0x50
  2947 08af 740C0000 		.4byte	.LVL160-.Ltext0
  2948 08b3 900E0000 		.4byte	.LFE14-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 68
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 68
 
 
  2949 08b7 0100     		.2byte	0x1
@@ -4078,7 +4078,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3003 094a 54       		.byte	0x54
  3004 094b 480E0000 		.4byte	.LVL180-.Ltext0
  3005 094f 900E0000 		.4byte	.LFE14-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 69
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 69
 
 
  3006 0953 0100     		.2byte	0x1
@@ -4138,7 +4138,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3060 0040 08       		.byte	0x8
  3061 0041 04       		.uleb128 0x4
  3062 0042 9B000000 		.4byte	.LASF5
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 70
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 70
 
 
  3063 0046 02       		.byte	0x2
@@ -4198,7 +4198,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3117 00ac 4E       		.byte	0x4e
  3118 00ad 41000000 		.4byte	0x41
  3119 00b1 02       		.byte	0x2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 71
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 71
 
 
  3120 00b2 23       		.byte	0x23
@@ -4258,7 +4258,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3174 010f 73000000 		.4byte	0x73
  3175 0113 02       		.byte	0x2
  3176 0114 23       		.byte	0x23
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 72
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 72
 
 
  3177 0115 18       		.uleb128 0x18
@@ -4318,7 +4318,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3231 0178 03       		.byte	0x3
  3232 0179 61       		.byte	0x61
  3233 017a 06       		.uleb128 0x6
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 73
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 73
 
 
  3234 017b C5000000 		.4byte	.LASF27
@@ -4378,7 +4378,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3288 01dd 6E       		.byte	0x6e
  3289 01de 73000000 		.4byte	0x73
  3290 01e2 02       		.byte	0x2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 74
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 74
 
 
  3291 01e3 23       		.byte	0x23
@@ -4438,7 +4438,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3345 0243 CB010000 		.4byte	0x1cb
  3346 0247 0C       		.uleb128 0xc
  3347 0248 80020000 		.4byte	0x280
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 75
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 75
 
 
  3348 024c 04       		.byte	0x4
@@ -4498,7 +4498,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3402 02b2 14       		.byte	0x14
  3403 02b3 8B020000 		.4byte	0x28b
  3404 02b7 0E       		.uleb128 0xe
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 76
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 76
 
 
  3405 02b8 ED020000 		.4byte	0x2ed
@@ -4558,7 +4558,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3459 0336 84000000 		.4byte	.LLST5
  3460 033a 00       		.byte	0x0
  3461 033b 08       		.uleb128 0x8
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 77
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 77
 
 
  3462 033c 04       		.byte	0x4
@@ -4618,7 +4618,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3516 03c7 6F667300 		.ascii	"ofs\000"
  3517 03cb 01       		.byte	0x1
  3518 03cc 40       		.byte	0x40
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 78
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 78
 
 
  3519 03cd 5A000000 		.4byte	0x5a
@@ -4678,7 +4678,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3573 044b 57       		.byte	0x57
  3574 044c 1B       		.uleb128 0x1b
  3575 044d A0000000 		.4byte	.LASF30
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 79
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 79
 
 
  3576 0451 01       		.byte	0x1
@@ -4738,7 +4738,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3630 04d2 76010000 		.4byte	.LASF62
  3631 04d6 01       		.byte	0x1
  3632 04d7 7F02     		.2byte	0x27f
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 80
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 80
 
 
  3633 04d9 08060000 		.4byte	.L98
@@ -4798,7 +4798,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3687 054c 01       		.byte	0x1
  3688 054d E7       		.byte	0xe7
  3689 054e 3B030000 		.4byte	0x33b
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 81
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 81
 
 
  3690 0552 20       		.uleb128 0x20
@@ -4858,7 +4858,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3744 05c1 7000     		.ascii	"p\000"
  3745 05c3 01       		.byte	0x1
  3746 05c4 4D01     		.2byte	0x14d
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 82
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 82
 
 
  3747 05c6 D1050000 		.4byte	0x5d1
@@ -4918,7 +4918,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3801 0642 667300   		.ascii	"fs\000"
  3802 0645 01       		.byte	0x1
  3803 0646 4103     		.2byte	0x341
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 83
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 83
 
 
  3804 0648 ED020000 		.4byte	0x2ed
@@ -4978,7 +4978,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3858 06d4 0B       		.byte	0xb
  3859 06d5 00       		.byte	0x0
  3860 06d6 0A       		.uleb128 0xa
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 84
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 84
 
 
  3861 06d7 E6060000 		.4byte	0x6e6
@@ -5038,7 +5038,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3915 074f 23       		.uleb128 0x23
  3916 0750 7000     		.ascii	"p\000"
  3917 0752 01       		.byte	0x1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 85
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 85
 
 
  3918 0753 1601     		.2byte	0x116
@@ -5098,7 +5098,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  3972 07c3 01       		.byte	0x1
  3973 07c4 C6       		.byte	0xc6
  3974 07c5 80020000 		.4byte	0x280
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 86
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 86
 
 
  3975 07c9 20       		.uleb128 0x20
@@ -5158,7 +5158,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4029 0833 15       		.uleb128 0x15
  4030 0834 6A090000 		.4byte	0x96a
  4031 0838 9F020000 		.4byte	.LASF72
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 87
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 87
 
 
  4032 083c 01       		.byte	0x1
@@ -5218,7 +5218,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4086 08ce 28       		.uleb128 0x28
  4087 08cf 39070000 		.4byte	0x739
  4088 08d3 29       		.uleb128 0x29
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 88
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 88
 
 
  4089 08d4 43070000 		.4byte	0x743
@@ -5278,7 +5278,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4143 0957 28       		.uleb128 0x28
  4144 0958 10080000 		.4byte	0x810
  4145 095c 28       		.uleb128 0x28
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 89
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 89
 
 
  4146 095d 19080000 		.4byte	0x819
@@ -5338,7 +5338,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4200 09d8 01       		.byte	0x1
  4201 09d9 1303     		.2byte	0x313
  4202 09db ED020000 		.4byte	0x2ed
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 90
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 90
 
 
  4203 09df E8070000 		.4byte	.LLST49
@@ -5398,7 +5398,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4257 0a59 01       		.byte	0x1
  4258 0a5a 54       		.byte	0x54
  4259 0a5b 00       		.byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 91
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 91
 
 
  4260 0a5c 18       		.uleb128 0x18
@@ -5458,7 +5458,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4314 0ae4 7C090000 		.4byte	.LLST59
  4315 0ae8 00       		.byte	0x0
  4316 0ae9 0A       		.uleb128 0xa
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 92
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 92
 
 
  4317 0aea F90A0000 		.4byte	0xaf9
@@ -5518,7 +5518,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4371 0b5d 5D010000 		.4byte	0x15d
  4372 0b61 01       		.byte	0x1
  4373 0b62 05       		.byte	0x5
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 93
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 93
 
 
  4374 0b63 03       		.byte	0x3
@@ -5578,7 +5578,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4428 0020 00       		.byte	0x0
  4429 0021 03       		.uleb128 0x3
  4430 0022 0E       		.uleb128 0xe
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 94
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 94
 
 
  4431 0023 0B       		.uleb128 0xb
@@ -5638,7 +5638,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4485 0059 3A       		.uleb128 0x3a
  4486 005a 0B       		.uleb128 0xb
  4487 005b 3B       		.uleb128 0x3b
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 95
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 95
 
 
  4488 005c 0B       		.uleb128 0xb
@@ -5698,7 +5698,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4542 0092 3A       		.uleb128 0x3a
  4543 0093 0B       		.uleb128 0xb
  4544 0094 3B       		.uleb128 0x3b
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 96
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 96
 
 
  4545 0095 0B       		.uleb128 0xb
@@ -5758,7 +5758,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4599 00cb 08       		.uleb128 0x8
  4600 00cc 3A       		.uleb128 0x3a
  4601 00cd 0B       		.uleb128 0xb
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 97
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 97
 
 
  4602 00ce 3B       		.uleb128 0x3b
@@ -5818,7 +5818,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4656 0104 0B       		.uleb128 0xb
  4657 0105 49       		.uleb128 0x49
  4658 0106 13       		.uleb128 0x13
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 98
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 98
 
 
  4659 0107 02       		.uleb128 0x2
@@ -5878,7 +5878,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4713 013d 06       		.uleb128 0x6
  4714 013e 00       		.byte	0x0
  4715 013f 00       		.byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 99
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 99
 
 
  4716 0140 17       		.uleb128 0x17
@@ -5938,7 +5938,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4770 0176 00       		.byte	0x0
  4771 0177 1A       		.uleb128 0x1a
  4772 0178 34       		.uleb128 0x34
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 100
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 100
 
 
  4773 0179 00       		.byte	0x0
@@ -5998,7 +5998,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4827 01af 0E       		.uleb128 0xe
  4828 01b0 3A       		.uleb128 0x3a
  4829 01b1 0B       		.uleb128 0xb
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 101
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 101
 
 
  4830 01b2 3B       		.uleb128 0x3b
@@ -6058,7 +6058,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4884 01e8 05       		.uleb128 0x5
  4885 01e9 00       		.byte	0x0
  4886 01ea 03       		.uleb128 0x3
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 102
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 102
 
 
  4887 01eb 08       		.uleb128 0x8
@@ -6118,7 +6118,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4941 0221 00       		.byte	0x0
  4942 0222 31       		.uleb128 0x31
  4943 0223 13       		.uleb128 0x13
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 103
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 103
 
 
  4944 0224 00       		.byte	0x0
@@ -6178,7 +6178,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  4998 025a 0B       		.uleb128 0xb
  4999 025b 00       		.byte	0x0
  5000 025c 00       		.byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 104
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 104
 
 
  5001 025d 2C       		.uleb128 0x2c
@@ -6238,7 +6238,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  5055 0293 31       		.uleb128 0x31
  5056 0294 13       		.uleb128 0x13
  5057 0295 55       		.uleb128 0x55
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 105
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 105
 
 
  5058 0296 06       		.uleb128 0x6
@@ -6298,7 +6298,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  5112 02cc 00       		.byte	0x0
  5113 02cd 00       		.byte	0x0
  5114 02ce 00       		.byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 106
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 106
 
 
  5115              		.section	.debug_pubnames,"",%progbits
@@ -6358,7 +6358,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  5154 000e 0000     		.2byte	0x0
  5155 0010 00000000 		.4byte	.Ltext0
  5156 0014 900E0000 		.4byte	.Letext0-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 107
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 107
 
 
  5157 0018 00000000 		.4byte	0x0
@@ -6418,7 +6418,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  5211 00c8 00000000 		.4byte	0x0
  5212 00cc 00000000 		.4byte	0x0
  5213 00d0 4C090000 		.4byte	.LBB29-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 108
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 108
 
 
  5214 00d4 6C090000 		.4byte	.LBE29-.Ltext0
@@ -6478,7 +6478,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  5260              	.LASF10:
  5261 0028 66735F74 		.ascii	"fs_type\000"
  5261      79706500 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 109
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 109
 
 
  5262              	.LASF25:
@@ -6538,7 +6538,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  5293      6F746469 
  5293      7200
  5294              	.LASF33:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 110
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 110
 
 
  5295 00af 6674696D 		.ascii	"ftime\000"
@@ -6598,7 +6598,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  5322 015b 5245535F 		.ascii	"RES_OK\000"
  5322      4F4B00
  5323              	.LASF29:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 111
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 111
 
 
  5324 0162 636C7573 		.ascii	"clust\000"
@@ -6658,7 +6658,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  5352      66617400 
  5353              	.LASF19:
  5354 01ed 66707472 		.ascii	"fptr\000"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 112
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 112
 
 
  5354      00
@@ -6718,7 +6718,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  5384 0274 73636C75 		.ascii	"sclust\000"
  5384      737400
  5385              	.LASF24:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 113
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 113
 
 
  5386 027b 46415446 		.ascii	"FATFS\000"
@@ -6778,7 +6778,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  5416 0301 5245535F 		.ascii	"RES_PARERR\000"
  5416      50415245 
  5416      525200
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 114
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 114
 
 
  5417              	.LASF80:
@@ -6796,30 +6796,30 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 1
  5424 0328 636C7374 		.ascii	"clst\000"
  5424      00
  5425              		.ident	"GCC: (GNU) 4.1.1"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s 			page 115
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s 			page 115
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 pff.c
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:12     .text:00000000 clust2sect
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:22     .text:00000000 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:50     .text:00000030 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1842   .bss:00000000 FatFs
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:55     .text:00000034 dir_rewind
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:63     .text:00000034 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:130    .text:000000b8 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:135    .text:000000bc check_fs
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:142    .text:000000bc $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:202    .text:00000174 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:209    .text:00000180 get_fat
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:216    .text:00000180 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:364    .text:000002f4 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:372    .text:000002fc pf_lseek
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:380    .text:000002fc $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:538    .text:00000440 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:545    .text:00000444 pf_read
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:553    .text:00000444 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:745    .text:00000624 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:12     .text:00000000 clust2sect
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:22     .text:00000000 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:50     .text:00000030 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1842   .bss:00000000 FatFs
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:55     .text:00000034 dir_rewind
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:63     .text:00000034 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:130    .text:000000b8 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:135    .text:000000bc check_fs
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:142    .text:000000bc $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:202    .text:00000174 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:209    .text:00000180 get_fat
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:216    .text:00000180 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:364    .text:000002f4 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:372    .text:000002fc pf_lseek
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:380    .text:000002fc $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:538    .text:00000440 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:545    .text:00000444 pf_read
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:553    .text:00000444 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:745    .text:00000624 $d
                             *COM*:00000004 rbuff
                             *COM*:00000004 fs
                             *COM*:00000004 remain
@@ -6827,24 +6827,24 @@ DEFINED SYMBOLS
                             *COM*:00000004 sect
                             *COM*:00000002 rcnt
                             *COM*:00000004 dr
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:757    .text:00000644 dir_next
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:765    .text:00000644 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:852    .text:000006f4 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:858    .text:000006f8 pf_readdir
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:865    .text:000006f8 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1137   .text:000008e8 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1142   .text:000008ec follow_path
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1149   .text:000008ec $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1406   .text:00000af0 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1412   .text:00000af4 pf_opendir
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1419   .text:00000af4 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1497   .text:00000b8c $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1503   .text:00000b90 pf_open
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1510   .text:00000b90 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1592   .text:00000c54 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1598   .text:00000c58 pf_mount
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1605   .text:00000c58 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNVDkT5.s:1834   .text:00000e80 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:757    .text:00000644 dir_next
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:765    .text:00000644 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:852    .text:000006f4 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:858    .text:000006f8 pf_readdir
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:865    .text:000006f8 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1137   .text:000008e8 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1142   .text:000008ec follow_path
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1149   .text:000008ec $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1406   .text:00000af0 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1412   .text:00000af4 pf_opendir
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1419   .text:00000af4 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1497   .text:00000b8c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1503   .text:00000b90 pf_open
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1510   .text:00000b90 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1592   .text:00000c54 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1598   .text:00000c58 pf_mount
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1605   .text:00000c58 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccvY4ytg.s:1834   .text:00000e80 $d
 
 UNDEFINED SYMBOLS
 disk_readp

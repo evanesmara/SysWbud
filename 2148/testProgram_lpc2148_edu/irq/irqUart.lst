@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 1
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
    1              		.file	"irqUart.c"
@@ -58,7 +62,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
   36:irqUart.c     ****  *
   37:irqUart.c     ****  ****************************************************************************/
   38:irqUart.c     **** void
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 2
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 2
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
   39:irqUart.c     **** uart1ISR(void)
@@ -118,7 +126,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
   55:irqUart.c     **** 
   56:irqUart.c     ****       case 0x0c:  //Character Timeout Indicator
   57:irqUart.c     ****       case 0x04:  //Receive Data Available
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 3
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 3
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
   58:irqUart.c     ****       do
@@ -178,7 +190,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
   93 00c0 E8309FE5 		ldr	r3, .L30+20
   94 00c4 003093E5 		ldr	r3, [r3, #0]
   95 00c8 030052E1 		cmp	r2, r3
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 4
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 4
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
   96 00cc 1700000A 		beq	.L12
@@ -238,7 +254,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
   93:irqUart.c     ****       {
   94:irqUart.c     ****         uart1TxRunning = FALSE;
  130              		.loc 1 94 0
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 5
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 5
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  131 0130 80309FE5 		ldr	r3, .L30+28
@@ -298,7 +318,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  172 019c 000001E0 		.word	-536805376
  173 01a0 00000000 		.word	uart1RxHead
  174 01a4 00000000 		.word	uart1RxTail
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 6
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 6
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  175 01a8 00000000 		.word	uart1RxBuf
@@ -358,7 +382,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  201              		
  202 01d8 1EFF2FE1 		bx	lr
  203              	.LFE3:
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 7
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 7
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  204              		.size	disIrq, .-disIrq
@@ -418,7 +446,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  239              	.LSFDE0:
  240 0010 10000000 		.4byte	.LEFDE0-.LASFDE0
  241              	.LASFDE0:
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 8
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 8
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  242 0014 00000000 		.4byte	.Lframe0
@@ -478,7 +510,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  296 003a 90010000 		.4byte	.LVL3-.Ltext0
  297 003e 0100     		.2byte	0x1
  298 0040 53       		.byte	0x53
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 9
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 9
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  299 0041 90010000 		.4byte	.LVL3-.Ltext0
@@ -515,7 +551,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  330 003c 02       		.byte	0x2
  331 003d 07       		.byte	0x7
  332 003e 04       		.uleb128 0x4
+<<<<<<< HEAD
  333 003f 51010000 		.4byte	.LASF2
+=======
+ 333 003f 42010000 		.4byte	.LASF2
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
  334 0043 02       		.byte	0x2
  335 0044 49       		.byte	0x49
  336 0045 49000000 		.4byte	0x49
@@ -528,7 +568,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  343 0055 01       		.byte	0x1
  344 0056 06       		.byte	0x6
  345 0057 03       		.uleb128 0x3
+<<<<<<< HEAD
  346 0058 3C010000 		.4byte	.LASF5
+=======
+ 346 0058 2D010000 		.4byte	.LASF5
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
  347 005c 02       		.byte	0x2
  348 005d 05       		.byte	0x5
  349 005e 05       		.uleb128 0x5
@@ -538,7 +582,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  353 0065 06       		.uleb128 0x6
  354 0066 CF000000 		.4byte	0xcf
  355 006a 01       		.byte	0x1
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 10
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 10
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  356 006b A6000000 		.4byte	.LASF11
@@ -598,7 +646,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  410 00da 00010000 		.4byte	0x100
  411 00de 01       		.byte	0x1
  412 00df 18000000 		.4byte	.LASF12
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 11
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 11
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  413 00e3 01       		.byte	0x1
@@ -627,7 +679,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  436 0115 01       		.byte	0x1
  437 0116 5D       		.byte	0x5d
  438 0117 0E       		.uleb128 0xe
+<<<<<<< HEAD
  439 0118 2F010000 		.4byte	.LASF25
+=======
+ 439 0118 20010000 		.4byte	.LASF25
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
  440 011c 01       		.byte	0x1
  441 011d 93       		.byte	0x93
  442 011e 3E000000 		.4byte	0x3e
@@ -658,7 +714,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  467 014f 03       		.byte	0x3
  468 0150 15       		.byte	0x15
  469 0151 D4000000 		.4byte	0xd4
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 12
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 12
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  470 0155 01       		.byte	0x1
@@ -676,7 +736,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  482 016d 10       		.uleb128 0x10
  483 016e 00       		.byte	0x0
  484 016f 11       		.uleb128 0x11
+<<<<<<< HEAD
  485 0170 46010000 		.4byte	.LASF19
+=======
+ 485 0170 37010000 		.4byte	.LASF19
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
  486 0174 03       		.byte	0x3
  487 0175 18       		.byte	0x18
  488 0176 64010000 		.4byte	0x164
@@ -718,7 +782,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  524 0011 00       		.byte	0x0
  525 0012 00       		.byte	0x0
  526 0013 02       		.uleb128 0x2
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 13
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 13
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  527 0014 16       		.uleb128 0x16
@@ -778,7 +846,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  581 004a 03       		.uleb128 0x3
  582 004b 0E       		.uleb128 0xe
  583 004c 3A       		.uleb128 0x3a
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 14
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 14
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  584 004d 0B       		.uleb128 0xb
@@ -838,7 +910,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  638 0083 00       		.byte	0x0
  639 0084 49       		.uleb128 0x49
  640 0085 13       		.uleb128 0x13
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 15
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 15
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  641 0086 00       		.byte	0x0
@@ -898,7 +974,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  695 00bc 0C       		.uleb128 0xc
  696 00bd 11       		.uleb128 0x11
  697 00be 01       		.uleb128 0x1
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 16
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 16
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  698 00bf 12       		.uleb128 0x12
@@ -958,7 +1038,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  752 0000 35000000 		.4byte	0x35
  753 0004 0200     		.2byte	0x2
  754 0006 00000000 		.4byte	.Ldebug_info0
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 17
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 17
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  755 000a 97010000 		.4byte	0x197
@@ -1008,6 +1092,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  785 002e 62797465 		.ascii	"bytesToSend\000"
  785      73546F53 
  785      656E6400 
+<<<<<<< HEAD
  786              	.LASF24:
  787 003a 2F637967 		.ascii	"/cygdrive/g/servers/github/SysWbud/2148/testProgram"
  787      64726976 
@@ -1091,10 +1176,92 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  820      68617200 
  821              	.LASF25:
  822 012f 72657374 		.ascii	"restoreValue\000"
+=======
+ 786              	.LASF20:
+ 787 003a 75617274 		.ascii	"uart1RxHead\000"
+ 787      31527848 
+ 787      65616400 
+ 788              	.LASF7:
+ 789 0046 64756D6D 		.ascii	"dummy\000"
+ 789      7900
+ 790              	.LASF21:
+ 791 004c 75617274 		.ascii	"uart1RxTail\000"
+ 791      31527854 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 18
+
+
+ 791      61696C00 
+ 792              	.LASF23:
+ 793 0058 69727155 		.ascii	"irqUart.c\000"
+ 793      6172742E 
+ 793      6300
+ 794              	.LASF11:
+ 795 0062 75617274 		.ascii	"uart1ISR\000"
+ 795      31495352 
+ 795      00
+ 796              	.LASF8:
+ 797 006b 746D7048 		.ascii	"tmpHead\000"
+ 797      65616400 
+ 798              	.LASF9:
+ 799 0073 746D7054 		.ascii	"tmpTail\000"
+ 799      61696C00 
+ 800              	.LASF0:
+ 801 007b 756E7369 		.ascii	"unsigned char\000"
+ 801      676E6564 
+ 801      20636861 
+ 801      7200
+ 802              	.LASF6:
+ 803 0089 73746174 		.ascii	"statusReg\000"
+ 803      75735265 
+ 803      6700
+ 804              	.LASF16:
+ 805 0093 75617274 		.ascii	"uart1TxHead\000"
+ 805      31547848 
+ 805      65616400 
+ 806              	.LASF15:
+ 807 009f 75617274 		.ascii	"uart1TxBuf\000"
+ 807      31547842 
+ 807      756600
+ 808              	.LASF17:
+ 809 00aa 75617274 		.ascii	"uart1TxTail\000"
+ 809      31547854 
+ 809      61696C00 
+ 810              	.LASF22:
+ 811 00b6 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 811      4320342E 
+ 811      312E3100 
+ 812              	.LASF13:
+ 813 00c2 72657475 		.ascii	"returnReg\000"
+ 813      726E5265 
+ 813      6700
+ 814              	.LASF1:
+ 815 00cc 73686F72 		.ascii	"short unsigned int\000"
+ 815      7420756E 
+ 815      7369676E 
+ 815      65642069 
+ 815      6E7400
+ 816              	.LASF4:
+ 817 00df 7369676E 		.ascii	"signed char\000"
+ 817      65642063 
+ 817      68617200 
+ 818              	.LASF24:
+ 819 00eb 2F637967 		.ascii	"/cygdrive/e/SysWbud/2148/testProgram_lpc2148_edu/ir"
+ 819      64726976 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 19
+
+
+ 819      652F652F 
+ 819      53797357 
+ 819      6275642F 
+ 820 011e 7100     		.ascii	"q\000"
+ 821              	.LASF25:
+ 822 0120 72657374 		.ascii	"restoreValue\000"
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
  822      6F726556 
  822      616C7565 
  822      00
  823              	.LASF5:
+<<<<<<< HEAD
  824 013c 73686F72 		.ascii	"short int\000"
  824      7420696E 
  824      7400
@@ -1107,10 +1274,25 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 1
  828      00
  829              		.ident	"GCC: (GNU) 4.1.1"
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s 			page 20
+=======
+ 824 012d 73686F72 		.ascii	"short int\000"
+ 824      7420696E 
+ 824      7400
+ 825              	.LASF19:
+ 826 0137 75617274 		.ascii	"uart1RxBuf\000"
+ 826      31527842 
+ 826      756600
+ 827              	.LASF2:
+ 828 0142 74553332 		.ascii	"tU32\000"
+ 828      00
+ 829              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s 			page 20
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 irqUart.c
+<<<<<<< HEAD
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s:13     .text:00000000 uart1ISR
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s:21     .text:00000000 $a
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s:37     .text:00000020 $d
@@ -1120,6 +1302,17 @@ DEFINED SYMBOLS
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s:194    .text:000001bc disIrq1
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s:194    .text:000001bc $a
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccemM01g.s:208    .text:000001dc restoreIrq
+=======
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s:13     .text:00000000 uart1ISR
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s:21     .text:00000000 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s:37     .text:00000020 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s:50     .text:0000004c $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s:172    .text:0000019c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s:185    .text:000001bc disIrq
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s:194    .text:000001bc disIrq1
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s:194    .text:000001bc $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5P13qw.s:208    .text:000001dc restoreIrq
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 UNDEFINED SYMBOLS
 uart1RxHead

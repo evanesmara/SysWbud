@@ -1,4 +1,4 @@
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 1
 
 
    1              		.file	"spi.c"
@@ -35,7 +35,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
   13:src/spi.c     **** 	// set Chip-Select high - unselect card
   14:src/spi.c     **** 	UNSELECT_CARD();
   15:src/spi.c     **** 
-  16:src/spi.c     **** 	// reset Pin-Functions	
+  16:src/spi.c     **** 	// reset Pin-Functions
   17:src/spi.c     **** 	SPI_PINSEL &= ~((3 << SPI_SCK_FUNCBIT) | (3 << SPI_MISO_FUNCBIT) | (3 << SPI_MOSI_FUNCBIT) | (3 <<
   18:src/spi.c     **** 
   19:src/spi.c     **** 	SPI_PINSEL |= ((1 << SPI_SCK_FUNCBIT) | (1 << SPI_MISO_FUNCBIT) | (1 << SPI_MOSI_FUNCBIT));
@@ -58,7 +58,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
   36:src/spi.c     **** {
   16              		.loc 1 36 0
   17              		@ Function supports interworking.
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 2
 
 
   18              		@ args = 0, pretend = 0, frame = 0
@@ -118,7 +118,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
   58              		.loc 1 50 0
   59 0024 080083E5 		str	r0, [r3, #8]
   60              		.loc 1 47 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 3
 
 
   61              		@ lr needed for prologue
@@ -172,16 +172,16 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
   97              		.loc 1 61 0
   98              		@ lr needed for prologue
   99              	.L16:
-  63:src/spi.c     **** 	while (!(S0SPSR & (1 << SPIF)))
+  63:src/spi.c     **** 		while (!(S0SPSR & (1 << SPIF)))
  100              		.loc 1 63 0
  101 0054 1C209FE5 		ldr	r2, .L21
  102 0058 043092E5 		ldr	r3, [r2, #4]
  103 005c 800013E3 		tst	r3, #128
  104 0060 FBFFFF0A 		beq	.L16
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 4
 
 
-  64:src/spi.c     **** 		;
+  64:src/spi.c     **** 			;
   65:src/spi.c     **** 
   66:src/spi.c     **** 	incoming = S0SPDR;
  105              		.loc 1 66 0
@@ -238,7 +238,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  153              	.LBB4:
  154              	.LBB5:
  155              		.loc 1 43 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 5
 
 
  156 00c4 DE3083E2 		add	r3, r3, #222
@@ -298,7 +298,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  210 001c 1C000000 		.4byte	.LFE3-.LFB3
  211              		.align	2
  212              	.LEFDE0:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 6
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 6
 
 
  213              	.LSFDE2:
@@ -358,7 +358,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  267 002d 00000000 		.4byte	0x0
  268              	.LLST5:
  269 0031 48000000 		.4byte	.LVL4-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 7
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 7
 
 
  270 0035 68000000 		.4byte	.LVL5-.Ltext0
@@ -418,7 +418,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  324 0052 15       		.byte	0x15
  325 0053 45000000 		.4byte	0x45
  326 0057 03       		.uleb128 0x3
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 8
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 8
 
 
  327 0058 BB000000 		.4byte	.LASF5
@@ -478,7 +478,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  381 00ca 01       		.byte	0x1
  382 00cb 2E       		.byte	0x2e
  383 00cc 4C000000 		.4byte	0x4c
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 9
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 9
 
 
  384 00d0 1E000000 		.4byte	.LLST3
@@ -538,7 +538,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  438 0146 01       		.byte	0x1
  439 0147 3A       		.byte	0x3a
  440 0148 4C000000 		.4byte	0x4c
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 10
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 10
 
 
  441 014c 01       		.byte	0x1
@@ -598,7 +598,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  495 0030 3B       		.uleb128 0x3b
  496 0031 0B       		.uleb128 0xb
  497 0032 49       		.uleb128 0x49
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 11
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 11
 
 
  498 0033 13       		.uleb128 0x13
@@ -658,7 +658,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  552 0069 13       		.uleb128 0x13
  553 006a 02       		.uleb128 0x2
  554 006b 06       		.uleb128 0x6
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 12
 
 
  555 006c 00       		.byte	0x0
@@ -718,7 +718,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  609 00a2 00       		.byte	0x0
  610 00a3 0C       		.uleb128 0xc
  611 00a4 2E       		.uleb128 0x2e
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 13
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 13
 
 
  612 00a5 01       		.byte	0x1
@@ -778,7 +778,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  666 00db 00       		.byte	0x0
  667 00dc 00       		.byte	0x0
  668 00dd 10       		.uleb128 0x10
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 14
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 14
 
 
  669 00de 34       		.uleb128 0x34
@@ -838,7 +838,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  715              	.Ldebug_ranges0:
  716 0000 C4000000 		.4byte	.LBB4-.Ltext0
  717 0004 CC000000 		.4byte	.LBE4-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 15
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 15
 
 
  718 0008 D0000000 		.4byte	.LBB6-.Ltext0
@@ -898,7 +898,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  748 007d 6C6F6E67 		.ascii	"long int\000"
  748      20696E74 
  748      00
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 16
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 16
 
 
  749              	.LASF3:
@@ -937,23 +937,23 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 1
  763      2F706666 
  763      3200
  764              		.ident	"GCC: (GNU) 4.1.1"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s 			page 17
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s 			page 17
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 spi.c
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:13     .text:00000000 setSpiSpeed
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:23     .text:00000000 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:40     .text:00000018 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:46     .text:0000001c my_spiSend
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:55     .text:0000001c $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:77     .text:00000044 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:83     .text:00000048 spiSend
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:92     .text:00000048 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:116    .text:00000078 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:13     .text:00000000 setSpiSpeed
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:23     .text:00000000 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:40     .text:00000018 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:46     .text:0000001c my_spiSend
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:55     .text:0000001c $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:77     .text:00000044 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:83     .text:00000048 spiSend
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:92     .text:00000048 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:116    .text:00000078 $d
                             *COM*:00000001 incoming
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:123    .text:00000080 initSpi
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:130    .text:00000080 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cccc0ppd.s:185    .text:000000f4 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:123    .text:00000080 initSpi
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:130    .text:00000080 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccKL7LRm.s:185    .text:000000f4 $d
 
 NO UNDEFINED SYMBOLS

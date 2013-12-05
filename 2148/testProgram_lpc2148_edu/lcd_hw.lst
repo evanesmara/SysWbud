@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 1
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
    1              		.code	16
@@ -58,7 +62,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
   33:lcd_hw.c      ****  ****************************************************************************/
   34:lcd_hw.c      **** 
   35:lcd_hw.c      **** /*****************************************************************************
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 2
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 2
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
   36:lcd_hw.c      ****  * Local prototypes
@@ -118,7 +126,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
   54 0022 1A60     		str	r2, [r3]
   55 0024 01E0     		b	.L4
   56              	.L2:
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 3
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 3
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
   55:lcd_hw.c      ****   else
@@ -178,7 +190,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
   89              		.loc 1 76 0
   90 0050 094B     		ldr	r3, .L10+24
   91 0052 1B68     		ldr	r3, [r3]
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 4
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 4
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
   92 0054 1A06     		lsl	r2, r3, #24
@@ -238,7 +254,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  104:lcd_hw.c      **** /*****************************************************************************
  105:lcd_hw.c      ****  *
  106:lcd_hw.c      ****  * Description:
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 5
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 5
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  107:lcd_hw.c      ****  *    Select/deselect LCD controller (by controlling chip select signal)
@@ -298,7 +318,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  162 00a4 0B60     		str	r3, [r1]
  163              	.LBB4:
  164              	.LBB5:
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 6
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 6
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  165              		.loc 1 116 0
@@ -358,7 +382,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  219 0010 18000000 		.4byte	.LEFDE0-.LASFDE0
  220              	.LASFDE0:
  221 0014 00000000 		.4byte	.Lframe0
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 7
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 7
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  222 0018 00000000 		.4byte	.LFB2
@@ -418,7 +446,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  276 0032 0100     		.2byte	0x1
  277 0034 50       		.byte	0x50
  278 0035 00000000 		.4byte	0x0
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 8
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 8
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  279 0039 00000000 		.4byte	0x0
@@ -453,36 +485,40 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  308 000c 00000000 		.4byte	.Ldebug_line0
  309 0010 D8000000 		.4byte	.Letext0
  310 0014 00000000 		.4byte	.Ltext0
- 311 0018 B6000000 		.4byte	.LASF12
+ 311 0018 A7000000 		.4byte	.LASF12
  312 001c 01       		.byte	0x1
- 313 001d A0000000 		.4byte	.LASF13
- 314 0021 00000000 		.4byte	.LASF14
+ 313 001d 60000000 		.4byte	.LASF13
+ 314 0021 76000000 		.4byte	.LASF14
  315 0025 02       		.uleb128 0x2
  316 0026 74553800 		.ascii	"tU8\000"
  317 002a 02       		.byte	0x2
  318 002b 47       		.byte	0x47
  319 002c 30000000 		.4byte	0x30
  320 0030 03       		.uleb128 0x3
- 321 0031 64000000 		.4byte	.LASF0
+ 321 0031 24000000 		.4byte	.LASF0
  322 0035 01       		.byte	0x1
  323 0036 08       		.byte	0x8
  324 0037 03       		.uleb128 0x3
- 325 0038 84000000 		.4byte	.LASF1
+ 325 0038 44000000 		.4byte	.LASF1
  326 003c 02       		.byte	0x2
  327 003d 07       		.byte	0x7
  328 003e 03       		.uleb128 0x3
- 329 003f A9000000 		.4byte	.LASF2
+ 329 003f 69000000 		.4byte	.LASF2
  330 0043 04       		.byte	0x4
  331 0044 07       		.byte	0x7
  332 0045 03       		.uleb128 0x3
- 333 0046 D6000000 		.4byte	.LASF3
+ 333 0046 C7000000 		.4byte	.LASF3
  334 004a 01       		.byte	0x1
  335 004b 06       		.byte	0x6
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 9
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 9
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  336 004c 03       		.uleb128 0x3
- 337 004d CC000000 		.4byte	.LASF4
+ 337 004d BD000000 		.4byte	.LASF4
  338 0051 02       		.byte	0x2
  339 0052 05       		.byte	0x5
  340 0053 04       		.uleb128 0x4
@@ -490,18 +526,18 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  342 0058 04       		.byte	0x4
  343 0059 05       		.byte	0x5
  344 005a 05       		.uleb128 0x5
- 345 005b E2000000 		.4byte	.LASF5
+ 345 005b D3000000 		.4byte	.LASF5
  346 005f 02       		.byte	0x2
  347 0060 4D       		.byte	0x4d
  348 0061 30000000 		.4byte	0x30
  349 0065 03       		.uleb128 0x3
- 350 0066 72000000 		.4byte	.LASF6
+ 350 0066 32000000 		.4byte	.LASF6
  351 006a 04       		.byte	0x4
  352 006b 07       		.byte	0x7
  353 006c 06       		.uleb128 0x6
  354 006d A4000000 		.4byte	0xa4
  355 0071 01       		.byte	0x1
- 356 0072 C2000000 		.4byte	.LASF9
+ 356 0072 B3000000 		.4byte	.LASF9
  357 0076 01       		.byte	0x1
  358 0077 30       		.byte	0x30
  359 0078 01       		.byte	0x1
@@ -509,13 +545,13 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  361 007d 7C000000 		.4byte	.LFE2
  362 0081 00000000 		.4byte	.LLST0
  363 0085 07       		.uleb128 0x7
- 364 0086 97000000 		.4byte	.LASF7
+ 364 0086 57000000 		.4byte	.LASF7
  365 008a 01       		.byte	0x1
  366 008b 2F       		.byte	0x2f
  367 008c 25000000 		.4byte	0x25
  368 0090 1F000000 		.4byte	.LLST1
  369 0094 07       		.uleb128 0x7
- 370 0095 40000000 		.4byte	.LASF8
+ 370 0095 00000000 		.4byte	.LASF8
  371 0099 01       		.byte	0x1
  372 009a 2F       		.byte	0x2f
  373 009b 25000000 		.4byte	0x25
@@ -524,13 +560,13 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  376 00a4 08       		.uleb128 0x8
  377 00a5 BE000000 		.4byte	0xbe
  378 00a9 01       		.byte	0x1
- 379 00aa 5A000000 		.4byte	.LASF10
+ 379 00aa 1A000000 		.4byte	.LASF10
  380 00ae 01       		.byte	0x1
  381 00af 70       		.byte	0x70
  382 00b0 01       		.byte	0x1
  383 00b1 01       		.byte	0x1
  384 00b2 09       		.uleb128 0x9
- 385 00b3 53000000 		.4byte	.LASF11
+ 385 00b3 13000000 		.4byte	.LASF11
  386 00b7 01       		.byte	0x1
  387 00b8 6F       		.byte	0x6f
  388 00b9 5A000000 		.4byte	0x5a
@@ -538,7 +574,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  390 00be 0A       		.uleb128 0xa
  391 00bf DB000000 		.4byte	0xdb
  392 00c3 A4000000 		.4byte	0xa4
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 10
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 10
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  393 00c7 7C000000 		.4byte	.LFB4
@@ -551,7 +591,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  400 00da 00       		.byte	0x0
  401 00db 0C       		.uleb128 0xc
  402 00dc 01       		.byte	0x1
- 403 00dd 45000000 		.4byte	.LASF15
+ 403 00dd 05000000 		.4byte	.LASF15
  404 00e1 01       		.byte	0x1
  405 00e2 59       		.byte	0x59
  406 00e3 01       		.byte	0x1
@@ -598,7 +638,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  447 0018 3A       		.uleb128 0x3a
  448 0019 0B       		.uleb128 0xb
  449 001a 3B       		.uleb128 0x3b
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 11
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 11
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  450 001b 0B       		.uleb128 0xb
@@ -658,7 +702,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  504 0051 0C       		.uleb128 0xc
  505 0052 11       		.uleb128 0x11
  506 0053 01       		.uleb128 0x1
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 12
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 12
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  507 0054 12       		.uleb128 0x12
@@ -718,7 +766,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  561 008a 2E       		.uleb128 0x2e
  562 008b 01       		.byte	0x1
  563 008c 01       		.uleb128 0x1
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 13
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 13
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  564 008d 13       		.uleb128 0x13
@@ -778,7 +830,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  618 00c3 00       		.byte	0x0
  619 00c4 00       		.byte	0x0
  620 00c5 0E       		.uleb128 0xe
+<<<<<<< HEAD
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 14
+=======
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 14
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
  621 00c6 05       		.uleb128 0x5
@@ -820,6 +876,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
  650 0018 00000000 		.4byte	0x0
  651 001c 00000000 		.4byte	0x0
  652              		.section	.debug_str,"MS",%progbits,1
+<<<<<<< HEAD
  653              	.LASF14:
  654 0000 2F637967 		.ascii	"/cygdrive/g/servers/github/SysWbud/2148/testProgram"
  654      64726976 
@@ -902,10 +959,88 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 1
 
 
 ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s 			page 17
+=======
+ 653              	.LASF8:
+ 654 0000 64617461 		.ascii	"data\000"
+ 654      00
+ 655              	.LASF15:
+ 656 0005 696E6974 		.ascii	"initSpiForLcd\000"
+ 656      53706946 
+ 656      6F724C63 
+ 656      6400
+ 657              	.LASF11:
+ 658 0013 73656C65 		.ascii	"select\000"
+ 658      637400
+ 659              	.LASF10:
+ 660 001a 73656C65 		.ascii	"selectLCD\000"
+ 660      63744C43 
+ 660      4400
+ 661              	.LASF0:
+ 662 0024 756E7369 		.ascii	"unsigned char\000"
+ 662      676E6564 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 15
+
+
+ 662      20636861 
+ 662      7200
+ 663              	.LASF6:
+ 664 0032 6C6F6E67 		.ascii	"long unsigned int\000"
+ 664      20756E73 
+ 664      69676E65 
+ 664      6420696E 
+ 664      7400
+ 665              	.LASF1:
+ 666 0044 73686F72 		.ascii	"short unsigned int\000"
+ 666      7420756E 
+ 666      7369676E 
+ 666      65642069 
+ 666      6E7400
+ 667              	.LASF7:
+ 668 0057 66697273 		.ascii	"firstBit\000"
+ 668      74426974 
+ 668      00
+ 669              	.LASF13:
+ 670 0060 6C63645F 		.ascii	"lcd_hw.c\000"
+ 670      68772E63 
+ 670      00
+ 671              	.LASF2:
+ 672 0069 756E7369 		.ascii	"unsigned int\000"
+ 672      676E6564 
+ 672      20696E74 
+ 672      00
+ 673              	.LASF14:
+ 674 0076 2F637967 		.ascii	"/cygdrive/e/SysWbud/2148/testProgram_lpc2148_edu\000"
+ 674      64726976 
+ 674      652F652F 
+ 674      53797357 
+ 674      6275642F 
+ 675              	.LASF12:
+ 676 00a7 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 676      4320342E 
+ 676      312E3100 
+ 677              	.LASF9:
+ 678 00b3 73656E64 		.ascii	"sendToLCD\000"
+ 678      546F4C43 
+ 678      4400
+ 679              	.LASF4:
+ 680 00bd 73686F72 		.ascii	"short int\000"
+ 680      7420696E 
+ 680      7400
+ 681              	.LASF3:
+ 682 00c7 7369676E 		.ascii	"signed char\000"
+ 682      65642063 
+ 682      68617200 
+ 683              	.LASF5:
+ 684 00d3 74426F6F 		.ascii	"tBool\000"
+ 684      6C00
+ 685              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s 			page 16
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 lcd_hw.c
+<<<<<<< HEAD
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s:1      .text:00000000 $t
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s:16     .text:00000000 sendToLCD
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s:103    .text:00000060 $d
@@ -915,5 +1050,16 @@ DEFINED SYMBOLS
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s:154    .text:0000009c initSpiForLcd
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s:151    .text:0000009c $t
 /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccal5nc1.s:197    .text:000000c8 $d
+=======
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s:16     .text:00000000 sendToLCD
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s:103    .text:00000060 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s:117    .text:0000007c selectLCD
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s:114    .text:0000007c $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s:145    .text:00000094 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s:154    .text:0000009c initSpiForLcd
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s:151    .text:0000009c $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccBd4XLO.s:197    .text:000000c8 $d
+>>>>>>> b88a4584e0cab1e54aa8e88946e0c8ab8cd53d40
 
 NO UNDEFINED SYMBOLS
