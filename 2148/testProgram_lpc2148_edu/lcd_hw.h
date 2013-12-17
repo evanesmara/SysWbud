@@ -17,7 +17,7 @@
  * Includes
  *****************************************************************************/
 #include "../pre_emptive_os/api/general.h"
-#include <lpc2xxx.h>
+#include "../startup/lpc2xxx.h"
 
 
 /******************************************************************************
@@ -31,7 +31,7 @@
 /*****************************************************************************
  * Global variables
  ****************************************************************************/
-void sendToLCD(tU8 firstBit, tU8 data);
+void sendToLCD(uint8 firstBit, uint8 data);
 void initSpiForLcd(void);
 void selectLCD(tBool select);
 

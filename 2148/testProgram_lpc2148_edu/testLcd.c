@@ -16,9 +16,7 @@
 #define LCD_RW        0x00400000  //P0.22
 #define LCD_RS        0x01000000  //P1.24
 #define LCD_BACKLIGHT 0x40000000  //P0.30
-/*
- * TODO: Spisaæ klika s³ów o inicjalizacji.
- */
+
 static void initLCD (void)
 {
 	IODIR1 |= (LCD_DATA | LCD_E | LCD_RS);
@@ -97,7 +95,7 @@ static void WypiszZnakNaEkran (tU8 reg, tU8 data)
 /*
  * Wypisuje ci¹g znaków w linii na ekranie.
  */
-void WypiszCiag (const char* tekst)
+static void WypiszCiag (const char* tekst)
 {
 	while (*tekst != '\0')
 	{
@@ -111,13 +109,13 @@ void WypiszCiag (const char* tekst)
 /*
  * Funkcja czyszcz¹ca ekran wyœwietlacza.
  */
-void WyczyscEkran ()
+static void WyczyscEkran ()
 {
 	WypiszZnakNaEkran (0, 0x01);
 	osSleep (50);
 }
 
-void PoczekajIWyczyscEkran (int ileCzekac)
+static void PoczekajIWyczyscEkran (int ileCzekac)
 {
 	//OpóŸnienie przed znikniêciem.
 	osSleep (ileCzekac);
@@ -132,7 +130,7 @@ void PoczekajIWyczyscEkran (int ileCzekac)
 /*
  * Przenosi kursor wyœwietlacza do nastêpnej linii.
  */
-void PrzejdzDoNastepnejLinii ()
+static void PrzejdzDoNastepnejLinii ()
 {
 	WypiszZnakNaEkran (0, 0xC0);
 	delay37us ();
@@ -141,18 +139,13 @@ void PrzejdzDoNastepnejLinii ()
 /*
  * Wyœwietlenie na ekranie LCD napisów.
  */
-void WyswietlTekstNaLcd (void)
+static void WyswietlTekstNaLcd (void)
 {
 	initLCD ();
-	PodswietlEkran (FALSE);
-	osSleep (10);
+	PoczekajIWyczyscEkran (1);
 
 	while (1)
 	{
-		PodswietlEkran (TRUE);
-
-		//TODO: Dowiedzieæ siê co to za znaki (a¿ do funkcji WypiszCiag) i co siê dzieje bez ich udzia³u.
-		//function set
 		WypiszZnakNaEkran (0, 0x30);
 		osSleep (1);
 		WypiszZnakNaEkran (0, 0x30);
@@ -180,14 +173,6 @@ void WyswietlTekstNaLcd (void)
 		WypiszZnakNaEkran (0, 0x02);
 		osSleep (1);
 
-		//WypiszCiag ("M. Kolodziejczyk");
-
-		PrzejdzDoNastepnejLinii ();
-
-		//WypiszCiag ("P. Zielinski");
-
-		PoczekajIWyczyscEkran (500);
-
 		WypiszCiag ("   Odtwarzacz");
 
 		PrzejdzDoNastepnejLinii ();
@@ -196,6 +181,4 @@ void WyswietlTekstNaLcd (void)
 
 		PoczekajIWyczyscEkran (500);
 	}
-
-	PodswietlEkran (FALSE);
 }

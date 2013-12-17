@@ -14,8 +14,6 @@
 /******************************************************************************
  * Includes
  *****************************************************************************/
-#include "../pre_emptive_os/api/general.h"
-#include "../pre_emptive_os/api/osapi.h"
 #include "lcd.h"
 #include "ascii.h"
 #include "lcd_hw.h"
@@ -43,16 +41,18 @@
 /*****************************************************************************
  * Local variables
  ****************************************************************************/
-static tU8 lcd_x;
-static tU8 lcd_y;
-static tU8 bkgColor;
-static tU8 textColor;
-static tU8 setcolmark;
+static uint8 lcd_x;
+static uint8 lcd_y;
+static uint8 bkgColor;
+static uint8 textColor;
+static uint8 setcolmark;
+
+static uint8 czekajNaWolnyZapis = 0;
 
 /*****************************************************************************
  * Local prototypes
  ****************************************************************************/
-static void lcdWindow1 (tU8 xp, tU8 yp, tU8 xe, tU8 ye);
+static void lcdWindow1 (uint8 xp, uint8 yp, uint8 xe, uint8 ye);
 
 /*****************************************************************************
  *
@@ -125,7 +125,7 @@ void lcdInit (void)
  ****************************************************************************/
 void lcdClrscr (void)
 {
-	tU32 i;
+	uint32 i;
 
 	lcd_x = 0;
 	lcd_y = 0;
@@ -138,9 +138,7 @@ void lcdClrscr (void)
 	lcdWrcmd (LCD_CMD_RAMWR); //write memory
 
 	for (i = 0; i < 16900; i++)
-	{
 		lcdWrdata (bkgColor);
-	}
 
 	//deselect controller
 	selectLCD (FALSE);
@@ -171,7 +169,7 @@ void lcdOff (void)
  *    Set current foreground and background color
  *
  ****************************************************************************/
-void lcdColor (tU8 bkg, tU8 text)
+void lcdColor (uint8 bkg, uint8 text)
 {
 	bkgColor = bkg;
 	textColor = text;
@@ -183,7 +181,7 @@ void lcdColor (tU8 bkg, tU8 text)
  *    Set display contrast
  *
  ****************************************************************************/
-void lcdContrast (tU8 cont) //vary between 0 - 127
+void lcdContrast (uint8 cont) //vary between 0 - 127
 {
 	//select controller
 	selectLCD (TRUE);
@@ -202,10 +200,10 @@ void lcdContrast (tU8 cont) //vary between 0 - 127
  *    Draw a rectangular area with specified color.
  *
  ****************************************************************************/
-void lcdRect (tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 color)
+void lcdRect (uint8 x, uint8 y, uint8 xLen, uint8 yLen, uint8 color)
 {
-	tU32 i;
-	tU32 len;
+	uint32 i;
+	uint32 len;
 
 	//select controller
 	selectLCD (TRUE);
@@ -229,9 +227,9 @@ void lcdRect (tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 color)
  *    by example game.
  *
  ****************************************************************************/
-void lcdRectBrd (tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 color1, tU8 color2, tU8 color3)
+void lcdRectBrd (uint8 x, uint8 y, uint8 xLen, uint8 yLen, uint8 color1, uint8 color2, uint8 color3)
 {
-	tU32 i, j;
+	uint32 i, j;
 
 	//select controller
 	selectLCD (TRUE);
@@ -270,10 +268,10 @@ void lcdRectBrd (tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 color1, tU8 color2, tU8 c
  *    equals the escape value in a compressed string.
  *
  ****************************************************************************/
-void lcdIcon (tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 compressionOn, tU8 escapeChar, const tU8* pData)
+void lcdIcon (uint8 x, uint8 y, uint8 xLen, uint8 yLen, uint8 compressionOn, uint8 escapeChar, const uint8* pData)
 {
-	tU32 i, j;
-	tS32 len;
+	uint32 i, j;
+	int32 len;
 
 	//select controller
 	selectLCD (TRUE);
@@ -315,7 +313,7 @@ void lcdIcon (tU8 x, tU8 y, tU8 xLen, tU8 yLen, tU8 compressionOn, tU8 escapeCha
  *    Update xy-position (by also creating a window).
  *
  ****************************************************************************/
-void lcdGotoxy (tU8 x, tU8 y)
+void lcdGotoxy (uint8 x, uint8 y)
 {
 	lcd_x = x;
 	lcd_y = y;
@@ -330,7 +328,7 @@ void lcdGotoxy (tU8 x, tU8 y)
  *    Selects/deselects LCD controller.
  *
  ****************************************************************************/
-void lcdWindow (tU8 xp, tU8 yp, tU8 xe, tU8 ye)
+void lcdWindow (uint8 xp, uint8 yp, uint8 xe, uint8 ye)
 {
 	//select controller
 	selectLCD (TRUE);
@@ -349,7 +347,7 @@ void lcdWindow (tU8 xp, tU8 yp, tU8 xe, tU8 ye)
  *    No select/deselect of LCD controller.
  *
  ****************************************************************************/
-static void lcdWindow1 (tU8 xp, tU8 yp, tU8 xe, tU8 ye)
+static void lcdWindow1 (uint8 xp, uint8 yp, uint8 xe, uint8 ye)
 {
 	lcdWrcmd (LCD_CMD_CASET); //set X
 	lcdWrdata (xp + 2);
@@ -371,9 +369,7 @@ static void lcdNewline (void)
 	lcd_x = 0;
 	lcd_y += 14;
 	if (lcd_y >= 126)
-	{
 		lcd_y = 126;
-	}
 }
 
 /*****************************************************************************
@@ -383,15 +379,15 @@ static void lcdNewline (void)
  *    at current xy position on display. Update x-position (+8).
  *
  ****************************************************************************/
-void lcdData (tU8 data)
+void lcdData (uint8 data)
 {
 	//select controller
 	selectLCD (TRUE);
 
 	if (data <= 127)
 	{
-		tU32 mapOffset;
-		tU8 i, j, byteToShift;
+		uint32 mapOffset;
+		uint8 i, j, byteToShift;
 
 		data -= 30;
 		mapOffset = 14 * data;
@@ -410,12 +406,9 @@ void lcdData (tU8 data)
 			for (j = 0; j < 8; j++)
 			{
 				if (byteToShift & 0x80)
-				{
 					lcdWrdata (textColor);
-				} else
-				{
+				else
 					lcdWrdata (bkgColor);
-				}
 				byteToShift <<= 1;
 			}
 		}
@@ -434,21 +427,19 @@ void lcdData (tU8 data)
  *    The xy-position is updated afterwards
  *
  ****************************************************************************/
-void lcdPutchar (tU8 data)
+void lcdPutchar (uint8 data)
 {
 	if (data == '\n')
-	{
 		lcdNewline ();
-	} else if (data != '\r')
+	else if (data != '\r')
 	{
 		if (setcolmark == TRUE)
 		{
 			textColor = data;
 			setcolmark = FALSE;
 		} else if (data == 0xff)
-		{
 			setcolmark = TRUE;
-		} else if (lcd_x <= 124)
+		else if (lcd_x <= 124)
 		{
 			lcdData (data);
 		}
@@ -464,9 +455,32 @@ void lcdPutchar (tU8 data)
 void lcdPuts (char *s)
 {
 	while (*s != '\0')
-	{
 		lcdPutchar (*s++);
-	}
+}
+
+char hexChars[] = "0123456789abcdef";
+char buf[33];
+
+void lcdPutsNumber (uint32 number)
+{
+
+	char *p;
+
+	p = buf;
+
+	do
+	{
+		*p++ = hexChars[number % 10];
+	} while (number /= 10);
+
+	//*p++ = '\0';
+
+	do
+	{
+		//outputFnk(*--p);
+		lcdPutchar (*--p);
+	} while (p > buf);
+
 }
 
 /*****************************************************************************
@@ -475,9 +489,19 @@ void lcdPuts (char *s)
  *    Send command data to LCD controller
  *
  ****************************************************************************/
-void lcdWrcmd (tU8 data)
+void lcdWrcmd (uint8 data)
 {
-	sendToLCD (0, data);
+	while (1)
+	{
+		if (SEMAFOR_SPI == 0)
+		{
+			SEMAFOR_SPI = 1;
+			sendToLCD (0, data);
+			SEMAFOR_SPI = 0;
+
+			return;
+		}
+	}
 }
 
 /*****************************************************************************
@@ -486,8 +510,17 @@ void lcdWrcmd (tU8 data)
  *    Send data byte to LCD controller
  *
  ****************************************************************************/
-void lcdWrdata (tU8 data)
+void lcdWrdata (uint8 data)
 {
-	sendToLCD (1, data);
-}
+	while (1)
+	{
+		if (SEMAFOR_SPI == 0)
+		{
+			SEMAFOR_SPI = 1;
+			sendToLCD (1, data);
+			SEMAFOR_SPI = 0;
 
+			return;
+		}
+	}
+}
